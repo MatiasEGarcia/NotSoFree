@@ -2,12 +2,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head th:replace="layout/headAndScript :: head">
+        <title>Index</title>
     </head>
     <body>
-        <h1 th:text="${Message}"></h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Mark</th>
+                    <th scope="col">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="product:${products}">
+                    <td th:text="${product.idProduct}"></td>
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${product.stock}"></td>
+                    <td th:text="${product.Mark}"></td>
+                    <td th:text="${product.Price}"></td>
+                </tr>
+            </tbody>
+        </table>
     </body>
 </html>
