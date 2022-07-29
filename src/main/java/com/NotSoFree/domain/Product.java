@@ -3,6 +3,7 @@ package com.NotSoFree.domain;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
 
 import lombok.Data;
 
@@ -36,5 +37,13 @@ public class Product implements Serializable {
    
     @Column(name = "image", columnDefinition = "BLOB")
     private String image;
+    
+    public Product(){
+        
+    }
+    
+    public Product(Long idProduct){
+        this.idProduct=idProduct;
+    }
     
 }

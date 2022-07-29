@@ -24,6 +24,7 @@
                                &sortDir=' + ${reverseSortDir}+ 
                                '&pageSize=' + ${pageSize}">#Precio</a>
                         </th>
+                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,6 +34,12 @@
                         <td th:text="${product.stock}"></td>
                         <td th:text="${product.Mark}"></td>
                         <td th:text="${product.Price}"></td>
+                        <td>
+                            <form id="formDeleteProduct"  th:action="@{/productC/deleteProd}" method="post">
+                                <input name="idProduct" hidden="true" th:value="${product.idProduct}"> 
+                                <button type="submit" class="btn btn-danger">Delete product</button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>
