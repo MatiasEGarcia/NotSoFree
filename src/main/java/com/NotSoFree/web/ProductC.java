@@ -22,12 +22,16 @@ public class ProductC {
     
     
     @PostMapping(value="deleteProd")
-    public String deleteProduct(@RequestParam(name = "idProduct") String idProduct){
+    public String deleteProduct(@RequestParam(name = "idProduct") String idProduct,RedirectAttributes redirectAttrs){
         log.info("deleteProduct handler");
         
         Product product= new Product(Long.parseLong(idProduct));
         
         productService.removeProduct(product);
+        
+        redirectAttrs
+            .addFlashAttribute("message", "Product deleted successfully")
+            .addFlashAttribute("class", "success");
         
         return "redirect:/";
     }
