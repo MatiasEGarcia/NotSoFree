@@ -3,7 +3,9 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="layout/headAndScript :: head">
-
+        <title>Index</title>
+    </head>
+    <body>
         <nav th:replace="layout/nav :: nav"></nav>
 
         <div class="alert" th:classappend=" 'alert-' + (${class != null} ? ${class} : info) " th:if="${message != null}"
@@ -26,6 +28,7 @@
                                '&pageSize=' + ${pageSize}">#Precio</a>
                         </th>
                         <th scope="col">Delete</th>
+                        <th scope="col">Edit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,6 +43,11 @@
                                 <input name="idProduct" hidden="true" th:value="${product.idProduct}"> 
                                     <button type="submit" class="btn btn-danger">Delete product</button>
                             </form>
+                        </td>
+                        <td>
+                            <a class="btn btn-secondary" th:href="@{/productC/editPage/} + ${product.idProduct}">
+                                Edit product
+                            </a>
                         </td>
                     </tr>
                 </tbody>

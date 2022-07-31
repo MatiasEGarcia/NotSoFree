@@ -23,7 +23,7 @@ public class ProductC {
     private ProductService productService;
     
     
-    @PostMapping(value="deleteProd")
+    @PostMapping(value="/deleteProd")
     public String deleteProduct(@RequestParam(name = "idProduct") String idProduct,RedirectAttributes redirectAttrs){
         log.info("deleteProduct handler");
         
@@ -38,19 +38,52 @@ public class ProductC {
         return "redirect:/";
     }
     
-    @GetMapping(value="savePage")
+    @GetMapping(value="/savePage")
     public String savePage(Model model){
         log.info("savePage handler");
         
         Product product= new Product();
         
         model.addAttribute("product", product);
-        return "saveProdPage";
+        model.addAttribute("formAction", "/productC/saveProd");
+        return "saveEditProdP";
+    }
+    
+    @GetMapping(value="/editPage/{idProduct}")
+    public String editPage(Product product,Model model){
+        log.info("editPage handler");
+        
+        Product productFound = productService.findProduct(product.getIdProduct());
+        model.addAttribute("product", productFound);
+        model.addAttribute("formAction", "/productC/editProd");
+        
+        return "saveEditProdP";
+    }
+    
+    @PostMapping(value="/editProd")
+    public String editProd(Model model,Product product,
+            @RequestParam(name = "file", required = false) MultipartFile image,
+            RedirectAttributes redirectAttrs){
+        log.info("editProd handler");
+        
+        try {
+            productService.saveProduct(product, image);
+        }catch (IOException ex) {
+            log.info("There was some error with the image: {}",ex);
+        }catch(Exception ex){
+             log.info("There was some error: {}",ex);
+        }
+        
+        redirectAttrs
+            .addFlashAttribute("message", "Product edited successfully")
+            .addFlashAttribute("class", "success")
+            .addAttribute("idProduct", product.getIdProduct());
+        
+        return "redirect:/productC/editPage/{idProduct}";
     }
     
     
-    
-    @PostMapping(value="saveProd")
+    @PostMapping(value="/saveProd")
     public String saveProduct(Product product,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs){
@@ -69,6 +102,6 @@ public class ProductC {
             .addFlashAttribute("class", "success");
 
         return "redirect:/productC/savePage";
-    }
+}
     
 }
