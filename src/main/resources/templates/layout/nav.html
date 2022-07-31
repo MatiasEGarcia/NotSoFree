@@ -6,11 +6,7 @@
     <body>
         <nav th:fragment="nav" class="navbar navbar-expand-lg bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" th:href="@{/}+ 
-                                   '?pageNo=' + ${1} +
-                                   '&sortField=' + ${sortField} +
-                                   '&sortDir=' + ${sortDir}+ 
-                                   '&pageSize=' + ${pageSize}">NotSoFree</a>
+                <a class="navbar-brand" th:href="@{/}">NotSoFree</a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -29,7 +25,7 @@
                                 Products
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Create</a></li>
+                                <li><a class="dropdown-item" th:href="@{/productC/savePage}">Save a product</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#">Another action</a></li>
                             </ul>

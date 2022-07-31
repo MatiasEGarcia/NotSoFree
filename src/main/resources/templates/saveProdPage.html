@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>Page to save a product</title>
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div class="alert" th:classappend=" 'alert-' + (${class != null} ? ${class} : info) " th:if="${message != null}"
+             th:text="${message}">
+        </div>
+
+        <div class="container">
+            <div class="row gy-5">
+                <div class="col col-md-7">
+                    <h5 class="display-5">Product</h5>
+                    <form class="d-grid gap-3" th:action="@{/productC/saveProd}" th:object="${product}" method="POST" enctype="multipart/form-data"><!--The enctype is to indicate to the browser that there may be file uploads-->
+                        <div class="form_group">
+                            <label for="name" class="form-label">Name</label>
+                            <input id="name" type="text" class="form-control" th:field="*{name}"/>
+                        </div>
+                        <div class="form_group">
+                            <label for="stock" class="form-label">Stock</label>
+                            <input id="stock" type="text" class="form-control" th:field="*{stock}"/>
+                        </div>
+                        <div class="form_group">
+                            <label for="mark" class="form-label">Mark</label>
+                            <input id="mark" type="text" class="form-control" th:field="*{mark}"/>
+                        </div>
+                        <div class="form_group">
+                            <label  for="price" class="form-label">Price</label>
+                            <input id="price" type="text" class="form-control" th:field="*{price}"/>
+                        </div>
+                        <div class="form_group">
+                            <label  for="image" class="form-label">Image</label>
+                            <input id="image" name="file" type="file" class="form-control"/>
+                        </div>
+                        <button class="btn btn-success" type="submit">Save</button>
+                    </form>
+                </div>
+                <div th:if="${product.getImage!=null}"   class="text-center col col-md-5"> 
+                    <h3>Imagen actual</h3>
+                    <img class="imagen__actual" th:src="${'data:image/jpeg;charset=utf-8;base64,' + product.image}"  th:alt="${producto.name}"/>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
