@@ -16,7 +16,7 @@
                     <h3>Categories</h3>
 
                     <select class="form-select" aria-label="Default select example">
-                        <option selected>None</option>
+                        <option selected>---</option>
                         <div  th:each="category:${categories}" >
                             <option th:text="${category.name}"></option>
                         </div>

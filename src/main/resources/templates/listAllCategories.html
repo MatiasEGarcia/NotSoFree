@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head  th:replace="layout/headAndScript :: head">
+        <title>List all Categories</title>
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div th:replace="layout/alert :: alert"></div>
+
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Image</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="category:${categories}">
+                                <td th:text="${category.idCategory}"></td>
+                                <td th:text="${category.name}"></td>
+                                <td th:text="${category.state}"></td>
+                                <td ></td>
+                                <td>
+                                    <form id="formDeleteProduct"  th:action="@{/categoryC/deleteCateg}" method="post">
+                                        <input name="idCategory" hidden="true" th:value="${category.idCategory}"> 
+                                        <button type="submit" class="btn btn-danger">Delete category</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a class="btn btn-secondary" th:href="@{/categoryC/editCateg/} + ${category.idCategory}">
+                                        Edit category
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+    </body>
+</html>

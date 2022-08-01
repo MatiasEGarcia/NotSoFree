@@ -22,6 +22,16 @@ public class CategoryC {
     @Autowired
     public CategoryService categoryService;
 
+    @GetMapping(value="/listAllPage")
+    public String listAllCategories(Model model){
+        log.info("listAllCategories handler");
+        
+        model.addAttribute("categories", categoryService.listCategories() );
+        return "listAllCategories";
+    }
+    
+    
+    
     @GetMapping(value = "/savePage")
     public String savePageCategory(Model model) {
         log.info("savePageCategory handler");
