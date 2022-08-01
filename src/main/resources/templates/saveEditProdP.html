@@ -3,14 +3,12 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="layout/headAndScript :: head">
-        <title>Page to save a product</title>
+        <title>Page to save or edit a product</title>
     </head>
     <body>
         <nav th:replace="layout/nav :: nav"></nav>
 
-        <div class="alert" th:classappend=" 'alert-' + (${class != null} ? ${class} : info) " th:if="${message != null}"
-             th:text="${message}">
-        </div>
+        <div th:replace="layout/alert :: alert"></div>
 
         <div class="container">
             <div class="row gy-5">

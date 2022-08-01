@@ -29,7 +29,7 @@ public class Category implements Serializable{
     
     @NotNull
     @Column(name="state")
-    private Byte state;
+    private byte state;
     
     @Column(name="image")
     private String image;

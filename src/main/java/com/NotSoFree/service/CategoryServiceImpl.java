@@ -34,6 +34,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     @Transactional
     public void save(Category category, MultipartFile image) throws IOException { //for the image
+        
         if (!image.isEmpty()) {
             category.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
         }

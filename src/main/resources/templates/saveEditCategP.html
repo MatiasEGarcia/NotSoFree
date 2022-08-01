@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>Page to save or edit a category</title>
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div th:replace="layout/alert :: alert"></div>
+        
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-7">
+                    <h5 class="display-5">Category</h5>
+                    <form class="d-grid gap-3" th:action="@{${formAction}}" th:object="${category}" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="form_group">
+                            <label for="name">Name</label>
+                            <input id="name" class="form-control" name="name" type="text" th:field="*{name}"/>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" value="1" type="radio" name="flexRadio" id="activeRadio" th:checked="${category.state==1}" ? 'checked' :' ' />
+                            <label class="form-check-label" for="activeRadio">Active</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" value="0" type="radio" name="flexRadio" id="noActiveRadio" th:checked="${category.state==0}" ? 'checked' :' ' />
+                            <label class="form-check-label" for="noActiveRadio">No active</label>
+                        </div>
+                        <div class="form_group">
+                            <label for="image">Image</label>
+                            <input id="image" class="form-control" name="file" type="file"/>
+                        </div>
+                        
+                        <button class="btn btn-success w-50" type="submit">Save<i class="fas fa-check"></i></button>
+                    </form>
+                </div>
+                <div class="col-12 col-md-5"></div>
+            </div>
+        </div>
+        
+        
+        
+        
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+    </body>
+</html>

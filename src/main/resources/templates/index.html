@@ -13,11 +13,14 @@
         <div class="container">
             <div class="row mt-3">
                 <div class="col-12 col-md-3">
-                    <ul>
-                        <li  th:each="category:${categories}" >
-                            <a th:text="${category.name}"></a>
-                        </li>
-                    </ul> 
+                    <h3>Categories</h3>
+
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>None</option>
+                        <div  th:each="category:${categories}" >
+                            <option th:text="${category.name}"></option>
+                        </div>
+                    </select>
                 </div>
                 <div class="col-12 col-md-9">
                     <table class="table">
@@ -27,12 +30,8 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Mark</th>
-                                <th scope="col"> 
-                                    <a class="h6" th:href="@{/}+ 
-                                       '?pageNo=' + ${actualPage} +
-                                       '&sortField=price
-                                       &sortDir=' + ${reverseSortDir}+ 
-                                       '&pageSize=' + ${pageSize}">#Precio</a>
+                                <th scope="col"> <!--problema, dice que Product no tiene la propiedad price -->
+                                    <a class="h6" th:href="@{/}+ '?pageNo=' + ${actualPage} +'&sortField=price&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Precio</a>
                                 </th>
                                 <th scope="col">Delete</th>
                                 <th scope="col">Edit</th>
