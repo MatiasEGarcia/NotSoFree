@@ -30,7 +30,16 @@ public class CategoryC {
         return "listAllCategories";
     }
     
-    
+    @PostMapping(value="/deleteCateg")
+    public String deleteCategory(@RequestParam(name = "idCategory") String idCategory,RedirectAttributes redirectAttrs){
+        log.info("delete handler");
+        categoryService.delete(new Category(Long.parseLong(idCategory)));
+        redirectAttrs
+            .addFlashAttribute("message", "Category deleted successfully")
+            .addFlashAttribute("class", "success");
+        
+        return "redirect:/categoryC/listAllPage";
+    }
     
     @GetMapping(value = "/savePage")
     public String savePageCategory(Model model) {
