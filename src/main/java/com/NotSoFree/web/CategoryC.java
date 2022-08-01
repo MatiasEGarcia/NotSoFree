@@ -5,6 +5,7 @@ import com.NotSoFree.service.CategoryService;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +24,26 @@ public class CategoryC {
     public CategoryService categoryService;
 
     @GetMapping(value="/listAllPage")
-    public String listAllCategories(Model model){
+    public String listAllCategories(Model model,
+            @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
+            @RequestParam(name = "sortField",defaultValue = "idCategory") String sortField,
+            @RequestParam(name = "sortDir",defaultValue = "asc") String sortDir, 
+            @RequestParam(name = "pageSize",defaultValue = "10") String pageSize){
         log.info("listAllCategories handler");
         
-        model.addAttribute("categories", categoryService.listCategories() );
+        int pageNoInt= Integer.parseInt(pageNo);
+        Page<Category> pageCateg=categoryService.findPaginated(pageNoInt,Integer.parseInt(pageSize),sortField, sortDir);
+        
+        
+        model.addAttribute("categories", pageCateg.getContent());
+        model.addAttribute("totalPages", pageCateg.getTotalPages());
+        model.addAttribute("totalItems", pageCateg.getTotalElements());
+        model.addAttribute("actualPage",pageNoInt); //I need it to be integer for the pagination of the page to work
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        
         return "listAllCategories";
     }
     

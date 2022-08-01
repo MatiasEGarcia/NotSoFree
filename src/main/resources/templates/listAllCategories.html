@@ -33,7 +33,7 @@
                                 <td>
                                     <form id="formDeleteProduct"  th:action="@{/categoryC/deleteCateg}" method="post">
                                         <input name="idCategory" hidden="true" th:value="${category.idCategory}"> 
-                                        <button type="submit" class="btn btn-danger">Delete category</button>
+                                            <button type="submit" class="btn btn-danger">Delete category</button>
                                     </form>
                                 </td>
                                 <td>
@@ -44,6 +44,46 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <div th:if="${totalPages > 1}" >
+                        <div> 
+                            <div>
+                                Total de elementos: [[${totalItems}]]
+                            </div>
+                            <nav aria-label="...">
+                                <ul class="pagination justify-content-center">
+                                    <li  th:class="${actualPage == 1 } ? 'page-item disabled' : 'page-item ' "> 
+                                        <a class="page-link"  th:href="@{/categoryC/listAllPage}+ 
+                                           '?pageNo=' + ${actualPage-1} +
+                                           '&sortField=' + ${sortField} +
+                                           '&sortDir=' + ${sortDir}+ 
+                                           '&pageSize=' + ${pageSize}">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+
+                                    <li  th:class="${actualPage == i} ? 'page-item active' : 'page-item ' "  th:each="i: ${#numbers.sequence(1,totalPages)}">
+                                        <a class="page-link"  th:href="@{/categoryC/listAllPage}+ 
+                                           '?pageNo=' + ${i} +
+                                           '&sortField=' + ${sortField} +
+                                           '&sortDir=' + ${sortDir}+ 
+                                           '&pageSize=' + ${pageSize}">[[${i}]]</a>
+                                    </li>
+
+                                    <li  th:class="${actualPage == totalPages} ? 'page-item disabled' : 'page-item' " >
+                                        <a  class="page-link"  th:href="@{/categoryC/listAllPage}+ 
+                                            '?pageNo=' + ${actualPage+1} +
+                                            '&sortField=' + ${sortField} +
+                                            '&sortDir=' + ${sortDir}+ 
+                                            '&pageSize=' + ${pageSize}" >
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
