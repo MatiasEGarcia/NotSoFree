@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Alert</title>
+    </head>
+    <body>
+        
+        <div th:fragment="alert" class="alert" th:classappend=" 'alert-' + (${class != null} ? ${class} : info)"   th:if="${message != null}"
+             th:text="${message}">
+        </div>
+        
+    </body>
+</html>

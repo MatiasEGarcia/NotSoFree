@@ -1,7 +1,10 @@
 package com.NotSoFree.web;
 
+import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.Product;
+import com.NotSoFree.service.CategoryService;
 import com.NotSoFree.service.ProductService;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 @Controller
 public class IndexC {
+    
+    @Autowired
+    public CategoryService categoryService;
     
     @Autowired
     private ProductService productService;
@@ -27,9 +33,12 @@ public class IndexC {
         log.info("index handler");
         
         int pageNoInt= Integer.parseInt(pageNo);
+        byte active=1;
         
         Page<Product> pageProd=productService.findPaginated(pageNoInt,Integer.parseInt(pageSize),sortField, sortDir);
+        List<Category> activeCategories= categoryService.listByState(active);
         
+        model.addAttribute("categories", activeCategories);
         model.addAttribute("products", pageProd.getContent());
         model.addAttribute("totalPages", pageProd.getTotalPages());
         model.addAttribute("totalItems", pageProd.getTotalElements());
