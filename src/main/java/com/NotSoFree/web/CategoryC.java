@@ -41,9 +41,18 @@ public class CategoryC {
         return "redirect:/categoryC/listAllPage";
     }
     
+    @GetMapping(value="/editPage/{idCategory}")
+    public String editPage(Category category,Model model){
+        log.info("editPage handler");
+        
+        model.addAttribute("category", categoryService.findCategory(category));
+        model.addAttribute("formAction", "/categoryC/editCateg");
+        return "saveEditCategP";
+    }    
+    
     @GetMapping(value = "/savePage")
-    public String savePageCategory(Model model) {
-        log.info("savePageCategory handler");
+    public String savePage(Model model) {
+        log.info("savePage handler");
 
         Category category = new Category();
 
@@ -52,6 +61,30 @@ public class CategoryC {
         return "saveEditCategP";
     }
 
+    @PostMapping(value="/editCateg")
+    public String editCategory(Model model,Category category,
+            @RequestParam(name = "flexRadio", required = true) byte state,
+            @RequestParam(name = "file", required = false) MultipartFile image,
+            RedirectAttributes redirectAttrs){
+        log.info("editCategory handler");
+        
+        try {
+            category.setState(state);
+            categoryService.save(category, image);
+        } catch (IOException ex) {
+            log.info("There was some error with the image: {}", ex);
+        } catch (Exception ex) {
+            log.info("There was some error: {}", ex);
+        }
+        
+         redirectAttrs
+                .addFlashAttribute("message", "Category edited successfully")
+                .addFlashAttribute("class", "success")
+                .addAttribute("idCategory", category.getIdCategory());
+        
+        return "redirect:/categoryC/editPage/{idCategory}";
+    }
+    
     @PostMapping(value = "/saveCateg")
     public String saveCategory(Category category,
             @RequestParam(name = "flexRadio", required = true) byte state,

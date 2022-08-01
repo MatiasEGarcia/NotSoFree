@@ -9,14 +9,16 @@
         <nav th:replace="layout/nav :: nav"></nav>
 
         <div th:replace="layout/alert :: alert"></div>
-        
-        
+
+
         <div class="container">
             <div class="row">
                 <div class="col-12 col-md-7">
                     <h5 class="display-5">Category</h5>
                     <form class="d-grid gap-3" th:action="@{${formAction}}" th:object="${category}" method="POST" enctype="multipart/form-data">
-                        
+                        <input type="text" hidden="true" th:field="*{image}"  th:value="${category.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
+                        <input type="hidden" name="idCategory" th:field="*{idCategory}"/>
+
                         <div class="form_group">
                             <label for="name">Name</label>
                             <input id="name" class="form-control" name="name" type="text" th:field="*{name}"/>
@@ -33,17 +35,19 @@
                             <label for="image">Image</label>
                             <input id="image" class="form-control" name="file" type="file"/>
                         </div>
-                        
+
                         <button class="btn btn-success w-50" type="submit">Save<i class="fas fa-check"></i></button>
                     </form>
                 </div>
-                <div class="col-12 col-md-5"></div>
+                <div th:if="${category.getImage!=null}"  class="col-12 col-md-5 text-center ">
+                    <img id="actualImage" th:src="${'data:image/jpeg;charset=utf-8;base64,' + category.image}"  th:alt="${category.name}"/>
+                </div>
             </div>
         </div>
-        
-        
-        
-        
+
+
+
+
         <div th:replace="layout/headAndScript :: commonScript"></div>
     </body>
 </html>
