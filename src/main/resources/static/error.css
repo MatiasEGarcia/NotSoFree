@@ -1,0 +1,21 @@
+/*error*/
+.error{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error .header{
+
+}
+
+.error .imgContainer{
+    width: 50rem;
+    height: 30rem;
+}
+
+.error .imgError{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
