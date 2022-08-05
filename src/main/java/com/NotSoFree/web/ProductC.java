@@ -1,12 +1,15 @@
 package com.NotSoFree.web;
 
 import com.NotSoFree.domain.Product;
+import com.NotSoFree.exception.ProductNotFoundById;
 import com.NotSoFree.service.ProductService;
 import java.io.IOException;
+import javax.servlet.annotation.HandlesTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +53,7 @@ public class ProductC {
     }
     
     @GetMapping(value="/editPage/{idProduct}")
-    public String editPage(Product product,Model model){
+    public String editPage(Product product,Model model) throws ProductNotFoundById{
         log.info("editPage handler");
         
         Product productFound = productService.findProduct(product.getIdProduct());

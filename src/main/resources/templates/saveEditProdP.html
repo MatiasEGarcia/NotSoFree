@@ -15,7 +15,7 @@
                 <div class="col-12 col-md-7">
                     <h5 class="display-5">Product</h5>
                     <form class="d-grid gap-3" th:action="@{${formAction}}" th:object="${product}" method="POST" enctype="multipart/form-data"><!--The enctype is to indicate to the browser that there may be file uploads-->
-                         <input type="text" hidden="true" th:field="*{image}"  th:value="${product.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
+                        <input type="text" hidden="true" th:field="*{image}"  th:value="${product.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
                         <input type="hidden" name="idProducto" th:field="*{idProduct}"/>
                         
                         <div class="form_group">

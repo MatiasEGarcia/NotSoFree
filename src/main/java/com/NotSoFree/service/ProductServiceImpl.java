@@ -2,6 +2,7 @@ package com.NotSoFree.service;
 
 import com.NotSoFree.domain.Product;
 import com.NotSoFree.dao.ProductDao;
+import com.NotSoFree.exception.ProductNotFoundById;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -48,8 +49,8 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     @Transactional(readOnly= true)
-    public Product findProduct(Long idProduct) {
-       return productDao.findById(idProduct).orElse(null);
+    public Product findProduct(Long idProduct) throws ProductNotFoundById{
+       return productDao.findById(idProduct).orElseThrow(() -> new ProductNotFoundById(Long.toString(idProduct) ) );
     }
 
     @Override
