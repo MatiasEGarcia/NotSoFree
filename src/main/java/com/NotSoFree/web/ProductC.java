@@ -4,12 +4,10 @@ import com.NotSoFree.domain.Product;
 import com.NotSoFree.exception.ProductNotFoundById;
 import com.NotSoFree.service.ProductService;
 import java.io.IOException;
-import javax.servlet.annotation.HandlesTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +25,10 @@ public class ProductC {
     
     
     @PostMapping(value="/deleteProd")
-    public String deleteProduct(@RequestParam(name = "idProduct") String idProduct,RedirectAttributes redirectAttrs){
+    public String deleteProduct(@RequestParam(name = "idProduct") String idProduct,RedirectAttributes redirectAttrs)  throws ProductNotFoundById {
         log.info("deleteProduct handler");
         
-        Product product= new Product(Long.parseLong(idProduct));
-        
-        productService.removeProduct(product);
+        productService.removeProduct(Long.parseLong(idProduct));
         
         redirectAttrs
             .addFlashAttribute("message", "Product deleted successfully")
@@ -89,16 +85,10 @@ public class ProductC {
     @PostMapping(value="/saveProd")
     public String saveProduct(Product product,
             @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs){
+            RedirectAttributes redirectAttrs) throws IOException{
          log.info("saveProd handler");
-         
-        try {
-            productService.saveProduct(product, image);
-        }catch (IOException ex) {
-            log.info("There was some error with the image: {}",ex);
-        }catch(Exception ex){
-             log.info("There was some error: {}",ex);
-        }
+
+         productService.saveProduct(product, image);
          
         redirectAttrs
             .addFlashAttribute("message", "Product create successfully")

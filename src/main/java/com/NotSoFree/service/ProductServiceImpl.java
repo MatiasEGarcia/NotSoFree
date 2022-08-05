@@ -36,14 +36,15 @@ public class ProductServiceImpl implements ProductService{
         if (!image.isEmpty()) {
             product.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
         }
-                
-        productDao.save(product);
+        
+            productDao.save(product);
         log.info("Product saved successfully");
     }
 
     @Override
     @Transactional
-    public void removeProduct(Product product) {
+    public void removeProduct(Long idProduct) throws ProductNotFoundById {
+        Product product = this.findProduct(idProduct);
         productDao.delete(product);
     }
 

@@ -14,7 +14,7 @@ public interface ProductService {
     
     public void saveProduct(Product product,MultipartFile image) throws IOException;
     
-    public void removeProduct(Product product);
+    public void removeProduct(Long idProduct) throws ProductNotFoundById;
     
     public Product findProduct(Long idProduct) throws ProductNotFoundById;
     
