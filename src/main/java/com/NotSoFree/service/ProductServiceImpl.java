@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService{
     @Override
     @Transactional(readOnly= true)
     public Product findProduct(Long idProduct) throws ProductNotFoundById{
-       return productDao.findById(idProduct).orElseThrow(() -> new ProductNotFoundById(Long.toString(idProduct) ) );
+       return productDao.findById(idProduct).orElseThrow(() -> new ProductNotFoundById(idProduct) );
     }
 
     @Override

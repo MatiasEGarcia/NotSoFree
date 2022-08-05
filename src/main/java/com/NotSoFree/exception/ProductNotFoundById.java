@@ -8,7 +8,7 @@ public class ProductNotFoundById extends Exception {
         super("The product with that id was not found");
     }
     
-    public ProductNotFoundById(String id){
+    public ProductNotFoundById(Long id){
         super("The product with id : " + id + " was not found");
     }
 }
