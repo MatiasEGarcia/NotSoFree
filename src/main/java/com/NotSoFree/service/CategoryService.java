@@ -1,6 +1,7 @@
 package com.NotSoFree.service;
 
 import com.NotSoFree.domain.Category;
+import com.NotSoFree.exception.CategoryNotFoundById;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -14,9 +15,9 @@ public interface CategoryService {
     
     public void save(Category category,MultipartFile image) throws IOException;
     
-    public void delete(Category category);
+    public void delete(Long id) throws CategoryNotFoundById;
     
-    public Category findCategory(Category category);
+    public Category findCategory(Long id) throws CategoryNotFoundById;
     
      public Page<Category> findPaginated(int pageNo, int pageSize, String sortField, String sortDir);
     

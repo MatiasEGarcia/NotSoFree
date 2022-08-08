@@ -3,6 +3,7 @@ package com.NotSoFree.service;
 
 import com.NotSoFree.dao.CategoryDao;
 import com.NotSoFree.domain.Category;
+import com.NotSoFree.exception.CategoryNotFoundById;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -49,14 +50,14 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     @Transactional
-    public void delete(Category category) {
-        categoryDao.delete(category);
+    public void delete(Long id) throws CategoryNotFoundById {
+        categoryDao.delete(this.findCategory(id));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Category findCategory(Category category) {
-        return categoryDao.findById(category.getIdCategory()).orElse(null);
+    public Category findCategory(Long id) throws CategoryNotFoundById {
+        return categoryDao.findById(id).orElseThrow(() -> new CategoryNotFoundById(id));
     }
 
     @Override

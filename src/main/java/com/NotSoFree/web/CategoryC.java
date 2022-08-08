@@ -1,6 +1,7 @@
 package com.NotSoFree.web;
 
 import com.NotSoFree.domain.Category;
+import com.NotSoFree.exception.CategoryNotFoundById;
 import com.NotSoFree.service.CategoryService;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,9 +50,10 @@ public class CategoryC {
     }
     
     @PostMapping(value="/deleteCateg")
-    public String deleteCategory(@RequestParam(name = "idCategory") String idCategory,RedirectAttributes redirectAttrs){
+    public String deleteCategory(@RequestParam(name = "idCategory") String idCategory,
+            RedirectAttributes redirectAttrs) throws CategoryNotFoundById{
         log.info("delete handler");
-        categoryService.delete(new Category(Long.parseLong(idCategory)));
+        categoryService.delete(Long.parseLong(idCategory));
         redirectAttrs
             .addFlashAttribute("message", "Category deleted successfully")
             .addFlashAttribute("class", "success");
@@ -59,10 +62,10 @@ public class CategoryC {
     }
     
     @GetMapping(value="/editPage/{idCategory}")
-    public String editPage(Category category,Model model){
+    public String editPage(Category category,Model model) throws CategoryNotFoundById{
         log.info("editPage handler");
         
-        model.addAttribute("category", categoryService.findCategory(category));
+        model.addAttribute("category", categoryService.findCategory(category.getIdCategory() ) );
         model.addAttribute("formAction", "/categoryC/editCateg");
         return "saveEditCategP";
     }    
