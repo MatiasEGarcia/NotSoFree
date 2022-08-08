@@ -23,41 +23,28 @@
                     </select>
                 </div>
                 <div class="col-12 col-md-9">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Mark</th>
-                                <th scope="col"> <!--problema, dice que Product no tiene la propiedad price -->
-                                    <a class="h6" th:href="@{/}+ '?pageNo=' + ${actualPage} +'&sortField=price&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Precio</a>
-                                </th>
-                                <th scope="col">Delete</th>
-                                <th scope="col">Edit</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="product:${products}">
-                                <td th:text="${product.idProduct}"></td>
-                                <td th:text="${product.name}"></td>
-                                <td th:text="${product.stock}"></td>
-                                <td th:text="${product.mark}"></td>
-                                <td th:text="${product.price}"></td>
-                                <td>
-                                    <form id="formDeleteProduct"  th:action="@{/productC/deleteProd}" method="post">
-                                        <input name="idProduct" hidden="true" th:value="${product.idProduct}"> 
-                                            <button type="submit" class="btn btn-danger">Delete product</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <a class="btn btn-secondary" th:href="@{/productC/editPage/} + ${product.idProduct}">
-                                        Edit product
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h2 class="display-6" style="text-align: center;">Our products</h2>
+                    <div class="productsList mt-3">
+
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                            <div class="col" th:each="product:${products}">
+                                <div class="card" style="width: 16rem; margin: auto">
+                                    <div class="imageContainer"> 
+                                        <img th:if="${product.image}  and ${product.image!='' }"  class="card-img-top image" th:src="@{'data:image/jpeg;charset=utf-8;base64,' + ${product.image}}"  th:alt="${product.image}"/>
+                                        <img th:unless="${product.image} and ${product.image!= '' }"   class="card-img-top image" src="/img/productDefault.jpg"  alt="The product currently has no image"/>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${product.name}"></h5>
+                                        <p th:text="${product.mark}" ></p>
+                                        <p th:text="'Price ' + ${new java.text.DecimalFormat('$#,##0.00').format(product.price)}"></p>
+                                        <a href="#" class="btn btn-primary">Detail</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
 
                     <div th:if="${totalPages > 1}" >
                         <div> 
