@@ -17,22 +17,34 @@
                     <form class="d-grid gap-3" th:action="@{${formAction}}" th:object="${product}" method="POST" enctype="multipart/form-data"><!--The enctype is to indicate to the browser that there may be file uploads-->
                         <input type="text" hidden="true" th:field="*{image}"  th:value="${product.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
                         <input type="hidden" name="idProducto" th:field="*{idProduct}"/>
-                        
+
                         <div class="form_group">
                             <label for="name" class="form-label">Name</label>
                             <input id="name" type="text" class="form-control" th:field="*{name}"/>
+                            <ul>
+                                <li th:each="error : ${#fields.errors('name')}" th:text="${error}" class="error" />
+                            </ul>
                         </div>
                         <div class="form_group">
                             <label for="stock" class="form-label">Stock</label>
-                            <input id="stock" type="text" class="form-control" th:field="*{stock}"/>
+                            <input id="stock" type="number" class="form-control" th:field="*{stock}" placeholder=""/>
+                            <ul>
+                                <li th:each="error : ${#fields.errors('stock')}" th:text="${error}" class="error" />
+                            </ul>
                         </div>
                         <div class="form_group">
                             <label for="mark" class="form-label">Mark</label>
                             <input id="mark" type="text" class="form-control" th:field="*{mark}"/>
+                            <ul>
+                                <li th:each="error : ${#fields.errors('mark')}" th:text="${error}" class="error" />
+                            </ul>
                         </div>
                         <div class="form_group">
                             <label  for="price" class="form-label">Price</label>
-                            <input id="price" type="text" class="form-control" th:field="*{price}"/>
+                            <input id="price" type="number" class="form-control"  th:field="*{price}" placeholder=""/>
+                            <ul>
+                                <li th:each="error : ${#fields.errors('price')}" th:text="${error}" class="error" />
+                            </ul>
                         </div>
                         <div class="form_group">
                             <label  for="image" class="form-label">Image</label>
@@ -41,12 +53,12 @@
                         <button class="btn btn-success" type="submit">Save</button>
                     </form>
                 </div>
-                <div th:if="${product.getImage!=null}"   class="col-12  col-md-5 text-center "> 
-                    <img id="actualImage" th:src="${'data:image/jpeg;charset=utf-8;base64,' + product.image}"  th:alt="${product.name}"/>
+                <div th:if="${product.image} and ${product.image!= '' }"   class="col-12  col-md-5 text-center "> 
+                        <img id="actualImage" th:src="${'data:image/jpeg;charset=utf-8;base64,' + product.image}"  th:alt="${product.name}"/>
                 </div>
             </div>
         </div>
-        
+
         <div th:replace="layout/headAndScript :: commonScript"></div>
 
     </body>

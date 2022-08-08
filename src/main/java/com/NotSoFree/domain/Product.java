@@ -1,9 +1,11 @@
 package com.NotSoFree.domain;
 
+import com.NotSoFree.validator.NotZero;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
+import javax.validation.constraints.NotBlank;
+
 
 import lombok.Data;
 
@@ -19,19 +21,21 @@ public class Product implements Serializable {
     @Column(name = "id_product")
     private Long idProduct;
     
-    @NotNull
+    @NotBlank(message="Product name can't be blank")
     @Column(name="name")
     private String name;
     
-    @NotNull
+    @NotNull(message="Product stock can't be null")
+    @NotZero
     @Column(name="stock")
     private int stock;
     
-    @NotNull
+    @NotBlank(message="Product mark can't be empty")
     @Column(name="mark")
     private String mark;
     
-    @NotNull
+    @NotNull(message="Product price can't be null")
+    @NotZero
     @Column(name="price")
     private float price;
    
