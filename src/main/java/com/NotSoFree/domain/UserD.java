@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="users" , schema = "notanlibre")
-public class User implements Serializable{
+public class UserD implements Serializable{
     private static final long serialVersionUID=1L;
     
     @Id
