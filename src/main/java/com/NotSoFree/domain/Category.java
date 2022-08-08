@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -23,11 +24,11 @@ public class Category implements Serializable{
     @Column(name = "id_category")
     private Long idCategory;
     
-    @NotNull
+    @NotBlank(message="Category name can't be blank")
     @Column(name="name")
     private String name;
     
-    @NotNull
+    @NotNull(message="Category state can't be null")
     @Column(name="state")
     private byte state;
     

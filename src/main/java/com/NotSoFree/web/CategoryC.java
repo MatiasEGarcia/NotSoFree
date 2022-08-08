@@ -4,13 +4,14 @@ import com.NotSoFree.domain.Category;
 import com.NotSoFree.exception.CategoryNotFoundById;
 import com.NotSoFree.service.CategoryService;
 import java.io.IOException;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,20 +83,21 @@ public class CategoryC {
     }
 
     @PostMapping(value="/editCateg")
-    public String editCategory(Model model,Category category,
+    public String editCategory(Model model,@Valid Category category,
+             BindingResult result,
             @RequestParam(name = "flexRadio", required = true) byte state,
             @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs){
+            RedirectAttributes redirectAttrs) throws IOException{
         log.info("editCategory handler");
         
-        try {
+         if (result.hasErrors()) {
+            model.addAttribute("category",category );
+            model.addAttribute("formAction", "/categoryC/editCateg");
+            return "saveEditCategP";
+        }
             category.setState(state);
             categoryService.save(category, image);
-        } catch (IOException ex) {
-            log.info("There was some error with the image: {}", ex);
-        } catch (Exception ex) {
-            log.info("There was some error: {}", ex);
-        }
+        
         
          redirectAttrs
                 .addFlashAttribute("message", "Category edited successfully")
@@ -106,20 +108,23 @@ public class CategoryC {
     }
     
     @PostMapping(value = "/saveCateg")
-    public String saveCategory(Category category,
+    public String saveCategory(Model model,@Valid Category category,
+            BindingResult result,
             @RequestParam(name = "flexRadio", required = true) byte state,
             @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs) {
+            RedirectAttributes redirectAttrs) throws IOException {
         log.info("saveCategory handler");
 
-        try {
+         if (result.hasErrors()) {
+            model.addAttribute("category",category );
+            model.addAttribute("formAction", "/categoryC/saveCateg");
+            return "saveEditCategP";
+        }
+         
+         
             category.setState(state);
             categoryService.save(category, image);
-        } catch (IOException ex) {
-            log.info("There was some error with the image: {}", ex);
-        } catch (Exception ex) {
-            log.info("There was some error: {}", ex);
-        }
+       
 
         redirectAttrs
                 .addFlashAttribute("message", "Category create successfully")

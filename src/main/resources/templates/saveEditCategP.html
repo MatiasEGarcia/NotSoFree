@@ -22,6 +22,9 @@
                         <div class="form_group">
                             <label for="name">Name</label>
                             <input id="name" class="form-control" name="name" type="text" th:field="*{name}"/>
+                            <ul>
+                                <li th:each="error : ${#fields.errors('name')}" th:text="${error}" class="error" />
+                            </ul>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" value="1" type="radio" name="flexRadio" id="activeRadio" th:checked="${category.state==1}" ? 'checked' :' ' />
@@ -39,7 +42,7 @@
                         <button class="btn btn-success w-50" type="submit">Save<i class="fas fa-check"></i></button>
                     </form>
                 </div>
-                <div th:if="${category.getImage!=null}"  class="col-12 col-md-5 text-center ">
+                <div th:if="${category.image} and ${category.image!= '' }"   class="col-12 col-md-5 text-center ">
                     <img id="actualImage" th:src="${'data:image/jpeg;charset=utf-8;base64,' + category.image}"  th:alt="${category.name}"/>
                 </div>
             </div>
