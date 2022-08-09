@@ -7,6 +7,7 @@ import com.NotSoFree.domain.UserD;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -26,7 +27,17 @@ public class UserService implements UserDetailsService{
     @Override
     @Transactional(readOnly=true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserD usuario= userDao.findByUsername(username);
+        
+        UserD usuario;
+        try{
+            usuario= userDao.findByUsername(username);
+        }catch(DataAccessException e){
+            throw new UsernameNotFoundException("Database Error");
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new UsernameNotFoundException("Unknown Error");
+        }
+        
         
         if(usuario==null) {
         	throw new UsernameNotFoundException(username);
