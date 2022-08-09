@@ -6,27 +6,38 @@
         <title>Login page</title>
     </head>
     <body>
-         <nav th:replace="layout/nav :: nav"></nav>
-        
-         <div class="container">
-             <div class="row">
-                 <div class="col">
-                     <form class="col-12" id="loginForm" method="POST" th:action="@{/login}">
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col d-flex justify-content-center">
+                    <div class="col-5">
+                        <div class="imgUserLoginContainer">
+                            <img class="imgUserLogin" src="/img/userDefault.jpg" alt="basicUserImage"/>
+                        </div>
+                        <form class="d-grid gap-3" id="loginForm" method="POST" th:action="@{/login}">
+                            <div th:if="${param.error}" class="alert alert-danger text-center">
+                                <h5>Invalid user or password</h5>
+                            </div>          
                             <div class="form-group">
                                 <input type="text" class="form-control" name="username" placeholder="User name">
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control" name="password" placeholder="Password">
                             </div>
-                            <button type="submit" class="btn btn-success btn-lg">
-                                <i class="fas fa-sign-in-alt"></i>
-                                Login</button>
+                            <div class="d-grid mt-3">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    <h4 class="d-inline">Login</h4>
+                                </button>
+                            </div>
                         </form>
-                 </div>
-             </div> 
-         </div>
-         
-         
-         <div th:replace="layout/headAndScript :: commonScript"></div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
     </body>
 </html>
