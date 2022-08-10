@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -68,7 +69,7 @@ public class ProductC {
         log.info("editProd handler");
 
         if (result.hasErrors()) {
-            model.addAttribute("product",product );
+            model.addAttribute("product", product);
             model.addAttribute("formAction", "/productC/editProd");
             return "saveEditProdP";
         }
@@ -83,14 +84,14 @@ public class ProductC {
     }
 
     @PostMapping(value = "/saveProd")
-    public String saveProduct(Model model, @Valid Product product, 
+    public String saveProduct(Model model, @Valid Product product,
             BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws IOException {
         log.info("saveProd handler");
 
         if (result.hasErrors()) {
-            model.addAttribute("product",product );
+            model.addAttribute("product", product);
             model.addAttribute("formAction", "/productC/saveProd");
             return "saveEditProdP";
         }
@@ -102,6 +103,31 @@ public class ProductC {
                 .addFlashAttribute("class", "success");
 
         return "redirect:/productC/savePage";
+    }
+
+    @GetMapping(value = "/listAllPage")
+    public String listAllPage(Model model,
+            @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
+            @RequestParam(name = "sortField", defaultValue = "idProduct") String sortField,
+            @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
+            @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) {
+        
+        log.info("listAllPage handler");
+        
+        int pageNoInt= Integer.parseInt(pageNo);
+        
+        Page<Product> pageProd=productService.findPaginated(pageNoInt,Integer.parseInt(pageSize),sortField, sortDir);
+        
+        model.addAttribute("products", pageProd.getContent());
+        model.addAttribute("totalPages", pageProd.getTotalPages());
+        model.addAttribute("totalItems", pageProd.getTotalElements());
+        model.addAttribute("actualPage",pageNoInt); //I need it to be integer for the pagination of the page to work
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        
+        return "listAllProducts";
     }
 
 }

@@ -13,15 +13,21 @@
         <div class="container mt-3">
             <div class="row">
                 <div class="col-12">
-                    <table class="table">
+                    <table class="table tableListAllPageCategory">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">State</th>
+                                <th scope="col">
+                                     <a class="h6" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=idCategory&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Id</a>
+                                </th>
+                                <th scope="col">
+                                    <a class="h6" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=name&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Name</a>
+                                </th>
+                                <th scope="col">
+                                    <a class="h6" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=state&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#State</a>
+                                </th>
                                 <th scope="col">Image</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
+                                <th scope="col">Delete</th>
+                                <th scope="col">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,16 +35,19 @@
                                 <td th:text="${category.idCategory}"></td>
                                 <td th:text="${category.name}"></td>
                                 <td th:text="${category.state}"></td>
-                                <td ></td>
+                                <td>
+                                    <img th:if="${category.image}  and ${category.image!='' }"   th:src="@{'data:image/jpeg;charset=utf-8;base64,' + ${category.image}}"  th:alt="${category.image}" style="max-width: 40px"/>
+                                    <img th:unless="${category.image} and ${category.image!= '' }"   src="/img/categoryDefault.jpg"  alt="The category currently has no image" style="max-width: 40px"/>
+                                </td>
                                 <td>
                                     <form id="formDeleteProduct"  th:action="@{/categoryC/deleteCateg}" method="post">
                                         <input name="idCategory" hidden="true" th:value="${category.idCategory}"> 
-                                            <button type="submit" class="btn btn-danger">Delete category</button>
+                                            <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                                     </form>
                                 </td>
                                 <td> 
                                     <a class="btn btn-secondary" th:href="@{/categoryC/editPage/} + ${category.idCategory}">
-                                        Edit category
+                                        <i class="bi bi-pencil-square"></i>
                                     </a>
                                 </td>
                             </tr>

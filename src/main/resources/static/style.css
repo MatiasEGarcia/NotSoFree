@@ -9,6 +9,7 @@
     object-fit: contain;
 }
 
+/*--------------------------Login page*/
 .imgUserLoginContainer{
     width: 100%;
     height: 12rem;
@@ -18,4 +19,18 @@
     height: 100%;
     width: 100%;
     object-fit: contain;
+}
+
+/*--------------------------listAllProducts*/
+
+.tableListAllPageProducts a{
+    text-decoration: none;
+    color: black;
+}
+
+/*--------------------------listAllCategories*/
+
+.tableListAllPageCategory a{
+    text-decoration: none;
+    color: black;
 }

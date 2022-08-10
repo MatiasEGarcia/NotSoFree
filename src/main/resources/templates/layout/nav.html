@@ -33,15 +33,15 @@
                             </ul>
                         </li>
                         <li class="nav-item" sec:authorize="isAnonymous()">
-                            <a class="nav-link" th:href="@{/login}">Login<i class="fas fa-user px-1"></i></a>
+                            <a class="nav-link" th:href="@{/login}">Login<i class="bi bi-person-circle"></i></a>
                         </li>
                         
                         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span sec:authentication="name">Usuario</span><i class="fas fa-user px-1"></i>
+                                <span sec:authentication="name">Usuario</span><i class="bi bi-person-circle"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" >Edit user</a></li>
+                                <li><a class="dropdown-item" >Edit profile</a></li>
                                 <li><a class="dropdown-item" >Favorites</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
@@ -49,7 +49,7 @@
                                         <a class="dropdown-item"> 
                                             <button class="btn btn-danger" type="submit" id="logout">
                                                 Logout
-                                                <i class="fas fa-power-off px-1"></i>
+                                                <i class="bi bi-box-arrow-left"></i>
                                             </button>
                                         </a>
                                     </form>
