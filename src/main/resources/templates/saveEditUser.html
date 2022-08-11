@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>userProfile page</title>
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div th:replace="layout/alert :: alert"></div>
+
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="saveEditUserImgContainer">
+                        <img class="saveEditUserImg" th:src="@{/img/userDefault.jpg}" alt="There are not default image" />
+                    </div>
+                </div>
+                <div class="col-12  col-md-8">
+
+                    <form class="" th:action="@{${formAction}}" th:object="${user}" method="POST" enctype="multipart/form-data">
+
+                        <div class="row justify-content-around">
+                            <div class="col-12 col-md-5 ">
+                                <h4>Personal details</h4>
+                                <div class="form_group">
+                                    <label for="names" class="form-label">Name</label>
+                                    <input id="names" name="names" type="text" class="form-control" th:field="*{person.names}"/>
+                                </div>
+                                <div class="form_group">
+                                    <label for="surnames" class="form-label">Surname</label>
+                                    <input id="surnames" name="surnames" type="text" class="form-control" th:field="*{person.surnames}"/>
+                                </div>
+                                <div class="form_group">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input id="phone" name="phone" type="tel" class="form-control" th:field="*{person.phone}"/>
+                                </div>
+                                <div class="form_group">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input id="email" name="email" type="text" class="form-control" th:field="*{person.email}"/>
+                                </div>
+                                <div class="form_group">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input id="address" name="address" type="text" class="form-control" th:field="*{person.address}"/>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-5 gy-5 gy-md-0">
+                                <h4>User Details</h4>
+                                <div class="form_group">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input id="username" name="username" type="text" class="form-control" th:field="*{username}"/>
+                                </div>
+                                <div class="form_group">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input id="password" name="password" type="password" class="form-control" th:field="*{password}"/>
+                                </div>
+                                <div class="form_group">
+                                    <label  for="image" class="form-label">Image</label>
+                                    <input id="image" name="image" type="file" class="form-control"/>
+                                </div>
+ 
+                                <div class="d-grid gap-2 mt-5">
+                                    <button type="submit" class="btn btn-success"><span class="h4">Save <i class="bi bi-check-circle-fill"></i></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form> 
+
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+    </body>
+</html>

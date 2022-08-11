@@ -35,13 +35,16 @@
                         <li class="nav-item" sec:authorize="isAnonymous()">
                             <a class="nav-link" th:href="@{/userC/login}">Login<i class="bi bi-person-circle"></i></a>
                         </li>
+                         <li class="nav-item" sec:authorize="isAnonymous()">
+                            <a class="nav-link" th:href="@{/userC/savePage}">Create Account<i class="bi bi-person-plus-fill"></i></a>
+                        </li>
                         
                         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span sec:authentication="name">Usuario</span><i class="bi bi-person-circle"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/userC/profilePage}">Edit profile</a></li>
+                                <li><a class="dropdown-item" th:href="@{/userC/editPage}">Edit profile</a></li>
                                 <li><a class="dropdown-item" >Favorites</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
@@ -56,6 +59,7 @@
                                 </li>
                             </ul>
                         </li>
+                        
                     </ul>
                     
                     <form class="d-flex" role="search">

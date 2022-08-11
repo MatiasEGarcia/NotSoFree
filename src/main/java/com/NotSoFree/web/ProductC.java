@@ -99,7 +99,7 @@ public class ProductC {
         productService.saveProduct(product, image);
 
         redirectAttrs
-                .addFlashAttribute("message", "Product create successfully")
+                .addFlashAttribute("message", "Product created successfully")
                 .addFlashAttribute("class", "success");
 
         return "redirect:/productC/savePage";
