@@ -3,6 +3,7 @@ package com.NotSoFree.domain;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -29,7 +31,7 @@ public class UserD implements Serializable{
     private Long idUser;
     
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.REMOVE,CascadeType.REFRESH})
     @JoinColumn(name="person")
     private Person person;
     
@@ -50,9 +52,8 @@ public class UserD implements Serializable{
     @Column(name="state")
     private byte state;
     
-    
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="user") 
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Rol> roles;
     
     

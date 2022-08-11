@@ -52,7 +52,7 @@ public class UserC {
     
     @PostMapping(value="/saveUser")
     public String saveUser(UserD user,
-            @RequestParam(name = "image", required = false) MultipartFile image,
+            @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception{
         log.info("saveUser handler");
         
