@@ -39,7 +39,7 @@ public class UserDServiceImpl implements UserDService {
         BCryptPasswordEncoder encoder = bcPasswordEncoder.passwordEncoder();
         UserD userD = new UserD();
         Person person = new Person();
-        byte active = 1;
+        byte[] active = {1};
         
         userD.setUsername(user.getUsername());
         userD.setPassword(encoder.encode(user.getUserPassword()));
@@ -70,8 +70,12 @@ public class UserDServiceImpl implements UserDService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserD findUserDByUsername(String username) throws UserDNotFoundByUsername {
+    public UserDto findUserByUsername(String username) throws UserDNotFoundByUsername {
         UserD userD = null;
+        Person person;
+        UserDto userDto = new UserDto();
+        
+        
         try {
             userD = userDao.findByUsername(username);
         } catch (DataAccessException e) {
@@ -84,8 +88,19 @@ public class UserDServiceImpl implements UserDService {
         if (userD == null) {
             throw new UserDNotFoundByUsername("There are not user with username= " + username);
         }
-
-        return userD;
+        
+        userDto.setUsername(userD.getUsername());
+        userDto.setUserPassword(userD.getPassword());
+        String stateString = new String(userD.getState());
+        userDto.setUserState(stateString);
+        person= userD.getPerson();
+        userDto.setPersonNames(person.getNames());
+        userDto.setPersonSurnames(person.getSurnames());
+        userDto.setPersonPhone(person.getPhone());
+        userDto.setPersonEmail(person.getEmail());
+        userDto.setPersonEmail(person.getAddress());
+        
+        return userDto;
     }
 
     @Override

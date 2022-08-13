@@ -1,6 +1,4 @@
 package com.NotSoFree.web;
-
-import com.NotSoFree.domain.UserD;
 import com.NotSoFree.dto.UserDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
@@ -35,10 +33,11 @@ public class UserC {
     public String editPage(Model model, Principal principal) throws UserDNotFoundByUsername {
         log.info("editPage handler");
 
-        UserD userD = userDService.findUserDByUsername(principal.getName());
+        UserDto userDto = userDService.findUserByUsername(principal.getName());
 
-        model.addAttribute("actualUser", userD);
-        return "userProfile";
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("formAction", "/userC/editUser");
+        return "saveEditUser";
     }
 
     @GetMapping(value = "/savePage")
@@ -72,6 +71,21 @@ public class UserC {
                 .addFlashAttribute("message", "User created successfully")
                 .addFlashAttribute("class", "success");
         
+        return "redirect:/userC/login";
+    }
+    
+    @PostMapping(value="/editUser")
+    public String editUser(Model model,UserDto userDto,
+            @RequestParam(name = "file", required = false) MultipartFile image,
+            RedirectAttributes redirectAttrs) throws Exception{
+         log.info("editUser handler");
+        
+         userDService.save(userDto, image);
+         
+          redirectAttrs
+                .addFlashAttribute("message", "User edited successfully")
+                .addFlashAttribute("class", "success");
+         
         return "redirect:/userC/login";
     }
     

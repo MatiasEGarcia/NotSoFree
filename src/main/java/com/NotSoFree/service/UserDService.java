@@ -13,7 +13,7 @@ public interface UserDService {
     
     public void save(UserDto user,MultipartFile image) throws Exception;
     
-    public UserD findUserDByUsername(String username) throws UserDNotFoundByUsername;
+    public UserDto findUserByUsername(String username) throws UserDNotFoundByUsername;
     
     public List<Rol> setRolesforUser(UserD user,String rol);
 }

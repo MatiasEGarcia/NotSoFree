@@ -78,7 +78,8 @@ public class ProductC {
 
         redirectAttrs
                 .addFlashAttribute("message", "Product edited successfully")
-                .addFlashAttribute("class", "success");
+                .addFlashAttribute("class", "success")
+                .addAttribute("idProduct", product.getIdProduct());
 
         return "redirect:/productC/editPage/{idProduct}";
     }

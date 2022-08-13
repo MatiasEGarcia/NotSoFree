@@ -1,7 +1,6 @@
 
 package com.NotSoFree.domain;
 
-import com.NotSoFree.validator.NotSameUsername;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -15,8 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.ToString;
 
@@ -45,7 +42,7 @@ public class UserD implements Serializable{
     private String image;
     
     @Column(name="state")
-    private byte state;
+    private byte[] state; /*Why is it an array? becouse I need to convert to String for userDto*/
     
     @ToString.Exclude
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")

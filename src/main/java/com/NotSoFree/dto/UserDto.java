@@ -3,7 +3,6 @@ package com.NotSoFree.dto;
 import com.NotSoFree.validator.NotSameUsername;
 import java.io.Serializable;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -11,6 +10,8 @@ import lombok.Data;
 //user and person attributes to save
 @Data
 public class UserDto implements Serializable{
+    
+    private Long idUser;
     
     @Size(min=5, max=15, message="Username cannot be less than 5 and greater than 15")
     @NotSameUsername
@@ -22,6 +23,8 @@ public class UserDto implements Serializable{
     private String userPassword;
     
     private String userState;
+    
+     private Long idPerson;
     
     @Size(min=5, max=15, message="name cannot be less than 5 and greater than 15")
     @NotBlank(message="Person name can't be blank")
