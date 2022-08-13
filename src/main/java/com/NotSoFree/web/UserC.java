@@ -1,6 +1,7 @@
 package com.NotSoFree.web;
 
 import com.NotSoFree.domain.UserD;
+import com.NotSoFree.dto.UserDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
 import java.security.Principal;
@@ -44,28 +45,28 @@ public class UserC {
     public String savePage(Model model) {
         log.info("savePage handler");
 
-        UserD userD = new UserD();
+        UserDto userDto= new UserDto();
 
-        model.addAttribute("userD", userD);
+        model.addAttribute("userDto", userDto);
         model.addAttribute("formAction", "/userC/saveUser");
         return "saveEditUser";
     }
     
     
     @PostMapping(value="/saveUser")
-    public String saveUser(Model model,@Valid UserD userD,
+    public String saveUser(Model model,@Valid UserDto userDto,
              BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception{
         log.info("saveUser handler");
         
          if (result.hasErrors()) {
-            model.addAttribute("user", userD);
+            model.addAttribute("user", userDto);
             model.addAttribute("formAction", "/userC/saveUser");
             return "saveEditUser";
         }
         
-        userDService.save(userD, image);
+        userDService.save(userDto, image);
         
         redirectAttrs
                 .addFlashAttribute("message", "User created successfully")

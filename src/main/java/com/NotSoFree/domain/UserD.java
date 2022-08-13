@@ -31,23 +31,16 @@ public class UserD implements Serializable{
     @Column(name="id_user")
     private Long idUser;
     
-
     @OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.REMOVE,CascadeType.REFRESH})
     @JoinColumn(name="person")
     private Person person;
     
-    @Size(min=5, max=15, message="Username cannot be less than 5 and greater than 15")
-    @NotSameUsername
-    @NotBlank(message="username can't be blank")
     @Column(name="user_name")
     private String username;
     
-    @Size(min=6, max=15, message="The password cannot be less than 6 and greater than 15")
-    @NotBlank(message="password can't be blank")
     @Column(name="password")
     private String password;
     
-   
     @Column(name="image")
     private String image;
     

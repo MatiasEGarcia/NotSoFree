@@ -1,8 +1,10 @@
 package com.NotSoFree.service;
 
 import com.NotSoFree.dao.UserDao;
+import com.NotSoFree.domain.Person;
 import com.NotSoFree.domain.Rol;
 import com.NotSoFree.domain.UserD;
+import com.NotSoFree.dto.UserDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.util.BCPasswordEncoder;
 import java.io.IOException;
@@ -32,19 +34,30 @@ public class UserDServiceImpl implements UserDService {
 
     @Override
     @Transactional
-    public void save(UserD user, MultipartFile image) throws Exception {
+    public void save(UserDto user, MultipartFile image) throws Exception {
 
         BCryptPasswordEncoder encoder = bcPasswordEncoder.passwordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
+        UserD userD = new UserD();
+        Person person = new Person();
         byte active = 1;
-
+        
+        userD.setUsername(user.getUsername());
+        userD.setPassword(encoder.encode(user.getUserPassword()));
+        userD.setState(active);
+        person.setNames(user.getPersonNames());
+        person.setSurnames(user.getPersonSurnames());
+        person.setPhone(user.getPersonPhone());
+        person.setEmail(user.getPersonEmail());
+        person.setAddress(user.getPersonAddress());
+        userD.setPerson(person);
+        
         try {
             if (!image.isEmpty()) {
-                user.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+                userD.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
             }
-            user.setState(active);
-            user = userDao.save(user);
-            rolService.createAll(setRolesforUser(user,"user"));
+            
+            userD = userDao.save(userD);
+            rolService.createAll(setRolesforUser(userD,"user"));
         } catch (IOException e) {
             throw new Exception("There was an error with the image");
         } catch (DataAccessException e) {
