@@ -4,10 +4,12 @@ import com.NotSoFree.domain.UserD;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
 import java.security.Principal;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,25 +46,32 @@ public class UserC {
 
         UserD userD = new UserD();
 
-        model.addAttribute("user", userD);
+        model.addAttribute("userD", userD);
         model.addAttribute("formAction", "/userC/saveUser");
         return "saveEditUser";
     }
     
     
     @PostMapping(value="/saveUser")
-    public String saveUser(UserD user,
+    public String saveUser(Model model,@Valid UserD userD,
+             BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception{
         log.info("saveUser handler");
         
-        userDService.save(user, image);
+         if (result.hasErrors()) {
+            model.addAttribute("user", userD);
+            model.addAttribute("formAction", "/userC/saveUser");
+            return "saveEditUser";
+        }
+        
+        userDService.save(userD, image);
         
         redirectAttrs
                 .addFlashAttribute("message", "User created successfully")
                 .addFlashAttribute("class", "success");
         
-        return "redirect:/";
+        return "redirect:/userC/login";
     }
     
 }

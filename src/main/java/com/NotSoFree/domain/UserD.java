@@ -1,6 +1,7 @@
 
 package com.NotSoFree.domain;
 
+import com.NotSoFree.validator.NotSameUsername;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -15,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.ToString;
 
@@ -35,11 +36,13 @@ public class UserD implements Serializable{
     @JoinColumn(name="person")
     private Person person;
     
-    
-   @NotBlank(message="username can't be blank")
+    @Size(min=5, max=15, message="Username cannot be less than 5 and greater than 15")
+    @NotSameUsername
+    @NotBlank(message="username can't be blank")
     @Column(name="user_name")
     private String username;
     
+    @Size(min=6, max=15, message="The password cannot be less than 6 and greater than 15")
     @NotBlank(message="password can't be blank")
     @Column(name="password")
     private String password;
@@ -48,7 +51,6 @@ public class UserD implements Serializable{
     @Column(name="image")
     private String image;
     
-    @NotNull
     @Column(name="state")
     private byte state;
     
