@@ -1,19 +1,24 @@
 
 package com.NotSoFree.service;
 
-import com.NotSoFree.domain.Rol;
-import com.NotSoFree.domain.UserD;
-import com.NotSoFree.dto.UserDto;
+
+import com.NotSoFree.dto.UserAEDto;
+import com.NotSoFree.dto.UserCDto;
+import com.NotSoFree.dto.UserEDto;
+import com.NotSoFree.dto.UserEPDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
-import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 
 public interface UserDService {
     
-    public void save(UserDto user,MultipartFile image) throws Exception;
+    public void userCreate (UserCDto user, MultipartFile image) throws Exception;
     
-    public UserDto findUserByUsername(String username) throws UserDNotFoundByUsername;
+    public void userEdit(UserEDto user ,MultipartFile image) throws Exception;
     
-    public List<Rol> setRolesforUser(UserD user,String rol);
+    public void userEditByAdmin(UserAEDto user) throws Exception;
+    
+    public void userEditPassword(UserEPDto user) throws Exception;
+    
+     public UserEDto findUserByUsername(String username) throws UserDNotFoundByUsername;
 }

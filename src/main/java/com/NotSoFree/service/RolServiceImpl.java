@@ -16,7 +16,7 @@ public class RolServiceImpl implements RolService {
 
     @Override
     @Transactional
-    public void create(Rol rol) throws Exception {
+    public void save(Rol rol) throws Exception {
 
         try {
             rolDao.save(rol);
@@ -30,7 +30,7 @@ public class RolServiceImpl implements RolService {
 
     @Override
     @Transactional
-    public void createAll(List<Rol> roles) throws Exception {
+    public void saveAll(List<Rol> roles) throws Exception {
 
         try {
             rolDao.saveAll(roles);

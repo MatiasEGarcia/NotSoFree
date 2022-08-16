@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RolService {
     
-    public void create(Rol rol) throws Exception;
+    public void save(Rol rol) throws Exception;
     
-    public void createAll(List<Rol> roles) throws Exception;
+    public void saveAll(List<Rol> roles) throws Exception;
 }

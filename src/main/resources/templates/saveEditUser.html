@@ -19,44 +19,44 @@
                 </div>
                 <div class="col-12  col-md-8">
 
-                    <form id="userForm" th:action="@{${formAction}}" th:object="${userDto}" method="POST" enctype="multipart/form-data">s
+                    <form id="userForm" th:action="@{${formAction}}" th:object="${userCDto}" method="POST" enctype="multipart/form-data">
                         
                         <div class="row justify-content-around">
                             <div class="col-12 col-md-5 ">
                                 <h4>Personal details</h4>
                                 <div class="form_group">
                                     <label for="names" class="form-label">Name</label>
-                                    <input id="names" name="names" type="text" class="form-control" th:field="*{personNames}"/>
+                                    <input id="names" name="names" type="text" class="form-control" th:field="*{names}"/>
                                     <ul>
-                                        <li th:each="error : ${#fields.errors('personNames')}" th:text="${error}" class="error" />
+                                        <li th:each="error : ${#fields.errors('names')}" th:text="${error}" class="error" />
                                     </ul>
                                 </div>
                                 <div class="form_group">
                                     <label for="surnames" class="form-label">Surname</label>
-                                    <input id="surnames" name="surnames" type="text" class="form-control" th:field="*{personSurnames}"/>
+                                    <input id="surnames" name="surnames" type="text" class="form-control" th:field="*{surnames}"/>
                                     <ul>
-                                        <li th:each="error : ${#fields.errors('personSurnames')}" th:text="${error}" class="error" />
+                                        <li th:each="error : ${#fields.errors('surnames')}" th:text="${error}" class="error" />
                                     </ul>
                                 </div>
                                 <div class="form_group">
                                     <label for="phone" class="form-label">Phone</label>
-                                    <input id="phone" name="phone" type="tel" class="form-control" th:field="*{personPhone}"/>
+                                    <input id="phone" name="phone" type="tel" class="form-control" th:field="*{phone}"/>
                                     <ul>
-                                        <li th:each="error : ${#fields.errors('personPhone')}" th:text="${error}" class="error" />
+                                        <li th:each="error : ${#fields.errors('phone')}" th:text="${error}" class="error" />
                                     </ul>
                                 </div>
                                 <div class="form_group">
                                     <label for="email" class="form-label">Email</label>
-                                    <input id="email" name="email" type="text" class="form-control" th:field="*{personEmail}"/>
+                                    <input id="email" name="email" type="text" class="form-control" th:field="*{email}"/>
                                     <ul>
-                                        <li th:each="error : ${#fields.errors('personEmail')}" th:text="${error}" class="error" />
+                                        <li th:each="error : ${#fields.errors('email')}" th:text="${error}" class="error" />
                                     </ul>
                                 </div>
                                 <div class="form_group">
                                     <label for="address" class="form-label">Address</label>
-                                    <input id="address" name="address" type="text" class="form-control" th:field="*{personAddress}"/>
+                                    <input id="address" name="address" type="text" class="form-control" th:field="*{address}"/>
                                     <ul>
-                                        <li th:each="error : ${#fields.errors('personAddress')}" th:text="${error}" class="error" />
+                                        <li th:each="error : ${#fields.errors('address')}" th:text="${error}" class="error" />
                                     </ul>
                                 </div>
                             </div>
@@ -72,9 +72,9 @@
                                 </div>
                                 <div class="form_group">
                                     <label for="password" class="form-label">Password</label>
-                                    <input id="password" name="password" type="password" class="form-control" th:field="*{userPassword}"/>
+                                    <input id="password" name="password" type="password" class="form-control" th:field="*{password}"/>
                                     <ul>
-                                        <li th:each="error : ${#fields.errors('userPassword')}" th:text="${error}" class="error" />
+                                        <li th:each="error : ${#fields.errors('password')}" th:text="${error}" class="error" />
                                     </ul>
                                 </div>
                                 <div class="form_group">

@@ -1,5 +1,6 @@
 package com.NotSoFree.web;
-import com.NotSoFree.dto.UserDto;
+import com.NotSoFree.dto.UserCDto;
+import com.NotSoFree.dto.UserEDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
 import java.security.Principal;
@@ -33,9 +34,9 @@ public class UserC {
     public String editPage(Model model, Principal principal) throws UserDNotFoundByUsername {
         log.info("editPage handler");
 
-        UserDto userDto = userDService.findUserByUsername(principal.getName());
+        UserEDto userEto = userDService.findUserByUsername(principal.getName());
 
-        model.addAttribute("userDto", userDto);
+        model.addAttribute("userDto", userEto);
         model.addAttribute("formAction", "/userC/editUser");
         return "saveEditUser";
     }
@@ -44,28 +45,28 @@ public class UserC {
     public String savePage(Model model) {
         log.info("savePage handler");
 
-        UserDto userDto= new UserDto();
+        UserCDto userCDto= new UserCDto();
 
-        model.addAttribute("userDto", userDto);
+        model.addAttribute("userCDto", userCDto);
         model.addAttribute("formAction", "/userC/saveUser");
         return "saveEditUser";
     }
     
     
     @PostMapping(value="/saveUser")
-    public String saveUser(Model model,@Valid UserDto userDto,
+    public String saveUser(Model model,@Valid UserCDto userCDto,
              BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception{
         log.info("saveUser handler");
         
          if (result.hasErrors()) {
-            model.addAttribute("user", userDto);
+            model.addAttribute("userCDto", userCDto);
             model.addAttribute("formAction", "/userC/saveUser");
             return "saveEditUser";
         }
         
-        userDService.save(userDto, image);
+        userDService.userCreate(userCDto, image);
         
         redirectAttrs
                 .addFlashAttribute("message", "User created successfully")
@@ -75,18 +76,19 @@ public class UserC {
     }
     
     @PostMapping(value="/editUser")
-    public String editUser(Model model,UserDto userDto,
+    public String editUser(Model model,UserEDto userEDto,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception{
          log.info("editUser handler");
         
-         userDService.save(userDto, image);
+         userDService.userEdit(userEDto, image);
          
           redirectAttrs
                 .addFlashAttribute("message", "User edited successfully")
-                .addFlashAttribute("class", "success");
+                .addFlashAttribute("class", "success")
+                .addAttribute("idUser", userEDto.getId());
          
-        return "redirect:/userC/login";
+        return "redirect:/userC/editPage/{idUser}";
     }
     
 }
