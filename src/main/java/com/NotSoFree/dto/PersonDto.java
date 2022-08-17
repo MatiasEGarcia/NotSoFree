@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class PersonDto implements Serializable{
     
-    private Long id;
+    private Long idPerson;
     
     @Size(min=5, max=15, message="name cannot be less than 5 and greater than 15")
     @NotBlank(message="Person name can't be blank")

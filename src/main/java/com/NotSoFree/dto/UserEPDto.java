@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class UserEPDto {
     
-    private Long id;
+    private Long idUser;
     private String newPassword;
     private String oldPassword;
 }

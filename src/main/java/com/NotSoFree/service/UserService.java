@@ -1,4 +1,3 @@
-
 package com.NotSoFree.service;
 
 import com.NotSoFree.dao.UserDao;
@@ -29,56 +28,55 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service("userDetailsService")
-public class UserService implements UserDetailsService,UserDService{
-    
-     @Autowired
+public class UserService implements UserDetailsService, UserDService {
+
+    @Autowired
     private UserDao userDao;
-     
-     @Autowired
+
+    @Autowired
     private RolService rolService;
-    
-     @Autowired
+
+    @Autowired
     private BCPasswordEncoder bcPasswordEncoder;
-    
+
     @Override
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        
+
         UserD usuario;
-        try{
-            usuario= userDao.findByUsername(username);
-        }catch(DataAccessException e){
+        try {
+            usuario = userDao.findByUsername(username);
+        } catch (DataAccessException e) {
             throw new UsernameNotFoundException("Database Error");
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new UsernameNotFoundException("Unknown Error");
         }
-        
-        
-        if(usuario==null) {
-        	throw new UsernameNotFoundException(username);
+
+        if (usuario == null) {
+            throw new UsernameNotFoundException(username);
         }
-        
-        List<GrantedAuthority> roles= new ArrayList<>();
-        
-        for(Rol rol: usuario.getRoles()){
+
+        List<GrantedAuthority> roles = new ArrayList<>();
+
+        for (Rol rol : usuario.getRoles()) {
             roles.add(new SimpleGrantedAuthority(rol.getName()));
         }
-        
+
         return new User(usuario.getUsername(), usuario.getPassword(), roles);
     }
 
     @Override
     @Transactional
     public void userCreate(UserCDto user, MultipartFile image) throws Exception {
-        
+
         BCryptPasswordEncoder encoder = bcPasswordEncoder.passwordEncoder();
         UserD userD = new UserD();
         Person person = new Person();
         byte[] active = {1};
-    
+
         userD.setUsername(user.getUsername());
-        userD.setPassword(encoder.encode(user.getPassword() ) );
+        userD.setPassword(encoder.encode(user.getPassword()));
         userD.setState(active);
         person.setNames(user.getNames());
         person.setSurnames(user.getSurnames());
@@ -86,13 +84,14 @@ public class UserService implements UserDetailsService,UserDService{
         person.setEmail(user.getEmail());
         person.setAddress(user.getAddress());
         userD.setPerson(person);
-        
+
         try {
             if (!image.isEmpty()) {
                 userD.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
             }
-            userD=userDao.save(userD);
-            rolService.save(new Rol("ROLE_USER",userD));  /*If the user has to have the admin role, an admin should give it to them (modifying it)*/
+            userD = userDao.save(userD);
+            rolService.save(new Rol("ROLE_USER", userD));
+            /*If the user has to have the admin role, an admin should give it to them (modifying it)*/
         } catch (IOException e) {
             throw new Exception("There was an error with the image");
         } catch (DataAccessException e) {
@@ -103,13 +102,36 @@ public class UserService implements UserDetailsService,UserDService{
         }
     }
 
-    
-    
-    
     @Override
     @Transactional
     public void userEdit(UserEDto user, MultipartFile image) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        UserD userD = new UserD();
+        Person person = new Person();
+
+        userD.setIdUser(user.getIdUser());
+        userD.setUsername(user.getUsername());
+        person.setIdPerson(user.getIdPerson());
+        person.setNames(user.getNames());
+        person.setSurnames(user.getSurnames());
+        person.setPhone(user.getPhone());
+        person.setEmail(user.getEmail());
+        person.setAddress(user.getAddress());
+        userD.setPerson(person);
+
+        try {
+            if (!image.isEmpty()) {
+                userD.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+            }
+            userDao.updateWithoutPassword(userD.getIdUser(), userD); /*TENGO QUE CREAR UN METODO PROPIIO PARA GUARDAR USUARIO SIN PASSWORD Y UNO SOLO PARA LA PASSWORD*/
+        } catch (IOException e) {
+            throw new Exception("There was an error with the image");
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+
     }
 
     @Override
@@ -128,10 +150,8 @@ public class UserService implements UserDetailsService,UserDService{
     @Transactional
     public UserEDto findUserByUsername(String username) throws UserDNotFoundByUsername {
         UserD userD = null;
-        Person person;
         UserEDto userEDto = new UserEDto();
-        
-        
+
         try {
             userD = userDao.findByUsername(username);
         } catch (DataAccessException e) {
@@ -144,16 +164,17 @@ public class UserService implements UserDetailsService,UserDService{
         if (userD == null) {
             throw new UserDNotFoundByUsername("There are not user with username= " + username);
         }
-        
+
+        userEDto.setIdUser(userD.getIdUser());
         userEDto.setUsername(userD.getUsername());
         userEDto.setImage(userD.getImage());
-        userEDto.setNames(userD.getPerson().getNames() );
+        userEDto.setIdPerson(userD.getPerson().getIdPerson());
+        userEDto.setNames(userD.getPerson().getNames());
         userEDto.setSurnames(userD.getPerson().getSurnames());
         userEDto.setPhone(userD.getPerson().getPhone());
         userEDto.setEmail(userD.getPerson().getEmail());
         userEDto.setAddress(userD.getPerson().getAddress());
-        
-        
+
         return userEDto;
     }
 

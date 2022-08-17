@@ -14,13 +14,21 @@
             <div class="row">
                 <div class="col-12 col-md-4">
                     <div class="saveEditUserImgContainer">
-                        <img class="saveEditUserImg" th:src="@{/img/userDefault.jpg}" alt="There are not default image" />
+                        <div th:if="${user.image} and ${user.image!= '' }" > 
+                            <img  class="saveEditUserImg" th:src="${'data:image/jpeg;charset=utf-8;base64,' + user.image}"  alt="The user image had an error"/>
+                        </div>
+                        <div  th:unless="${user.image} and ${user.image!= '' }">
+                            <img class="saveEditUserImg" th:src="@{/img/userDefault.jpg}" alt="There are not default image" />
+                        </div>
                     </div>
                 </div>
                 <div class="col-12  col-md-8">
 
-                    <form id="userForm" th:action="@{${formAction}}" th:object="${userCDto}" method="POST" enctype="multipart/form-data">
-                        
+                    <form id="userForm" th:action="@{${formAction}}" th:object="${user}" method="POST" enctype="multipart/form-data">
+                        <input type="text" hidden="true" th:field="*{image}"  th:value="${user.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
+                        <input type="hidden" name="idUser" th:field="*{idUser}"/>
+                        <input type="hidden" name="idPerson" th:field="*{idPerson}"/>
+
                         <div class="row justify-content-around">
                             <div class="col-12 col-md-5 ">
                                 <h4>Personal details</h4>
@@ -70,16 +78,23 @@
                                         <li th:each="error : ${#fields.errors('username')}" th:text="${error}" class="error" />
                                     </ul>
                                 </div>
-                                <div class="form_group">
+
+                                <div class="form_group" th:if="${user.idUser == null} and ${user.idPerson == null}"> <!--If there is an id it is because it is to edit the form, and to edit the password it is on another page-->
                                     <label for="password" class="form-label">Password</label>
                                     <input id="password" name="password" type="password" class="form-control" th:field="*{password}"/>
                                     <ul>
                                         <li th:each="error : ${#fields.errors('password')}" th:text="${error}" class="error" />
                                     </ul>
                                 </div>
+
+
                                 <div class="form_group">
                                     <label  for="image" class="form-label">Image</label>
                                     <input id="image" name="file" type="file" class="form-control"/>
+                                </div>
+
+                                <div class="d-grid gap-2 mt-5" th:if="${user.idUser != null} and ${user.idPerson != null}">
+                                    <button class="btn btn-secondary"> <a th:href="@{/userC/passwordPage}"> <span class="h4">Edit password <i class="bi bi-key"></i></span> </a> </button>
                                 </div>
 
                                 <div class="d-grid gap-2 mt-5">

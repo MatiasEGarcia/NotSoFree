@@ -34,9 +34,9 @@ public class UserC {
     public String editPage(Model model, Principal principal) throws UserDNotFoundByUsername {
         log.info("editPage handler");
 
-        UserEDto userEto = userDService.findUserByUsername(principal.getName());
+        UserEDto userEDto = userDService.findUserByUsername(principal.getName());
 
-        model.addAttribute("userDto", userEto);
+        model.addAttribute("user", userEDto);
         model.addAttribute("formAction", "/userC/editUser");
         return "saveEditUser";
     }
@@ -47,7 +47,7 @@ public class UserC {
 
         UserCDto userCDto= new UserCDto();
 
-        model.addAttribute("userCDto", userCDto);
+        model.addAttribute("user", userCDto);
         model.addAttribute("formAction", "/userC/saveUser");
         return "saveEditUser";
     }
@@ -61,7 +61,7 @@ public class UserC {
         log.info("saveUser handler");
         
          if (result.hasErrors()) {
-            model.addAttribute("userCDto", userCDto);
+            model.addAttribute("user", userCDto);
             model.addAttribute("formAction", "/userC/saveUser");
             return "saveEditUser";
         }
@@ -76,7 +76,7 @@ public class UserC {
     }
     
     @PostMapping(value="/editUser")
-    public String editUser(Model model,UserEDto userEDto,
+    public String editUser(Model model,@Valid UserEDto userEDto,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception{
          log.info("editUser handler");
@@ -86,9 +86,17 @@ public class UserC {
           redirectAttrs
                 .addFlashAttribute("message", "User edited successfully")
                 .addFlashAttribute("class", "success")
-                .addAttribute("idUser", userEDto.getId());
+                .addAttribute("idUser", userEDto.getIdUser());
          
         return "redirect:/userC/editPage/{idUser}";
     }
+    
+    @GetMapping(value="/passwordPage")
+    public String passwordPage(){
+        log.info("editPassword handler");
+        
+        return "passwordPage";
+    }
+    
     
 }
