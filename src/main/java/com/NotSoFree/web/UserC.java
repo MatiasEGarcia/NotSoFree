@@ -85,10 +85,9 @@ public class UserC {
          
           redirectAttrs
                 .addFlashAttribute("message", "User edited successfully")
-                .addFlashAttribute("class", "success")
-                .addAttribute("idUser", userEDto.getIdUser());
+                .addFlashAttribute("class", "success");
          
-        return "redirect:/userC/editPage/{idUser}";
+        return "redirect:/userC/editPage";
     }
     
     @GetMapping(value="/passwordPage")
