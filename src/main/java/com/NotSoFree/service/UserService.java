@@ -10,6 +10,7 @@ import com.NotSoFree.dto.UserEDto;
 import com.NotSoFree.dto.UserEPDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.util.BCPasswordEncoder;
+import com.NotSoFree.util.CustomUserDetails;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -43,9 +44,9 @@ public class UserService implements UserDetailsService, UserDService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserD usuario;
+        UserD user;
         try {
-            usuario = userDao.findByUsername(username);
+            user = userDao.findByUsername(username);
         } catch (DataAccessException e) {
             throw new UsernameNotFoundException("Database Error");
         } catch (Exception e) {
@@ -53,17 +54,11 @@ public class UserService implements UserDetailsService, UserDService {
             throw new UsernameNotFoundException("Unknown Error");
         }
 
-        if (usuario == null) {
+        if (user == null) {
             throw new UsernameNotFoundException(username);
         }
 
-        List<GrantedAuthority> roles = new ArrayList<>();
-
-        for (Rol rol : usuario.getRoles()) {
-            roles.add(new SimpleGrantedAuthority(rol.getName()));
-        }
-
-        return new User(usuario.getUsername(), usuario.getPassword(), roles);
+       return new CustomUserDetails(user);
     }
 
     @Override
@@ -111,7 +106,6 @@ public class UserService implements UserDetailsService, UserDService {
         Person person = new Person();
 
         userD.setIdUser(user.getIdUser());
-        userD.setUsername(user.getUsername());
         person.setIdPerson(user.getIdPerson());
         person.setNames(user.getNames());
         person.setSurnames(user.getSurnames());
@@ -124,7 +118,7 @@ public class UserService implements UserDetailsService, UserDService {
             if (!image.isEmpty()) {
                 userD.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
             }
-            userDao.updateWithoutPassword(userD.getIdUser(), userD); /*TENGO QUE CREAR UN METODO PROPIIO PARA GUARDAR USUARIO SIN PASSWORD Y UNO SOLO PARA LA PASSWORD*/
+            userDao.updateWithoutPassword(userD.getIdUser(), userD);
         } catch (IOException e) {
             throw new Exception("There was an error with the image");
         } catch (DataAccessException e) {
@@ -149,7 +143,7 @@ public class UserService implements UserDetailsService, UserDService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserEDto findUserByUsername(String username) throws UserDNotFoundByUsername {
         UserD userD = null;
         UserEDto userEDto = new UserEDto();
@@ -168,7 +162,6 @@ public class UserService implements UserDetailsService, UserDService {
         }
 
         userEDto.setIdUser(userD.getIdUser());
-        userEDto.setUsername(userD.getUsername());
         userEDto.setImage(userD.getImage());
         userEDto.setIdPerson(userD.getPerson().getIdPerson());
         userEDto.setNames(userD.getPerson().getNames());

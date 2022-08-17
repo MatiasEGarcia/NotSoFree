@@ -3,10 +3,12 @@ import com.NotSoFree.dto.UserCDto;
 import com.NotSoFree.dto.UserEDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
+import com.NotSoFree.util.CustomUserDetails;
 import java.security.Principal;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,11 +33,11 @@ public class UserC {
     }
 
     @GetMapping(value = "/editPage")//si el usuairo actualiza el nombre de usuario, este principal no se actualiza, sino que mantiene el viejo nombre , tengo que ver la clase UserDetails
-    public String editPage(Model model, Principal principal) throws UserDNotFoundByUsername {
+    public String editPage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) throws UserDNotFoundByUsername {
         log.info("editPage handler");
-
-        UserEDto userEDto = userDService.findUserByUsername(principal.getName());
-
+        
+      
+        UserEDto userEDto = userDService.findUserByUsername(loggedUser.getUsername());
         model.addAttribute("userEDto", userEDto);
         model.addAttribute("formAction", "/userC/editUser");
         model.addAttribute("action", "edit");

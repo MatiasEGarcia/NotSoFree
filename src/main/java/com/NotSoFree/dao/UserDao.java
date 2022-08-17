@@ -12,7 +12,6 @@ public interface UserDao extends JpaRepository<UserD, Long> {
 
     @Modifying
     @Query(value="UPDATE UserD u SET u.person= :#{#userD.person}"
-            + ",u.username= :#{#userD.username}"
             + ",u.image = :#{#userD.image}"
             + " WHERE u.idUser= :id")
     void updateWithoutPassword(@Param(value = "id") long id, @Param("userD")UserD userD);

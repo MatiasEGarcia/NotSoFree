@@ -69,14 +69,6 @@
                             </div>
 
                             <div class="col-12 col-md-5 gy-5 gy-md-0">
-                                <h4>User Details</h4>
-                                <div class="form_group">
-                                    <label for="username" class="form-label">Username</label>
-                                    <input id="username" name="username" type="text" class="form-control" th:field="*{username}"/>
-                                    <ul>
-                                        <li th:each="error : ${#fields.errors('username')}" th:text="${error}" class="error" />
-                                    </ul>
-                                </div>
                                 <div class="form_group">
                                     <label  for="image" class="form-label">Image</label>
                                     <input id="image" name="file" type="file" class="form-control"/>
