@@ -88,6 +88,8 @@ public class UserService implements UserDetailsService, UserDService {
         try {
             if (!image.isEmpty()) {
                 userD.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+            }else{
+                userD.setImage(user.getImage());
             }
             userD = userDao.save(userD);
             rolService.save(new Rol("ROLE_USER", userD));
