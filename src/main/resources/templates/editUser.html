@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>editUser page</title>
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div th:replace="layout/alert :: alert"></div>
+
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="saveEditUserImgContainer">
+                        <div th:if="${userEDto.image} and ${userEDto.image!= '' }" > 
+                            <img  class="saveEditUserImg" th:src="${'data:image/jpeg;charset=utf-8;base64,' + userEDto.image}"  alt="The user image had an error"/>
+                        </div>
+                        <div  th:unless="${userEDto.image} and ${userEDto.image!= '' }">
+                            <img class="saveEditUserImg" th:src="@{/img/userDefault.jpg}" alt="There are not default image" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12  col-md-8">
+                    <form id="userForm" th:action="@{/userC/editUser}" th:object="${userEDto}"  method="POST" enctype="multipart/form-data">
+                        <input type="text" hidden="true" th:field="*{image}"  th:value="${userEDto.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
+                        <input type="hidden" name="idUser" th:field="*{idUser}"/>
+                        <input type="hidden" name="idPerson" th:field="*{idPerson}"/>
+
+                        <div class="row justify-content-around">
+                            <div class="col-12 col-md-5 ">
+                                <h4>Personal details</h4>
+                                <div class="form_group">
+                                    <label for="names" class="form-label">Name</label>
+                                    <input id="names" name="names" type="text" class="form-control" th:field="*{names}"/>
+                                    <ul>
+                                        <li th:each="error : ${#fields.errors('names')}" th:text="${error}" class="error" />
+                                    </ul>
+                                </div>
+                                <div class="form_group">
+                                    <label for="surnames" class="form-label">Surname</label>
+                                    <input id="surnames" name="surnames" type="text" class="form-control" th:field="*{surnames}"/>
+                                    <ul>
+                                        <li th:each="error : ${#fields.errors('surnames')}" th:text="${error}" class="error" />
+                                    </ul>
+                                </div>
+                                <div class="form_group">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input id="phone" name="phone" type="tel" class="form-control" th:field="*{phone}"/>
+                                    <ul>
+                                        <li th:each="error : ${#fields.errors('phone')}" th:text="${error}" class="error" />
+                                    </ul>
+                                </div>
+                                <div class="form_group">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input id="email" name="email" type="text" class="form-control" th:field="*{email}"/>
+                                    <ul>
+                                        <li th:each="error : ${#fields.errors('email')}" th:text="${error}" class="error" />
+                                    </ul>
+                                </div>
+                                <div class="form_group">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input id="address" name="address" type="text" class="form-control" th:field="*{address}"/>
+                                    <ul>
+                                        <li th:each="error : ${#fields.errors('address')}" th:text="${error}" class="error" />
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-5 gy-5 gy-md-0">
+                                <h4>User Details</h4>
+                                <div class="form_group">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input id="username" name="username" type="text" class="form-control" th:field="*{username}"/>
+                                    <ul>
+                                        <li th:each="error : ${#fields.errors('username')}" th:text="${error}" class="error" />
+                                    </ul>
+                                </div>
+                                <div class="form_group">
+                                    <label  for="image" class="form-label">Image</label>
+                                    <input id="image" name="file" type="file" class="form-control"/>
+                                </div>
+                                <div class="d-grid gap-2 mt-5">
+                                    <button class="btn btn-secondary"> <a th:href="@{/userC/passwordPage}"> <span class="h4">Edit password <i class="bi bi-key"></i></span> </a> </button>
+                                </div>
+
+                                <div class="d-grid gap-2 mt-5">
+                                    <button type="submit" class="btn btn-success"><span class="h4">Edit <i class="bi bi-check-circle-fill"></i></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form> 
+
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+    </body>
+</html>

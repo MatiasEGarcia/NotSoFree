@@ -30,26 +30,24 @@ public class UserC {
         return "login";
     }
 
-    @GetMapping(value = "/editPage")
+    @GetMapping(value = "/editPage")//si el usuairo actualiza el nombre de usuario, este principal no se actualiza, sino que mantiene el viejo nombre , tengo que ver la clase UserDetails
     public String editPage(Model model, Principal principal) throws UserDNotFoundByUsername {
         log.info("editPage handler");
 
         UserEDto userEDto = userDService.findUserByUsername(principal.getName());
 
-        model.addAttribute("user", userEDto);
+        model.addAttribute("userEDto", userEDto);
         model.addAttribute("formAction", "/userC/editUser");
-        return "saveEditUser";
+        model.addAttribute("action", "edit");
+        return "editUser";
     }
 
     @GetMapping(value = "/savePage")
     public String savePage(Model model) {
         log.info("savePage handler");
-
         UserCDto userCDto= new UserCDto();
-
-        model.addAttribute("user", userCDto);
-        model.addAttribute("formAction", "/userC/saveUser");
-        return "saveEditUser";
+        model.addAttribute("userCDto", userCDto);
+        return "saveUser";
     }
     
     
@@ -61,9 +59,8 @@ public class UserC {
         log.info("saveUser handler");
         
          if (result.hasErrors()) {
-            model.addAttribute("user", userCDto);
-            model.addAttribute("formAction", "/userC/saveUser");
-            return "saveEditUser";
+            model.addAttribute("userCDto", userCDto);
+            return "saveUser";
         }
         
         userDService.userCreate(userCDto, image);
@@ -77,10 +74,17 @@ public class UserC {
     
     @PostMapping(value="/editUser")
     public String editUser(Model model,@Valid UserEDto userEDto,
+            BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception{
          log.info("editUser handler");
         
+         if (result.hasErrors()) {
+            model.addAttribute("userEDto", userEDto);
+            return "editUser";
+        }
+         
+
          userDService.userEdit(userEDto, image);
          
           redirectAttrs
@@ -94,7 +98,7 @@ public class UserC {
     public String passwordPage(){
         log.info("editPassword handler");
         
-        return "passwordPage";
+        return "editPassword";
     }
     
     
