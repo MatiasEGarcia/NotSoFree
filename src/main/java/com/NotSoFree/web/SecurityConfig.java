@@ -1,4 +1,3 @@
-    
 package com.NotSoFree.web;
 
 import com.NotSoFree.util.BCPasswordEncoder;
@@ -13,33 +12,33 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
-    
-     @Autowired
+
+    @Autowired
     private UserDetailsService userDetailsService;
-    
+
     @Autowired
     private BCPasswordEncoder bcPasswordEncoder;
 
-    
     @Autowired/*here I enter the user's password*/
     public void configurerGlobal(AuthenticationManagerBuilder build) throws Exception {
         build.userDetailsService(userDetailsService).passwordEncoder(bcPasswordEncoder.passwordEncoder());
     }
-    
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-     
+
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/", true)
+                .loginPage("/login")
+                .permitAll()
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/userC/login?error")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
- 
+
         return http.build();
     }
- 
-    
-    
+
 }
