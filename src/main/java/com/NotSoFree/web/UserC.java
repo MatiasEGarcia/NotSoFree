@@ -1,10 +1,10 @@
 package com.NotSoFree.web;
 import com.NotSoFree.dto.UserCDto;
 import com.NotSoFree.dto.UserEDto;
+import com.NotSoFree.dto.UserEPUDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
 import com.NotSoFree.util.CustomUserDetails;
-import java.security.Principal;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class UserC {
         return "login";
     }
 
-    @GetMapping(value = "/editPage")//si el usuairo actualiza el nombre de usuario, este principal no se actualiza, sino que mantiene el viejo nombre , tengo que ver la clase UserDetails
+    @GetMapping(value = "/editPage")
     public String editPage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) throws UserDNotFoundByUsername {
         log.info("editPage handler");
         
@@ -96,12 +96,35 @@ public class UserC {
         return "redirect:/userC/editPage";
     }
     
-    @GetMapping(value="/passwordPage")
-    public String passwordPage(){
-        log.info("editPassword handler");
+
+    @GetMapping(value="/passUNamePage")
+    public String passUNamePage(Model model,@AuthenticationPrincipal CustomUserDetails loggedUser){
+        log.info("passUNamePage handler");
         
-        return "editPassword";
+        UserEPUDto userEPUDto = new UserEPUDto();
+        userEPUDto.setIdUser(loggedUser.getId());
+        userEPUDto.setUsername(loggedUser.getUsername());
+       
+        model.addAttribute("userEPUDto", userEPUDto);
+        return "editPassUName";
     }
     
+    @PostMapping(value="editPassUName")
+    public String editPassUName(Model model, @Valid UserEPUDto userEPUDto,
+            BindingResult result,
+            RedirectAttributes redirectAttrs) throws Exception{
+         log.info("editPassUName handler");
+        if (result.hasErrors()) {
+            model.addAttribute("userEPUDto", userEPUDto);
+            return "editPassUName";
+        }
+        userDService.userEditPassAndUName(userEPUDto); 
+        
+         redirectAttrs
+                .addFlashAttribute("message", "User edited successfully, you must re-login")
+                .addFlashAttribute("class", "success");
+         
+        return "redirect:/userC/login";
+    }
     
 }

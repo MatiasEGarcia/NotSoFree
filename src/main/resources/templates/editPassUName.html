@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>Page to edit password and userName</title>
+
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div th:replace="layout/alert :: alert"></div>
+
+        <div class="container">
+            <div class="row ">
+                <div class="col d-flex justify-content-center">
+                    <div class="col-5">
+                        <div class="imgUserLoginContainer">
+                            <img class="imgUserLogin" src="/img/userDefault.jpg" alt="basicUserImage"/>
+                        </div>
+                        
+                        <form class="d-grid gap-3" id="editPassUName" method="POST" th:action="@{/userC/editPassUName}" th:object="${userEPUDto}">
+                            <input type="hidden" name="idProducto" th:field="*{idUser}"/>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="username" placeholder="User name"  th:field="*{username}" value="*{username}" />
+                                <ul>
+                                    <li th:each="error : ${#fields.errors('username')}" th:text="${error}" class="error" />
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="oldPassword" placeholder="Old password"  th:field="*{oldPassword}" />
+                                <ul>
+                                    <li th:each="error : ${#fields.errors('oldPassword')}" th:text="${error}" class="error" />
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="newPassword" placeholder="New password"  th:field="*{newPassword}"/>
+                                <ul>
+                                    <li th:each="error : ${#fields.errors('newPassword')}" th:text="${error}" class="error" />
+                                </ul>
+                            </div>
+                            <div class="d-grid mt-3">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    <h4 class="d-inline">Save</h4>
+                                </button>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div> 
+        </div>
+
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+
+
+    </body>
+</html>

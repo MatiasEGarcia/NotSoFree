@@ -10,12 +10,12 @@ import java.util.Set;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 public class CustomUserDetails implements UserDetails{
 
     private static final long serialVersionUID = 1L;
     
-    private UserD user;
+    private final UserD user;
+    
     
     
     public CustomUserDetails(UserD user) {  
@@ -48,6 +48,10 @@ public class CustomUserDetails implements UserDetails{
     public String getPassword() {
         return this.user.getPassword();
     }
+    
+    public void setPassword(String password) {
+        this.user.setPassword(password);
+    }
 
     @Override
     public String getUsername() {
@@ -76,5 +80,13 @@ public class CustomUserDetails implements UserDetails{
     @Override
     public boolean isEnabled() {
         return Arrays.toString(user.getState()).contains("1");  //if there is 1 then is active, 0 no
+    }
+    
+    public Long getId(){
+        return this.user.getIdUser();
+    }
+    
+    public String getImage(){
+        return this.user.getImage();
     }
 }

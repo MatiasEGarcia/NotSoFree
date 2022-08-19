@@ -52,3 +52,16 @@
     text-decoration: none;
     color: white;
 }
+
+/*------------------------editPassUName*/
+
+.imgPassUsernameEditContainer{
+    width: 100%;
+    height: 12rem;
+}
+
+.imgPassUsernameEditContainer .editPassUsernameImg{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}

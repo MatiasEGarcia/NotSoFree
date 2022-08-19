@@ -7,19 +7,16 @@ import com.NotSoFree.domain.UserD;
 import com.NotSoFree.dto.UserAEDto;
 import com.NotSoFree.dto.UserCDto;
 import com.NotSoFree.dto.UserEDto;
-import com.NotSoFree.dto.UserEPDto;
+import com.NotSoFree.dto.UserEPUDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.util.BCPasswordEncoder;
 import com.NotSoFree.util.CustomUserDetails;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -118,7 +115,7 @@ public class UserService implements UserDetailsService, UserDService {
             if (!image.isEmpty()) {
                 userD.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
             }
-            userDao.updateWithoutPassword(userD.getIdUser(), userD);
+            userDao.updateWithoutPasswordUsername(userD.getIdUser(), userD);
         } catch (IOException e) {
             throw new Exception("There was an error with the image");
         } catch (DataAccessException e) {
@@ -138,8 +135,19 @@ public class UserService implements UserDetailsService, UserDService {
 
     @Override
     @Transactional
-    public void userEditPassword(UserEPDto user) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void userEditPassAndUName(UserEPUDto user) throws Exception { 
+        BCryptPasswordEncoder encoder = bcPasswordEncoder.passwordEncoder();
+        user.setNewPassword(encoder.encode(user.getNewPassword()));
+        try {
+            userDao.updatePassUsername(user);
+        }catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        }  catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+        //User must re-login
+        SecurityContextHolder.clearContext();
     }
 
     @Override
