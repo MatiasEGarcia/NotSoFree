@@ -32,6 +32,17 @@
                                 <li><a class="dropdown-item" th:href="@{/categoryC/listAllPage}">List all categories</a></li>
                             </ul>
                         </li>
+                        <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Users
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" th:href="@{/userC/saveAdmin}">Save a user</a></li>
+                                <li><a class="dropdown-item" th:href="@{/userC/listAllPage}">List all users</a></li>
+                            </ul>
+                        </li>
+                        
+                        
                         <li class="nav-item" sec:authorize="isAnonymous()">
                             <a class="nav-link" th:href="@{/userC/login}">Login<i class="bi bi-person-circle"></i></a>
                         </li>

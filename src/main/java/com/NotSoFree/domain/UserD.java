@@ -42,7 +42,7 @@ public class UserD implements Serializable{
     private String image;
     
     @Column(name="state")
-    private byte[] state; /*Why is it an array? becouse I need to convert to String for userDto*/
+    private byte state;
     
     @ToString.Exclude
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")

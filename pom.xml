@@ -14,7 +14,7 @@
     <name>NotSoFree</name>
     <description>Spring app</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>15</java.version>
     </properties>
     <dependencies>
         <dependency>

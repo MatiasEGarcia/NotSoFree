@@ -1,4 +1,7 @@
 package com.NotSoFree.web;
+
+import com.NotSoFree.dto.PageDto;
+import com.NotSoFree.dto.UserAEDto;
 import com.NotSoFree.dto.UserCDto;
 import com.NotSoFree.dto.UserEDto;
 import com.NotSoFree.dto.UserEPUDto;
@@ -8,6 +11,7 @@ import com.NotSoFree.util.CustomUserDetails;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,8 +39,7 @@ public class UserC {
     @GetMapping(value = "/editPage")
     public String editPage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) throws UserDNotFoundByUsername {
         log.info("editPage handler");
-        
-      
+
         UserEDto userEDto = userDService.findUserByUsername(loggedUser.getUsername());
         model.addAttribute("userEDto", userEDto);
         model.addAttribute("formAction", "/userC/editUser");
@@ -47,84 +50,104 @@ public class UserC {
     @GetMapping(value = "/savePage")
     public String savePage(Model model) {
         log.info("savePage handler");
-        UserCDto userCDto= new UserCDto();
+        UserCDto userCDto = new UserCDto();
         model.addAttribute("userCDto", userCDto);
         return "saveUser";
     }
-    
-    
-    @PostMapping(value="/saveUser")
-    public String saveUser(Model model,@Valid UserCDto userCDto,
-             BindingResult result,
+
+    @PostMapping(value = "/saveUser")
+    public String saveUser(Model model, @Valid UserCDto userCDto,
+            BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs) throws Exception{
+            RedirectAttributes redirectAttrs) throws Exception {
         log.info("saveUser handler");
-        
-         if (result.hasErrors()) {
+
+        if (result.hasErrors()) {
             model.addAttribute("userCDto", userCDto);
             return "saveUser";
         }
-        
+
         userDService.userCreate(userCDto, image);
-        
+
         redirectAttrs
                 .addFlashAttribute("message", "User created successfully")
                 .addFlashAttribute("class", "success");
-        
+
         return "redirect:/userC/login";
     }
-    
-    @PostMapping(value="/editUser")
-    public String editUser(Model model,@Valid UserEDto userEDto,
+
+    @PostMapping(value = "/editUser")
+    public String editUser(Model model, @Valid UserEDto userEDto,
             BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs) throws Exception{
-         log.info("editUser handler");
-        
-         if (result.hasErrors()) {
+            RedirectAttributes redirectAttrs) throws Exception {
+        log.info("editUser handler");
+
+        if (result.hasErrors()) {
             model.addAttribute("userEDto", userEDto);
             return "editUser";
         }
-         
 
-         userDService.userEdit(userEDto, image);
-         
-          redirectAttrs
+        userDService.userEdit(userEDto, image);
+
+        redirectAttrs
                 .addFlashAttribute("message", "User edited successfully")
                 .addFlashAttribute("class", "success");
-         
+
         return "redirect:/userC/editPage";
     }
-    
 
-    @GetMapping(value="/passUNamePage")
-    public String passUNamePage(Model model,@AuthenticationPrincipal CustomUserDetails loggedUser){
+    @GetMapping(value = "/passUNamePage")
+    public String passUNamePage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) {
         log.info("passUNamePage handler");
-        
+
         UserEPUDto userEPUDto = new UserEPUDto();
         userEPUDto.setIdUser(loggedUser.getId());
         userEPUDto.setUsername(loggedUser.getUsername());
-       
+
         model.addAttribute("userEPUDto", userEPUDto);
         return "editPassUName";
     }
-    
-    @PostMapping(value="editPassUName")
+
+    @PostMapping(value = "editPassUName")
     public String editPassUName(Model model, @Valid UserEPUDto userEPUDto,
             BindingResult result,
-            RedirectAttributes redirectAttrs) throws Exception{
-         log.info("editPassUName handler");
+            RedirectAttributes redirectAttrs) throws Exception {
+        log.info("editPassUName handler");
         if (result.hasErrors()) {
             model.addAttribute("userEPUDto", userEPUDto);
             return "editPassUName";
         }
-        userDService.userEditPassAndUName(userEPUDto); 
-        
-         redirectAttrs
+        userDService.userEditPassAndUName(userEPUDto);
+
+        redirectAttrs
                 .addFlashAttribute("message", "User edited successfully, you must re-login")
                 .addFlashAttribute("class", "success");
-         
+
         return "redirect:/userC/login";
     }
-    
+
+    @GetMapping(value = "/listAllPage")
+    public String listAllPage(Model model,
+            @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
+            @RequestParam(name = "sortField", defaultValue = "idUser") String sortField,
+            @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
+            @RequestParam(name = "pageSize", defaultValue = "2") String pageSize) throws Exception {
+        log.info("listAllPage handler");
+        int pageNoInt = Integer.parseInt(pageNo);
+
+        PageDto<UserAEDto> users = userDService.listUsers(pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
+
+        model.addAttribute("users", users.getContent());
+        model.addAttribute("totalPages", users.getTotalPages());
+        model.addAttribute("totalItems", users.getTotalElements());
+        model.addAttribute("actualPage", pageNoInt); //I need it to be integer for the pagination of the page to work
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        return "listAllUsers";
+    }
+
 }

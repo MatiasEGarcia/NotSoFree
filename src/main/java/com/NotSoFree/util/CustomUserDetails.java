@@ -48,18 +48,10 @@ public class CustomUserDetails implements UserDetails{
     public String getPassword() {
         return this.user.getPassword();
     }
-    
-    public void setPassword(String password) {
-        this.user.setPassword(password);
-    }
 
     @Override
     public String getUsername() {
         return this.user.getUsername();
-    }
-    
-    public void setUsername(String username){
-        this.user.setUsername(username);
     }
 
     @Override
@@ -79,7 +71,7 @@ public class CustomUserDetails implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return Arrays.toString(user.getState()).contains("1");  //if there is 1 then is active, 0 no
+        return Byte.toString(user.getState()).equalsIgnoreCase("1");  //if there is 1 then is active, 0 no
     }
     
     public Long getId(){

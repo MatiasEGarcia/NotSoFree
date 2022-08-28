@@ -4,6 +4,7 @@ import com.NotSoFree.dao.UserDao;
 import com.NotSoFree.domain.Person;
 import com.NotSoFree.domain.Rol;
 import com.NotSoFree.domain.UserD;
+import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.UserAEDto;
 import com.NotSoFree.dto.UserCDto;
 import com.NotSoFree.dto.UserEDto;
@@ -12,10 +13,16 @@ import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.util.BCPasswordEncoder;
 import com.NotSoFree.util.CustomUserDetails;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -55,7 +62,7 @@ public class UserService implements UserDetailsService, UserDService {
             throw new UsernameNotFoundException(username);
         }
 
-       return new CustomUserDetails(user);
+        return new CustomUserDetails(user);
     }
 
     @Override
@@ -65,7 +72,7 @@ public class UserService implements UserDetailsService, UserDService {
         BCryptPasswordEncoder encoder = bcPasswordEncoder.passwordEncoder();
         UserD userD = new UserD();
         Person person = new Person();
-        byte[] active = {1};
+        byte active = 1;
 
         userD.setUsername(user.getUsername());
         userD.setPassword(encoder.encode(user.getPassword()));
@@ -80,7 +87,7 @@ public class UserService implements UserDetailsService, UserDService {
         try {
             if (!image.isEmpty()) {
                 userD.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
-            }else{
+            } else {
                 userD.setImage(user.getImage());
             }
             userD = userDao.save(userD);
@@ -135,14 +142,14 @@ public class UserService implements UserDetailsService, UserDService {
 
     @Override
     @Transactional
-    public void userEditPassAndUName(UserEPUDto user) throws Exception { 
+    public void userEditPassAndUName(UserEPUDto user) throws Exception {
         BCryptPasswordEncoder encoder = bcPasswordEncoder.passwordEncoder();
         user.setNewPassword(encoder.encode(user.getNewPassword()));
         try {
             userDao.updatePassUsername(user);
-        }catch (DataAccessException e) {
+        } catch (DataAccessException e) {
             throw new Exception("Database Error");
-        }  catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Unknown Error");
         }
@@ -179,6 +186,37 @@ public class UserService implements UserDetailsService, UserDService {
         userEDto.setAddress(userD.getPerson().getAddress());
 
         return userEDto;
+    }
+
+    @Override//TENGO UN PROBLEMA, NO SE ACTUALIZA BIEN LAS PAGINAS AL IR PASANDO
+    public PageDto listUsers(int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        //Pageable provides the info for the pagination
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort); // the pagination starts at 1 that's why I subtract 1
+        Page<UserD> pageUserD;
+        List<UserD> listUserD;
+        List<UserAEDto> listAEDto = new ArrayList<>();
+
+        try {
+            pageUserD = userDao.findAll(pageable);
+        } catch (DataAccessException e) {
+            throw new UserDNotFoundByUsername("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDNotFoundByUsername("Unknown Error");
+        }
+
+        if (!pageUserD.isEmpty()) {
+            listUserD = pageUserD.getContent();
+
+            for (int i = 0; i < listUserD.size(); i++) {
+                listAEDto.add(new UserAEDto(listUserD.get(i)));
+            }
+            
+            return new PageDto<>(listAEDto, pageUserD.getTotalPages(), pageUserD.getTotalElements());
+        }
+
+        return null;
     }
 
 }

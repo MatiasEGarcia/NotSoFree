@@ -2,6 +2,7 @@
 package com.NotSoFree.service;
 
 
+import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.UserAEDto;
 import com.NotSoFree.dto.UserCDto;
 import com.NotSoFree.dto.UserEDto;
@@ -21,4 +22,7 @@ public interface UserDService {
     public void userEditPassAndUName(UserEPUDto user) throws Exception;
     
      public UserEDto findUserByUsername(String username) throws UserDNotFoundByUsername;
+     
+     public PageDto listUsers(int pageNo, int pageSize, String sortField, String sortDir) throws Exception;
+     
 }

@@ -1,0 +1,86 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>List all users</title>
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div th:replace="layout/alert :: alert"></div>
+
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-12">
+                    <div th:if="${!#lists.isEmpty(users)}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Roles</th>
+                                    <th scope="col">State</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="user:${users}">
+                                    <th th:text="${user.idUser}"></th>
+                                    <td th:text="${user.userName}"></td>
+                                    <td>
+                                        <ul>
+                                            <li th:each="rol:${user.roles}" th:text="${rol.name}"></li>
+                                        </ul>
+                                    </td>
+                                    <td th:text="${user.state}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div th:if="${totalPages > 1}" >
+                            <div> 
+                                <div>
+                                    Total de elementos: [[${totalItems}]]
+                                </div>
+                                <nav aria-label="...">
+                                    <ul class="pagination justify-content-center">
+                                        <li  th:class="${actualPage == 1 } ? 'page-item disabled' : 'page-item ' "> 
+                                            <a class="page-link"  th:href="@{/userC/listAllPage}+ 
+                                               '?pageNo=' + ${actualPage-1} +
+                                               '&sortField=' + ${sortField} +
+                                               '&sortDir=' + ${sortDir}+ 
+                                               '&pageSize=' + ${pageSize}">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+
+                                        <li  th:class="${actualPage == i} ? 'page-item active' : 'page-item ' "  th:each="i: ${#numbers.sequence(1,totalPages)}">
+                                            <a class="page-link"  th:href="@{/userC/listAllPage}+ 
+                                               '?pageNo=' + ${i} +
+                                               '&sortField=' + ${sortField} +
+                                               '&sortDir=' + ${sortDir}+ 
+                                               '&pageSize=' + ${pageSize}">[[${i}]]</a>
+                                        </li>
+
+                                        <li  th:class="${actualPage == totalPages} ? 'page-item disabled' : 'page-item' " >
+                                            <a  class="page-link"  th:href="@{/userC/listAllPage}+ 
+                                                '?pageNo=' + ${actualPage+1} +
+                                                '&sortField=' + ${sortField} +
+                                                '&sortDir=' + ${sortDir}+ 
+                                                '&pageSize=' + ${pageSize}" >
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2 th:if="${#lists.isEmpty(users)}">No users</h2>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+    </body>
+</html>
