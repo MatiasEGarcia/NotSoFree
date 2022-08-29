@@ -12,6 +12,7 @@ import com.NotSoFree.dto.UserEPUDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.util.BCPasswordEncoder;
 import com.NotSoFree.util.CustomUserDetails;
+import com.NotSoFree.util.RolEnum;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -19,7 +20,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -91,7 +91,7 @@ public class UserService implements UserDetailsService, UserDService {
                 userD.setImage(user.getImage());
             }
             userD = userDao.save(userD);
-            rolService.save(new Rol("ROLE_USER", userD));
+            rolService.save(new Rol(RolEnum.ROLE_USER.toString() , userD));
             /*If the user has to have the admin role, an admin should give it to them (modifying it)*/
         } catch (IOException e) {
             throw new Exception("There was an error with the image");
@@ -159,10 +159,9 @@ public class UserService implements UserDetailsService, UserDService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserEDto findUserByUsername(String username) throws UserDNotFoundByUsername {
+    public UserD findUserByUsername(String username) throws UserDNotFoundByUsername {
         UserD userD = null;
-        UserEDto userEDto = new UserEDto();
-
+        
         try {
             userD = userDao.findByUsername(username);
         } catch (DataAccessException e) {
@@ -171,24 +170,16 @@ public class UserService implements UserDetailsService, UserDService {
             e.printStackTrace();
             throw new UserDNotFoundByUsername("Unknown Error");
         }
-
+        
         if (userD == null) {
             throw new UserDNotFoundByUsername("There are not user with username= " + username);
         }
 
-        userEDto.setIdUser(userD.getIdUser());
-        userEDto.setImage(userD.getImage());
-        userEDto.setIdPerson(userD.getPerson().getIdPerson());
-        userEDto.setNames(userD.getPerson().getNames());
-        userEDto.setSurnames(userD.getPerson().getSurnames());
-        userEDto.setPhone(userD.getPerson().getPhone());
-        userEDto.setEmail(userD.getPerson().getEmail());
-        userEDto.setAddress(userD.getPerson().getAddress());
-
-        return userEDto;
+        return userD;
     }
 
-    @Override//TENGO UN PROBLEMA, NO SE ACTUALIZA BIEN LAS PAGINAS AL IR PASANDO
+    @Override
+    @Transactional(readOnly = true)
     public PageDto listUsers(int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
         //Pageable provides the info for the pagination

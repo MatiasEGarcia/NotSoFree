@@ -20,6 +20,7 @@
                                     <th scope="col">Username</th>
                                     <th scope="col">Roles</th>
                                     <th scope="col">State</th>
+                                    <th scope="col">Edit</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -32,6 +33,11 @@
                                         </ul>
                                     </td>
                                     <td th:text="${user.state}"></td>
+                                    <td>
+                                        <a class="btn btn-secondary" th:href="@{/userC/editByAdminPage/} + ${user.userName}">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -75,7 +81,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <h2 th:if="${#lists.isEmpty(users)}">No users</h2>
                 </div>
             </div>

@@ -18,7 +18,7 @@ public class NotSameUsernameStringConstraint implements ConstraintValidator<NotS
 
         if (username != null && !username.contains("")) {
             try {
-               user= userDService.findUserByUsername(username);
+               user= new UserEDto(userDService.findUserByUsername(username));
             } catch (UserDNotFoundByUsername ex) {
                 ex.printStackTrace();
             }

@@ -1,6 +1,7 @@
 
 package com.NotSoFree.dto;
 
+import com.NotSoFree.domain.Person;
 import java.io.Serializable;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,5 +28,19 @@ public class PersonDto implements Serializable{
     private String email;
      
     private String address;
+    
+    public PersonDto(){
+        
+    }
+    
+    public PersonDto(Person person){
+        this.idPerson= person.getIdPerson();
+        this.names= person.getNames();
+        this.surnames= person.getSurnames();
+        this.phone= person.getPhone();
+        this.email= person.getEmail();
+        this.address= person.getAddress();
+    }
+    
             
 }

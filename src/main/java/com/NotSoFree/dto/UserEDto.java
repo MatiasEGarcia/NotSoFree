@@ -1,10 +1,8 @@
 
 package com.NotSoFree.dto;
 
-import com.NotSoFree.validator.NotSameUsername;
-import javax.validation.constraints.NotBlank;
+import com.NotSoFree.domain.UserD;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,4 +15,15 @@ public class UserEDto extends PersonDto{
     private Long idUser;
     
     private String image;
+    
+    public UserEDto (){
+        
+    }
+    
+    public UserEDto(UserD userD ){
+        super(userD.getPerson());
+        this.idUser= userD.getIdUser();
+        this.image= userD.getImage();   
+    }
+    
 }
