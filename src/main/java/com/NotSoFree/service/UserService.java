@@ -153,7 +153,7 @@ public class UserService implements UserDetailsService, UserDService {
                 }
             }
         } else { //If listRolEnum is null the user will no longer have any role
-            for(RolEnum rol : user.getRoles()){
+            for (RolEnum rol : user.getRoles()) {
                 rolesToDelete.add(rol.toString());
             }
         }
@@ -246,9 +246,10 @@ public class UserService implements UserDetailsService, UserDService {
     }
 
     @Override
+    @Transactional
     public void deleteByuserName(String username) throws Exception {
-        UserD user= this.findUserByUsername(username);
-        
+        UserD user = this.findUserByUsername(username);
+
         try {
             userDao.delete(user);
         } catch (DataAccessException e) {
