@@ -25,13 +25,13 @@ public class ProductC {
 
     @Autowired
     private ProductService productService;
-
+    
     @GetMapping(value = "/savePage")
     public String savePage(Model model) {
         log.info("savePage handler");
 
         Product product = new Product();
-
+        
         model.addAttribute("product", product);
         model.addAttribute("formAction", "/productC/saveProd");
         return "saveEditProdP";

@@ -31,7 +31,7 @@ public class CategoryC {
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField",defaultValue = "idCategory") String sortField,
             @RequestParam(name = "sortDir",defaultValue = "asc") String sortDir, 
-            @RequestParam(name = "pageSize",defaultValue = "10") String pageSize){
+            @RequestParam(name = "pageSize",defaultValue = "10") String pageSize) throws Exception{
         log.info("listAllCategories handler");
         
         int pageNoInt= Integer.parseInt(pageNo);
@@ -52,7 +52,7 @@ public class CategoryC {
     
     @PostMapping(value="/deleteCateg")
     public String deleteCategory(@RequestParam(name = "idCategory") String idCategory,
-            RedirectAttributes redirectAttrs) throws CategoryNotFoundById{
+            RedirectAttributes redirectAttrs) throws Exception{
         log.info("delete handler");
         categoryService.delete(Long.parseLong(idCategory));
         redirectAttrs
@@ -87,7 +87,7 @@ public class CategoryC {
              BindingResult result,
             @RequestParam(name = "flexRadio", required = true) byte state,
             @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs) throws IOException{
+            RedirectAttributes redirectAttrs) throws IOException, Exception{
         log.info("editCategory handler");
         
          if (result.hasErrors()) {
@@ -112,7 +112,7 @@ public class CategoryC {
             BindingResult result,
             @RequestParam(name = "flexRadio", required = true) byte state,
             @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs) throws IOException {
+            RedirectAttributes redirectAttrs) throws Exception {
         log.info("saveCategory handler");
 
          if (result.hasErrors()) {
