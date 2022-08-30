@@ -8,6 +8,8 @@ import com.NotSoFree.dto.UserEPUDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
 import com.NotSoFree.util.CustomUserDetails;
+import com.NotSoFree.util.RolEnum;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +152,7 @@ public class UserC {
     
     @GetMapping(value = "/editByAdminPage/{userName}")
     public String editByAdminPage(Model model,@PathVariable(name = "userName") String username) throws UserDNotFoundByUsername{
+        log.info("editByAdminPage handler");
         
         UserAEDto userAEDto= new UserAEDto(userDService.findUserByUsername(username));
         model.addAttribute("userAEDto", userAEDto);
@@ -157,5 +160,22 @@ public class UserC {
         return "editByAdmin";
     }
     
+    @PostMapping(value = "editByAdmin")
+    public String editByAdmin(Model model
+            ,UserAEDto userAEDto
+            ,@RequestParam(name = "rolCheckbox", required = false) List<RolEnum> listRolEnum
+            ,@RequestParam(name = "stateRadio", required = false) String state
+            ,RedirectAttributes redirectAttrs) throws Exception {
+        log.info("saveUserByAdmin handler");
+        
+        userAEDto.setState(state);
+        userDService.userEditByAdmin(userAEDto,listRolEnum);
+        
+        redirectAttrs
+                .addFlashAttribute("message", "User edited successfully")
+                .addFlashAttribute("class", "success")
+                .addAttribute("userName", userAEDto.getUserName());
 
+        return "redirect:/userC/editByAdminPage/{userName}";
+    }
 }

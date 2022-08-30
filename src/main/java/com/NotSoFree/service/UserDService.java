@@ -9,6 +9,8 @@ import com.NotSoFree.dto.UserCDto;
 import com.NotSoFree.dto.UserEDto;
 import com.NotSoFree.dto.UserEPUDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
+import com.NotSoFree.util.RolEnum;
+import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -18,7 +20,7 @@ public interface UserDService {
     
     public void userEdit(UserEDto user ,MultipartFile image) throws Exception;
     
-    public void userEditByAdmin(UserAEDto user) throws Exception;
+    public void userEditByAdmin(UserAEDto user,List<RolEnum> listRolEnum) throws Exception;
     
     public void userEditPassAndUName(UserEPUDto user) throws Exception;
     

@@ -22,4 +22,10 @@ public interface UserDao extends JpaRepository<UserD, Long> {
             + ", u.username= :#{#user.username}"
             + "  WHERE u.idUser= :#{#user.idUser}")
     void updatePassUsername(@Param("user")UserEPUDto user);
+    
+    @Modifying
+    @Query(value="UPDATE UserD u SET u.state= :#{#user.state}"
+            + "  WHERE u.idUser= :#{#user.idUser}")
+    void updateState(@Param("user")UserD user);
+    
 }

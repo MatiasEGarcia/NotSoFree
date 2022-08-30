@@ -91,7 +91,7 @@ public class UserService implements UserDetailsService, UserDService {
                 userD.setImage(user.getImage());
             }
             userD = userDao.save(userD);
-            rolService.save(new Rol(RolEnum.ROLE_USER.toString() , userD));
+            rolService.save(new Rol(RolEnum.ROLE_USER.toString(), userD));
             /*If the user has to have the admin role, an admin should give it to them (modifying it)*/
         } catch (IOException e) {
             throw new Exception("There was an error with the image");
@@ -136,8 +136,43 @@ public class UserService implements UserDetailsService, UserDService {
 
     @Override
     @Transactional
-    public void userEditByAdmin(UserAEDto user) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void userEditByAdmin(UserAEDto user, List<RolEnum> listRolEnum) throws Exception {
+        UserD userD = new UserD();
+        RolEnum[] allRolesEnum = RolEnum.values();
+        List<String> rolesToDelete = new ArrayList<>();
+        List<Rol> rolesToAdd = new ArrayList<>();
+        userD.setIdUser(user.getIdUser());
+        userD.setState(new Byte(user.getState()));
+
+        if (listRolEnum != null) {
+            for (RolEnum rol : allRolesEnum) {
+                if (user.getRoles().contains(rol) && !listRolEnum.contains(rol)) { //If the role is in USER and not in LISTROLENUM: then I must delete that role from the bdd
+                    rolesToDelete.add(rol.toString());
+                } else if (!user.getRoles().contains(rol) && listRolEnum.contains(rol)) { //if the role is not in USER and in LISTROLENUM yes: then I should add the role in the database
+                    rolesToAdd.add(new Rol(rol.toString(), userD));
+                }
+            }
+        } else { //If listRolEnum is null the user will no longer have any role
+            for(RolEnum rol : user.getRoles()){
+                rolesToDelete.add(rol.toString());
+            }
+        }
+
+        try {
+            userDao.updateState(userD);
+            if (!rolesToDelete.isEmpty()) {
+                rolService.deleteByUserAndNameIn(userD, rolesToDelete);
+            }
+            if (!rolesToAdd.isEmpty()) {
+                rolService.saveAll(rolesToAdd);
+            }
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+
     }
 
     @Override
@@ -161,7 +196,7 @@ public class UserService implements UserDetailsService, UserDService {
     @Transactional(readOnly = true)
     public UserD findUserByUsername(String username) throws UserDNotFoundByUsername {
         UserD userD = null;
-        
+
         try {
             userD = userDao.findByUsername(username);
         } catch (DataAccessException e) {
@@ -170,7 +205,7 @@ public class UserService implements UserDetailsService, UserDService {
             e.printStackTrace();
             throw new UserDNotFoundByUsername("Unknown Error");
         }
-        
+
         if (userD == null) {
             throw new UserDNotFoundByUsername("There are not user with username= " + username);
         }
@@ -203,7 +238,7 @@ public class UserService implements UserDetailsService, UserDService {
             for (int i = 0; i < listUserD.size(); i++) {
                 listAEDto.add(new UserAEDto(listUserD.get(i)));
             }
-            
+
             return new PageDto<>(listAEDto, pageUserD.getTotalPages(), pageUserD.getTotalElements());
         }
 

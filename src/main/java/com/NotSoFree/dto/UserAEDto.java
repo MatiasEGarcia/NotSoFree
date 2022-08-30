@@ -6,18 +6,14 @@ import com.NotSoFree.domain.UserD;
 import com.NotSoFree.util.RolEnum;
 import java.util.ArrayList;
 import java.util.List;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 //for the admin to edit the roles and status of a user
 @Data
 public class UserAEDto {
     
-    @NotNull(message="User ID needed")
     private Long idUser;
-    
-    @NotBlank(message="User must have userName")
+
     private String userName;
     
     //List enums

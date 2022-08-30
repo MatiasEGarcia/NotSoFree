@@ -2,6 +2,7 @@ package com.NotSoFree.service;
 
 import com.NotSoFree.dao.RolDao;
 import com.NotSoFree.domain.Rol;
+import com.NotSoFree.domain.UserD;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -41,6 +42,19 @@ public class RolServiceImpl implements RolService {
             throw new Exception("Unknown Error");
         }
 
+    }
+
+    @Override
+    @Transactional
+    public void deleteByUserAndNameIn(UserD user, List<String> roles) throws Exception {
+        try {
+            rolDao.deleteByUserAndNameIn(user, roles);
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
     }
 
 }

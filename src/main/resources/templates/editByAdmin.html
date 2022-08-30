@@ -17,13 +17,11 @@
                             <img class="imgUserLogin" src="/img/userDefault.jpg" alt="basicUserImage"/>
                         </div>
 
-                        <form class="d-grid gap-3" id="editUserByAdmin" method="POST" th:action="@{/userC/editUserByAdmin}" th:object="${userAEDto}">
+                        <form class="d-grid gap-3" id="editUserByAdmin" method="POST" th:action="@{/userC/editByAdmin}" th:object="${userAEDto}">
                             <input type="hidden" name="idUser" th:field="*{idUser}"/>
+                            <input type="hidden" name="idUser" th:field="*{roles}"/>
                             <div class="form-group">
-                                <input type="text" class="form-control" name="username" placeholder="User name"  th:field="*{userName}" value="*{userName}" />
-                                <ul>
-                                    <li th:each="error : ${#fields.errors('userName')}" th:text="${error}" class="error" />
-                                </ul>
+                                <input type="text" class="form-control" name="username" placeholder="User name"  th:field="*{userName}"  th:value="*{userName}" readonly="readonly" />
                             </div>
                             <h4>State</h4>
                             <div class="form-check">
