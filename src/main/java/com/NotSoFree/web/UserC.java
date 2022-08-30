@@ -178,4 +178,19 @@ public class UserC {
 
         return "redirect:/userC/editByAdminPage/{userName}";
     }
+    
+    @PostMapping(value = "/delete")
+    public String deleteProduct(@RequestParam(name = "userName") String userName, RedirectAttributes redirectAttrs) throws Exception{
+        log.info("deleteProduct handler");
+
+        userDService.deleteByuserName(userName);
+
+        redirectAttrs
+                .addFlashAttribute("message", "User deleted successfully")
+                .addFlashAttribute("class", "success");
+
+        return "redirect:/userC/listAllPage";
+    }
+    
+    
 }

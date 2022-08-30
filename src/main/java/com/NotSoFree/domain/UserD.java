@@ -45,7 +45,7 @@ public class UserD implements Serializable{
     private byte state;
     
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<Rol> roles;
     
     

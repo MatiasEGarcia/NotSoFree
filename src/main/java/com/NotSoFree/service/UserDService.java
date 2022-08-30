@@ -28,4 +28,6 @@ public interface UserDService {
      
      public PageDto listUsers(int pageNo, int pageSize, String sortField, String sortDir) throws Exception;
      
+     public void deleteByuserName(String username) throws Exception;
+     
 }

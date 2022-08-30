@@ -245,4 +245,18 @@ public class UserService implements UserDetailsService, UserDService {
         return null;
     }
 
+    @Override
+    public void deleteByuserName(String username) throws Exception {
+        UserD user= this.findUserByUsername(username);
+        
+        try {
+            userDao.delete(user);
+        } catch (DataAccessException e) {
+            throw new UserDNotFoundByUsername("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDNotFoundByUsername("Unknown Error");
+        }
+    }
+
 }

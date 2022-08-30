@@ -21,6 +21,7 @@
                                     <th scope="col">Roles</th>
                                     <th scope="col">State</th>
                                     <th scope="col">Edit</th>
+                                    <th scope="col">Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,6 +38,12 @@
                                         <a class="btn btn-secondary" th:href="@{/userC/editByAdminPage/} + ${user.userName}">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
+                                    </td>
+                                    <td>
+                                        <form id="formDeleteProduct"  th:action="@{/userC/delete}" method="post">
+                                            <input name="userName" hidden="true" th:value="${user.userName}"> 
+                                                <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                                        </form>
                                     </td>
                                 </tr>
                             </tbody>
