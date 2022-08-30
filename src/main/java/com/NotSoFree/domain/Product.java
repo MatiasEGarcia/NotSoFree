@@ -3,11 +3,13 @@ package com.NotSoFree.domain;
 import com.NotSoFree.validator.NotZero;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -42,6 +44,10 @@ public class Product implements Serializable {
     @Column(name = "image", columnDefinition = "BLOB")
     private String image;
     
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE, mappedBy = "product") 
+    private List<ProdCate> prodCate;
+
     public Product(){
         
     }
