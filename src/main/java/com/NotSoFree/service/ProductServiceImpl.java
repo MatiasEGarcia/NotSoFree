@@ -2,10 +2,13 @@ package com.NotSoFree.service;
 
 import com.NotSoFree.domain.Product;
 import com.NotSoFree.dao.ProductDao;
+import com.NotSoFree.domain.Category;
+import com.NotSoFree.domain.ProdCate;
 import com.NotSoFree.exception.ProductNotFoundById;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductDao productDao;
+    
+    @Autowired
+    private ProdCateService prodCateService;
 
     @Override
     @Transactional(readOnly = true)
@@ -40,11 +46,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void saveProduct(Product product, MultipartFile image) throws Exception {
+        
+        List<ProdCate> listProdCate = product.getNewCategories().stream()
+                                                        .map(cate -> new ProdCate(product, new Category(Long.parseLong(cate) ) ) )
+                                                        .collect(Collectors.toList());
+        
         try {
             if (!image.isEmpty()) {
                 product.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
             }
             productDao.save(product);
+            prodCateService.saveAll(listProdCate);
         } catch (IOException e) {
             throw new Exception("There was an error with the image");
         } catch (DataAccessException e) {

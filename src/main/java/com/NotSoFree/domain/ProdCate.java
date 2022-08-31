@@ -1,7 +1,6 @@
 package com.NotSoFree.domain;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +22,7 @@ public class ProdCate implements Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id_procate")
+    @Column(name="id_prodcate")
     private Long idProdCate; 
     
     @NotNull
@@ -35,5 +34,14 @@ public class ProdCate implements Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="category")
     private Category category;
+    
+    public ProdCate(){
+        
+    }
+    
+    public ProdCate(Product product,Category category){
+        this.product = product;
+        this.category = category;
+    }
     
 }

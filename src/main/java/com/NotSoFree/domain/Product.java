@@ -44,8 +44,12 @@ public class Product implements Serializable {
     @Column(name = "image", columnDefinition = "BLOB")
     private String image;
     
+    @NotNull(message="The product must have at least 1 category")
+    @Transient
+    private List<String> newCategories;
+    
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE, mappedBy = "product") 
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, mappedBy = "product") 
     private List<ProdCate> prodCate;
 
     public Product(){

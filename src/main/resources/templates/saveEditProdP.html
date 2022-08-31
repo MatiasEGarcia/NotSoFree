@@ -50,11 +50,24 @@
                             <label  for="image" class="form-label">Image</label>
                             <input id="image" name="file" type="file" class="form-control"/>
                         </div>
+                        
+                        <div>
+                            <h3>Categories</h3>
+                            <div class="form-check mt-2" th:each="category:${listCategories}">
+                                <input class="form-check-input" name="boxCategory" type="checkbox" th:value="${category.idCategory}" th:field="*{newCategories}">              
+                                    <label class="form-check-label" th:text="${category.name}"></label>
+                            </div>
+                            <ul>
+                                <li th:each="error : ${#fields.errors('newCategories')}" th:text="${error}" class="error" />
+                            </ul>
+                        </div>
+
+
                         <button class="btn btn-success" type="submit">Save</button>
                     </form>
                 </div>
                 <div th:if="${product.image} and ${product.image!= '' }"   class="col-12  col-md-5 text-center "> 
-                        <img id="actualImage" th:src="${'data:image/jpeg;charset=utf-8;base64,' + product.image}"  th:alt="${product.name}"/>
+                    <img id="actualImage" th:src="${'data:image/jpeg;charset=utf-8;base64,' + product.image}"  th:alt="${product.name}"/>
                 </div>
             </div>
         </div>

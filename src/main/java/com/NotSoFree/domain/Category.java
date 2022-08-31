@@ -41,7 +41,7 @@ public class Category implements Serializable{
     private String image;
     
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE, mappedBy = "category") 
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, mappedBy = "category") 
     private List<ProdCate> prodCate;
     
     public Category (){

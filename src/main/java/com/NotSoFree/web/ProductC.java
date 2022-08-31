@@ -1,9 +1,12 @@
 package com.NotSoFree.web;
 
+import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.Product;
 import com.NotSoFree.exception.ProductNotFoundById;
+import com.NotSoFree.service.CategoryService;
 import com.NotSoFree.service.ProductService;
 import java.io.IOException;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +29,15 @@ public class ProductC {
     @Autowired
     private ProductService productService;
     
+    @Autowired
+    private CategoryService categoryService;
+    
     @GetMapping(value = "/savePage")
-    public String savePage(Model model) {
+    public String savePage(Model model) throws Exception {
         log.info("savePage handler");
-
-        Product product = new Product();
         
-        model.addAttribute("product", product);
+        model.addAttribute("product", new Product());
+         model.addAttribute("listCategories", categoryService.listByState(new Byte("1")));
         model.addAttribute("formAction", "/productC/saveProd");
         return "saveEditProdP";
     }
