@@ -1,5 +1,6 @@
 package com.NotSoFree.domain;
 
+import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.validator.NotZero;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -22,31 +23,21 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_product")
     private Long idProduct;
-    
-    @NotBlank(message="Product name can't be blank")
+      
     @Column(name="name")
     private String name;
     
-    @NotNull(message="Product stock can't be null")
-    @NotZero
     @Column(name="stock")
     private int stock;
     
-    @NotBlank(message="Product mark can't be empty")
     @Column(name="mark")
     private String mark;
     
-    @NotNull(message="Product price can't be null")
-    @NotZero
     @Column(name="price")
     private float price;
    
     @Column(name = "image", columnDefinition = "BLOB")
     private String image;
-    
-    @NotNull(message="The product must have at least 1 category")
-    @Transient
-    private List<String> newCategories;
     
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, mappedBy = "product") 
@@ -58,6 +49,15 @@ public class Product implements Serializable {
     
     public Product(Long idProduct){
         this.idProduct=idProduct;
+    }
+    
+    public Product(ProductDto dto){
+        this.idProduct= dto.getIdProduct();
+        this.name= dto.getName();
+        this.stock= dto.getStock();
+        this.mark= dto.getMark();
+        this.price=dto.getPrice();
+        this.image=dto.getImage();
     }
     
 }
