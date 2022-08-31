@@ -29,7 +29,7 @@ public class IndexC {
             @RequestParam(name = "sortField",defaultValue = "idProduct") String sortField,
             @RequestParam(name = "sortDir",defaultValue = "asc") String sortDir, 
             @RequestParam(name = "pageSize",defaultValue = "10") String pageSize
-        ){
+        ) throws Exception{
         log.info("index handler");
         
         int pageNoInt= Integer.parseInt(pageNo);

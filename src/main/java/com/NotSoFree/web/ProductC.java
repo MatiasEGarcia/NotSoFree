@@ -49,7 +49,7 @@ public class ProductC {
     }
 
     @PostMapping(value = "/deleteProd")
-    public String deleteProduct(@RequestParam(name = "idProduct") String idProduct, RedirectAttributes redirectAttrs) throws ProductNotFoundById {
+    public String deleteProduct(@RequestParam(name = "idProduct") String idProduct, RedirectAttributes redirectAttrs) throws Exception {
         log.info("deleteProduct handler");
 
         productService.removeProduct(Long.parseLong(idProduct));
@@ -65,7 +65,7 @@ public class ProductC {
     public String editProd(Model model, @Valid Product product,
             BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs) throws IOException {
+            RedirectAttributes redirectAttrs) throws Exception {
         log.info("editProd handler");
 
         if (result.hasErrors()) {
@@ -88,7 +88,7 @@ public class ProductC {
     public String saveProduct(Model model, @Valid Product product,
             BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs) throws IOException {
+            RedirectAttributes redirectAttrs) throws Exception {
         log.info("saveProd handler");
 
         if (result.hasErrors()) {
@@ -111,7 +111,7 @@ public class ProductC {
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField", defaultValue = "idProduct") String sortField,
             @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
-            @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) {
+            @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) throws Exception {
         
         log.info("listAllPage handler");
         
