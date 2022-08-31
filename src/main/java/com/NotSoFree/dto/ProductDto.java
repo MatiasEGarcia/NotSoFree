@@ -11,7 +11,6 @@ import lombok.Data;
 @Data
 public class ProductDto implements Serializable {
     
-    @NotNull(message="Product id can't be null")
     private Long idProduct;
     
     @NotBlank(message="Product name can't be blank")  

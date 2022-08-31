@@ -14,8 +14,8 @@
             <div class="row gy-5">
                 <div class="col-12 col-md-7">
                     <h5 class="display-5">Product</h5>
-                    <form class="d-grid gap-3" th:action="@{${formAction}}" th:object="${product}" method="POST" enctype="multipart/form-data"><!--The enctype is to indicate to the browser that there may be file uploads-->
-                        <input type="text" hidden="true" th:field="*{image}"  th:value="${product.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
+                    <form class="d-grid gap-3" th:action="@{${formAction}}" th:object="${productDto}" method="POST" enctype="multipart/form-data"><!--The enctype is to indicate to the browser that there may be file uploads-->
+                        <input type="text" hidden="true" th:field="*{image}"  th:value="${productDto.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
                         <input type="hidden" name="idProducto" th:field="*{idProduct}"/>
 
                         <div class="form_group">
@@ -66,8 +66,8 @@
                         <button class="btn btn-success" type="submit">Save</button>
                     </form>
                 </div>
-                <div th:if="${product.image} and ${product.image!= '' }"   class="col-12  col-md-5 text-center "> 
-                    <img id="actualImage" th:src="${'data:image/jpeg;charset=utf-8;base64,' + product.image}"  th:alt="${product.name}"/>
+                <div th:if="${productDto.image} and ${productDto.image!= '' }"   class="col-12  col-md-5 text-center "> 
+                    <img id="actualImage" th:src="${'data:image/jpeg;charset=utf-8;base64,' + productDto.image}"  th:alt="${productDto.name}"/>
                 </div>
             </div>
         </div>

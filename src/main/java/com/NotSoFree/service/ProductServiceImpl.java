@@ -4,6 +4,7 @@ import com.NotSoFree.domain.Product;
 import com.NotSoFree.dao.ProductDao;
 import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.ProdCate;
+import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.exception.ProductNotFoundById;
 import java.io.IOException;
 import java.util.Base64;
@@ -45,9 +46,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void saveProduct(Product product, MultipartFile image) throws Exception {
-        
-        List<ProdCate> listProdCate = product.getNewCategories().stream()
+    public void saveProduct(ProductDto productDto, MultipartFile image) throws Exception {
+        Product product= new Product(productDto);
+        List<ProdCate> listProdCate = productDto.getNewCategories().stream()
                                                         .map(cate -> new ProdCate(product, new Category(Long.parseLong(cate) ) ) )
                                                         .collect(Collectors.toList());
         

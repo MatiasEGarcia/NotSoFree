@@ -2,6 +2,7 @@ package com.NotSoFree.web;
 
 import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.Product;
+import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.exception.ProductNotFoundById;
 import com.NotSoFree.service.CategoryService;
 import com.NotSoFree.service.ProductService;
@@ -36,7 +37,7 @@ public class ProductC {
     public String savePage(Model model) throws Exception {
         log.info("savePage handler");
         
-        model.addAttribute("product", new Product());
+        model.addAttribute("productDto", new ProductDto());
          model.addAttribute("listCategories", categoryService.listByState(new Byte("1")));
         model.addAttribute("formAction", "/productC/saveProd");
         return "saveEditProdP";
@@ -79,7 +80,8 @@ public class ProductC {
             return "saveEditProdP";
         }
 
-        productService.saveProduct(product, image);
+        //TENGO QUE CORREGIR ESTO
+        //productService.saveProduct(product, image);
 
         redirectAttrs
                 .addFlashAttribute("message", "Product edited successfully")
@@ -90,19 +92,19 @@ public class ProductC {
     }
 
     @PostMapping(value = "/saveProd")
-    public String saveProduct(Model model, @Valid Product product,
+    public String saveProduct(Model model, @Valid ProductDto productDto,
             BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception {
         log.info("saveProd handler");
 
         if (result.hasErrors()) {
-            model.addAttribute("product", product);
+            model.addAttribute("productDto", productDto);
             model.addAttribute("formAction", "/productC/saveProd");
             return "saveEditProdP";
         }
 
-        productService.saveProduct(product, image);
+        productService.saveProduct(productDto, image);
 
         redirectAttrs
                 .addFlashAttribute("message", "Product created successfully")

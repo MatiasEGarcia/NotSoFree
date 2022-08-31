@@ -1,12 +1,9 @@
 package com.NotSoFree.domain;
 
 import com.NotSoFree.dto.ProductDto;
-import com.NotSoFree.validator.NotZero;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 
 import lombok.Data;
