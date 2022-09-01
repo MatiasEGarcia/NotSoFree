@@ -17,6 +17,7 @@
                     <form class="d-grid gap-3" th:action="@{${formAction}}" th:object="${productDto}" method="POST" enctype="multipart/form-data"><!--The enctype is to indicate to the browser that there may be file uploads-->
                         <input type="text" hidden="true" th:field="*{image}"  th:value="${productDto.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
                         <input type="hidden" name="idProducto" th:field="*{idProduct}"/>
+                        <input type="hidden" name="oldCategories" th:field="*{oldCategories}"/>
 
                         <div class="form_group">
                             <label for="name" class="form-label">Name</label>
@@ -51,15 +52,15 @@
                             <input id="image" name="file" type="file" class="form-control"/>
                         </div>
                         
+                        
                         <div>
                             <h3>Categories</h3>
                             <div class="form-check mt-2" th:each="category:${listCategories}">
-                                <input class="form-check-input" name="boxCategory" type="checkbox" th:value="${category.idCategory}" th:field="*{newCategories}">              
+                                <input class="form-check-input" name="boxCategory" type="checkbox" 
+                                       th:value="${category.idCategory}" 
+                                       th:checked="${#lists.contains(productDto.oldCategories, category)} "/> 
                                     <label class="form-check-label" th:text="${category.name}"></label>
                             </div>
-                            <ul>
-                                <li th:each="error : ${#fields.errors('newCategories')}" th:text="${error}" class="error" />
-                            </ul>
                         </div>
 
 

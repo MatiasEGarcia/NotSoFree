@@ -7,6 +7,7 @@ import com.NotSoFree.domain.ProdCate;
 import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.exception.ProductNotFoundById;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,9 +28,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductDao productDao;
-    
+
     @Autowired
     private ProdCateService prodCateService;
+    
+    @Autowired
+    private CategoryService categoryService;
 
     @Override
     @Transactional(readOnly = true)
@@ -45,19 +49,39 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
+    @Transactional 
     public void saveProduct(ProductDto productDto, MultipartFile image) throws Exception {
-        Product product= new Product(productDto);
-        List<ProdCate> listProdCate = productDto.getNewCategories().stream()
-                                                        .map(cate -> new ProdCate(product, new Category(Long.parseLong(cate) ) ) )
-                                                        .collect(Collectors.toList());
-        
+        Product product = new Product(productDto);
+        List<Category> activeCategories= categoryService.listByState(new Byte("1"));
+        List<ProdCate> listAdd= new ArrayList<>();
+        List<Category> listDelete= new ArrayList<>();
+        List<Long> newCategories = productDto.getNewCategories().stream().map(cate -> Long.parseLong(cate)).collect(Collectors.toList());
+
+        if (!productDto.getOldCategories().isEmpty()) {
+            for(int i = 0; i<activeCategories.size() ; i++ ){
+                if(!productDto.getOldCategories().contains(activeCategories.get(i)) && newCategories.contains(activeCategories.get(i).getIdCategory())){ //If the category is in newCategories and they are not in oldCategories = I have to add it to the database
+                    listAdd.add(new ProdCate(product,activeCategories.get(i)));
+                }else if(productDto.getOldCategories().contains(activeCategories.get(i)) && !newCategories.contains(activeCategories.get(i).getIdCategory())){ //If the category is not in newCategories and if it is in oldCategories= I have to delete it from the bdd
+                    listDelete.add(activeCategories.get(i));
+                }
+            }
+        } else {
+                for(Long category:newCategories){
+                    listAdd.add(new ProdCate(product,new Category(category)));
+                }
+        }
+
         try {
             if (!image.isEmpty()) {
                 product.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
-            }
+            }            
             productDao.save(product);
-            prodCateService.saveAll(listProdCate);
+            if(!listAdd.isEmpty()){
+                prodCateService.saveAll(listAdd);
+            }
+            if(!listDelete.isEmpty()){
+                 prodCateService.deleteAll(prodCateService.findByProdWhereCateIn(product, listDelete));
+            }
         } catch (IOException e) {
             throw new Exception("There was an error with the image");
         } catch (DataAccessException e) {
@@ -71,9 +95,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void removeProduct(Long idProduct) throws Exception {
-        Product product = this.findProduct(idProduct);
         try {
-            productDao.delete(product);
+            productDao.delete(productDao.findById(idProduct).orElseThrow(() -> new ProductNotFoundById(idProduct)));
         } catch (DataAccessException e) {
             throw new Exception("Database Error");
         } catch (Exception e) {
@@ -84,8 +107,26 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Product findProduct(Long idProduct) throws ProductNotFoundById {
-        return productDao.findById(idProduct).orElseThrow(() -> new ProductNotFoundById(idProduct));
+    public ProductDto findProduct(Long idProduct) throws Exception {
+        Product product;
+        List<Category> oldCategories;
+
+        try {
+            product = productDao.findById(idProduct).orElseThrow(() -> new ProductNotFoundById());
+            oldCategories = product.getProdCate().stream()
+                    .map(prodCate -> prodCate.getCategory())
+                    .collect(Collectors.toList());
+
+        } catch (ProductNotFoundById e) {
+            throw new Exception("There are not a product with that id");
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+
+        return new ProductDto(product, oldCategories);
     }
 
     @Override

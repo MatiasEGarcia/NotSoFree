@@ -1,6 +1,8 @@
 
 package com.NotSoFree.dto;
 
+import com.NotSoFree.domain.Category;
+import com.NotSoFree.domain.Product;
 import com.NotSoFree.validator.NotZero;
 import java.io.Serializable;
 import java.util.List;
@@ -29,6 +31,23 @@ public class ProductDto implements Serializable {
    
     private String image;
     
-    @NotNull(message="The product must have at least 1 category")
     private List<String> newCategories;
+    
+    private List<Category> oldCategories;//To know if the product has categories
+    
+    public ProductDto(){
+        
+    }
+    
+    public ProductDto(Product product,List<Category> oldCategories){
+        this.idProduct= product.getIdProduct();
+        this.name=product.getName();
+        this.stock= product.getStock();
+        this.mark= product.getMark();
+        this.price= product.getPrice();
+        this.image= product.getImage();
+        this.oldCategories=oldCategories;
+    }
+    
+    
 }

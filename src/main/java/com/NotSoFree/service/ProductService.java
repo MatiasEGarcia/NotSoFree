@@ -3,7 +3,6 @@ package com.NotSoFree.service;
 import java.util.List;
 import com.NotSoFree.domain.Product;
 import com.NotSoFree.dto.ProductDto;
-import com.NotSoFree.exception.ProductNotFoundById;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +15,7 @@ public interface ProductService {
     
     public void removeProduct(Long idProduct) throws Exception;
     
-    public Product findProduct(Long idProduct) throws ProductNotFoundById;
+    public ProductDto findProduct(Long idProduct) throws Exception;
     
     public Page<Product> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) throws Exception;
     

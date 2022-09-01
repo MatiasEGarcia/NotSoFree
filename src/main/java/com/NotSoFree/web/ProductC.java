@@ -44,11 +44,11 @@ public class ProductC {
     }
 
     @GetMapping(value = "/editPage/{idProduct}")
-    public String editPage(Product product, Model model) throws ProductNotFoundById {
+    public String editPage(Product product, Model model) throws Exception {
         log.info("editPage handler");
 
-        Product productFound = productService.findProduct(product.getIdProduct());
-        model.addAttribute("product", productFound);
+        model.addAttribute("productDto", productService.findProduct(product.getIdProduct()));
+        model.addAttribute("listCategories", categoryService.listByState(new Byte("1")));
         model.addAttribute("formAction", "/productC/editProd");
 
         return "saveEditProdP";
@@ -68,25 +68,33 @@ public class ProductC {
     }
 
     @PostMapping(value = "/editProd")
-    public String editProd(Model model, @Valid Product product,
+    public String editProd(Model model, @Valid ProductDto productDto,
             BindingResult result,
+            @RequestParam(name = "boxCategory", required = false) List<String> newCategories,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception {
         log.info("editProd handler");
 
         if (result.hasErrors()) {
-            model.addAttribute("product", product);
+            model.addAttribute("productDto", productDto);
             model.addAttribute("formAction", "/productC/editProd");
             return "saveEditProdP";
+        }else if(newCategories.isEmpty()){  //why this? th:checked doesn't work if th:field is present, so I can't check it on the product object, I have to get it separately and check it separately
+            model.addAttribute("productDto", productDto);
+            model.addAttribute("formAction", "/productC/saveProd");
+            
+             redirectAttrs
+                .addFlashAttribute("message", "The product must have at least 1 category")
+                .addFlashAttribute("class", "danger");
+            return "saveEditProdP";
         }
-
-        //TENGO QUE CORREGIR ESTO
-        //productService.saveProduct(product, image);
+        productDto.setNewCategories(newCategories);
+        productService.saveProduct(productDto, image);
 
         redirectAttrs
                 .addFlashAttribute("message", "Product edited successfully")
                 .addFlashAttribute("class", "success")
-                .addAttribute("idProduct", product.getIdProduct());
+                .addAttribute("idProduct", productDto.getIdProduct());
 
         return "redirect:/productC/editPage/{idProduct}";
     }
@@ -94,6 +102,7 @@ public class ProductC {
     @PostMapping(value = "/saveProd")
     public String saveProduct(Model model, @Valid ProductDto productDto,
             BindingResult result,
+            @RequestParam(name = "boxCategory", required = false) List<String> newCategories,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception {
         log.info("saveProd handler");
@@ -101,6 +110,14 @@ public class ProductC {
         if (result.hasErrors()) {
             model.addAttribute("productDto", productDto);
             model.addAttribute("formAction", "/productC/saveProd");
+            return "saveEditProdP";
+        }else if(newCategories.isEmpty()){  //why this? th:checked doesn't work if th:field is present, so I can't check it on the product object, I have to get it separately and check it separately
+            model.addAttribute("productDto", productDto);
+            model.addAttribute("formAction", "/productC/saveProd");
+            
+             redirectAttrs
+                .addFlashAttribute("message", "The product must have at least 1 category")
+                .addFlashAttribute("class", "danger");
             return "saveEditProdP";
         }
 
