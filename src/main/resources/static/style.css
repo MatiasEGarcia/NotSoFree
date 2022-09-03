@@ -72,3 +72,23 @@
     text-decoration: none;
     color: black;
 }
+
+/*-------------------------detailProduct*/
+
+#productDetail .favoriteButton i{
+    font-size: 2rem;
+}
+
+#productDetail .favoriteButton i:hover{
+    color: red;
+}
+
+#productDetail .favoriteButton{
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}

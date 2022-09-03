@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -152,4 +153,10 @@ public class ProductC {
         return "listAllProducts";
     }
 
+    @GetMapping(value = "/detailPage/{idProduct}")
+    public String detailPage(@PathVariable String idProduct, Model model) throws Exception{
+        log.info("detailPage handler");
+        model.addAttribute("productDto", productService.findProduct(Long.parseLong(idProduct) ) );
+        return "detailProduct";
+    }
 }
