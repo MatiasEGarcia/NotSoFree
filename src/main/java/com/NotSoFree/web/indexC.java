@@ -50,4 +50,36 @@ public class IndexC {
 
         return "index";
     }
+    
+    @GetMapping("/selectCategory")
+    public String indexCategory(Model model,
+            @RequestParam(name = "categorySelect") String categorySelected,
+            @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
+            @RequestParam(name = "sortField",defaultValue = "idProduct") String sortField,
+            @RequestParam(name = "sortDir",defaultValue = "asc") String sortDir, 
+            @RequestParam(name = "pageSize",defaultValue = "10") String pageSize
+        ) throws Exception{
+        log.info("indexCategory handler");
+        
+        int pageNoInt= Integer.parseInt(pageNo);
+        byte active=1;
+        
+        Page<Product> pageProd=productService.findPaginatedByCategory(pageNoInt,Integer.parseInt(pageSize),sortField, sortDir,new Category(Long.parseLong(categorySelected)));
+        List<Category> activeCategories= categoryService.listByState(active);
+        
+        model.addAttribute("categories", activeCategories);
+        model.addAttribute("categorySelected", categorySelected);
+        model.addAttribute("products", pageProd.getContent());
+        model.addAttribute("totalPages", pageProd.getTotalPages());
+        model.addAttribute("totalItems", pageProd.getTotalElements());
+        model.addAttribute("actualPage",pageNoInt); //I need it to be integer for the pagination of the page to work
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        return "index";
+    }
+    
+    
 }

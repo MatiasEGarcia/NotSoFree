@@ -1,12 +1,9 @@
 package com.NotSoFree.web;
 
-import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.Product;
 import com.NotSoFree.dto.ProductDto;
-import com.NotSoFree.exception.ProductNotFoundById;
 import com.NotSoFree.service.CategoryService;
 import com.NotSoFree.service.ProductService;
-import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

@@ -13,14 +13,12 @@
         <div class="container">
             <div class="row mt-3">
                 <div class="col-12 col-md-3">
-                    <h3>Categories</h3>
-
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>---</option>
-                        <div  th:each="category:${categories}" >
-                            <option th:text="${category.name}"></option>
-                        </div>
-                    </select>
+                    <h3 class="mt-5 mb-3">Categories</h3>
+                    <ul class="list-group listCategoriesIndex">
+                        <li class="list-group-item"  th:each="category:${categories}">
+                            <a th:text="${category.name}" th:href="@{/selectCategory}+ '?categorySelect=' + ${category.idCategory}"></a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="col-12 col-md-9">
                     <h2 class="display-6" style="text-align: center;">Our products</h2>
@@ -54,8 +52,17 @@
                             <nav aria-label="...">
                                 <ul class="pagination justify-content-center">
                                     <li  th:class="${actualPage == 1 } ? 'page-item disabled' : 'page-item ' "> 
-                                        <a class="page-link"  th:href="@{/}+ 
+                                        <a th:if="${categorySelected == null}" class="page-link"  th:href="@{/}+ 
                                            '?pageNo=' + ${actualPage-1} +
+                                           '&sortField=' + ${sortField} +
+                                           '&sortDir=' + ${sortDir}+ 
+                                           '&pageSize=' + ${pageSize}">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                        <!-- For when the list is by category -->
+                                        <a th:if="${categorySelected}" class="page-link"  th:href="@{/selectCategory}+
+                                           '?categorySelect=' + ${categorySelected}+ 
+                                           '&pageNo=' + ${actualPage-1} +
                                            '&sortField=' + ${sortField} +
                                            '&sortDir=' + ${sortDir}+ 
                                            '&pageSize=' + ${pageSize}">
@@ -64,19 +71,37 @@
                                     </li>
 
                                     <li  th:class="${actualPage == i} ? 'page-item active' : 'page-item ' "  th:each="i: ${#numbers.sequence(1,totalPages)}">
-                                        <a class="page-link"  th:href="@{/}+ 
+                                        <a th:if="${categorySelected == null}" class="page-link"  th:href="@{/}+ 
                                            '?pageNo=' + ${i} +
+                                           '&sortField=' + ${sortField} +
+                                           '&sortDir=' + ${sortDir}+ 
+                                           '&pageSize=' + ${pageSize}">[[${i}]]</a>
+
+                                        <!-- For when the list is by category -->
+                                        <a th:if="${categorySelected}" class="page-link"  th:href="@{/selectCategory}+ 
+                                           '?categorySelect=' + ${categorySelected} + 
+                                           '&pageNo=' + ${i} +
                                            '&sortField=' + ${sortField} +
                                            '&sortDir=' + ${sortDir}+ 
                                            '&pageSize=' + ${pageSize}">[[${i}]]</a>
                                     </li>
 
                                     <li  th:class="${actualPage == totalPages} ? 'page-item disabled' : 'page-item' " >
-                                        <a  class="page-link"  th:href="@{/}+ 
-                                            '?pageNo=' + ${actualPage+1} +
-                                            '&sortField=' + ${sortField} +
-                                            '&sortDir=' + ${sortDir}+ 
-                                            '&pageSize=' + ${pageSize}" >
+                                        <a th:if="${categorySelected == null}" class="page-link"  th:href="@{/}+ 
+                                           '?pageNo=' + ${actualPage+1} +
+                                           '&sortField=' + ${sortField} +
+                                           '&sortDir=' + ${sortDir}+ 
+                                           '&pageSize=' + ${pageSize}" >
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+
+                                        <!-- For when the list is by category -->
+                                        <a th:if="${categorySelected}" class="page-link"  th:href="@{/selectCategory}+ 
+                                           '?categorySelect=' + ${categorySelected} + 
+                                           '&pageNo=' + ${actualPage+1} +
+                                           '&sortField=' + ${sortField} +
+                                           '&sortDir=' + ${sortDir}+ 
+                                           '&pageSize=' + ${pageSize}" >
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>

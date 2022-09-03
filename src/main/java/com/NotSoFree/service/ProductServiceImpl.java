@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProdCateService prodCateService;
-    
+
     @Autowired
     private CategoryService categoryService;
 
@@ -49,38 +50,38 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional 
+    @Transactional
     public void saveProduct(ProductDto productDto, MultipartFile image) throws Exception {
         Product product = new Product(productDto);
-        List<Category> activeCategories= categoryService.listByState(new Byte("1"));
-        List<ProdCate> listAdd= new ArrayList<>();
-        List<Category> listDelete= new ArrayList<>();
+        List<Category> activeCategories = categoryService.listByState(new Byte("1"));
+        List<ProdCate> listAdd = new ArrayList<>();
+        List<Category> listDelete = new ArrayList<>();
         List<Long> newCategories = productDto.getNewCategories().stream().map(cate -> Long.parseLong(cate)).collect(Collectors.toList());
 
         if (!productDto.getOldCategories().isEmpty()) {
-            for(int i = 0; i<activeCategories.size() ; i++ ){
-                if(!productDto.getOldCategories().contains(activeCategories.get(i)) && newCategories.contains(activeCategories.get(i).getIdCategory())){ //If the category is in newCategories and they are not in oldCategories = I have to add it to the database
-                    listAdd.add(new ProdCate(product,activeCategories.get(i)));
-                }else if(productDto.getOldCategories().contains(activeCategories.get(i)) && !newCategories.contains(activeCategories.get(i).getIdCategory())){ //If the category is not in newCategories and if it is in oldCategories= I have to delete it from the bdd
+            for (int i = 0; i < activeCategories.size(); i++) {
+                if (!productDto.getOldCategories().contains(activeCategories.get(i)) && newCategories.contains(activeCategories.get(i).getIdCategory())) { //If the category is in newCategories and they are not in oldCategories = I have to add it to the database
+                    listAdd.add(new ProdCate(product, activeCategories.get(i)));
+                } else if (productDto.getOldCategories().contains(activeCategories.get(i)) && !newCategories.contains(activeCategories.get(i).getIdCategory())) { //If the category is not in newCategories and if it is in oldCategories= I have to delete it from the bdd
                     listDelete.add(activeCategories.get(i));
                 }
             }
         } else {
-                for(Long category:newCategories){
-                    listAdd.add(new ProdCate(product,new Category(category)));
-                }
+            for (Long category : newCategories) {
+                listAdd.add(new ProdCate(product, new Category(category)));
+            }
         }
 
         try {
             if (!image.isEmpty()) {
                 product.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
-            }            
+            }
             productDao.save(product);
-            if(!listAdd.isEmpty()){
+            if (!listAdd.isEmpty()) {
                 prodCateService.saveAll(listAdd);
             }
-            if(!listDelete.isEmpty()){
-                 prodCateService.deleteAll(prodCateService.findByProdWhereCateIn(product, listDelete));
+            if (!listDelete.isEmpty()) {
+                prodCateService.deleteAll(prodCateService.findByProdWhereCateIn(product, listDelete));
             }
         } catch (IOException e) {
             throw new Exception("There was an error with the image");
@@ -140,6 +141,21 @@ public class ProductServiceImpl implements ProductService {
         try {
             //if you only wanted to use sort, you would have to pass instead of the pageable, just the sort
             return this.productDao.findAll(pageable);
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+    }
+
+    @Override
+    public Page<Product> findPaginatedByCategory(int pageNo, int pageSize, String sortField, String sortDir, Category category) throws Exception {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+
+        try {
+            return productDao.findProductsByCategory(category, pageable);
         } catch (DataAccessException e) {
             throw new Exception("Database Error");
         } catch (Exception e) {
