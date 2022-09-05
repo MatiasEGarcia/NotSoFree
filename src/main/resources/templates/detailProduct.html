@@ -25,14 +25,27 @@
                             <button class="favoriteButton"><i class="bi bi-suit-heart-fill"></i></button>
                         </div>
                         <div class="card-body d-grid gap-3">
-                            <h5 class="card-title" th:text="'Price: ' + ${productDto.price}"></h5>
-                            <h5 th:text="'Mark : ' + ${productDto.mark}"/>
-                            <h5 th:text="'How many left ? ' +${productDto.stock}"/>
+                            <h4 class="card-title" th:text="'Price: ' + ${productDto.price}"/>
+                            <h4 th:text="'Mark : ' + ${productDto.mark}"/>
                             <h5>Categories:</h5>
                             <ul class="categoryList">
                                 <li th:each="category:${productDto.oldCategories}" th:text="${category.name}"></li>
                             </ul>
-                            <a href="#" class="btn btn-primary btn-lg"><i class="bi bi-cart-plus"></i></a>
+                            
+                            <form th:action="@{/cartC/add}" method="POST" th:if="${!productDto.inCart}">
+                                <input type="hidden" name="idProduct" th:value="${productDto.idProduct}">
+                                <div class="row row-cols-auto">
+                                    <div class="col">
+                                        <select name="amountSelect" class="form-select amountSelect" >
+                                            <option th:each="i: ${#numbers.sequence(1,productDto.stock)}"   th:text=" ${i}" th:value="${i}" /> 
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-primary"><i class="bi bi-cart-plus"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                            <span  th:if="${productDto.inCart}">This product is already in the cart</span>
                         </div>
                     </div>
                 </div>

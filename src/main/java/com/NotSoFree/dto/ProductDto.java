@@ -35,6 +35,8 @@ public class ProductDto implements Serializable {
     
     private List<Category> oldCategories;//To know if the product has categories
     
+    private boolean inCart = false; //To know if it is in the cart
+    
     public ProductDto(){
         
     }
@@ -47,6 +49,15 @@ public class ProductDto implements Serializable {
         this.price= product.getPrice();
         this.image= product.getImage();
         this.oldCategories=oldCategories;
+    }
+    
+    public ProductDto(Product product){
+        this.idProduct= product.getIdProduct();
+        this.name=product.getName();
+        this.stock= product.getStock();
+        this.mark= product.getMark();
+        this.price= product.getPrice();
+        this.image= product.getImage();
     }
     
     

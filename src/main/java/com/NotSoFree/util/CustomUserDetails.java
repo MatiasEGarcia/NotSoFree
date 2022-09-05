@@ -1,5 +1,6 @@
 
 package com.NotSoFree.util;
+import com.NotSoFree.domain.Person;
 import com.NotSoFree.domain.Rol;
 import com.NotSoFree.domain.UserD;
 import java.util.Arrays;
@@ -80,5 +81,9 @@ public class CustomUserDetails implements UserDetails{
     
     public String getImage(){
         return this.user.getImage();
+    }
+    
+    public Person getPerson(){
+        return this.user.getPerson();
     }
 }

@@ -4,7 +4,10 @@ import com.NotSoFree.domain.Product;
 import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.service.CategoryService;
 import com.NotSoFree.service.ProductService;
+import com.NotSoFree.util.Cart;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +30,16 @@ public class ProductC {
 
     @Autowired
     private ProductService productService;
-    
+
     @Autowired
     private CategoryService categoryService;
-    
+
     @GetMapping(value = "/savePage")
     public String savePage(Model model) throws Exception {
         log.info("savePage handler");
-        
+
         model.addAttribute("productDto", new ProductDto());
-         model.addAttribute("listCategories", categoryService.listByState(new Byte("1")));
+        model.addAttribute("listCategories", categoryService.listByState(new Byte("1")));
         model.addAttribute("formAction", "/productC/saveProd");
         return "saveEditProdP";
     }
@@ -77,13 +80,13 @@ public class ProductC {
             model.addAttribute("productDto", productDto);
             model.addAttribute("formAction", "/productC/editProd");
             return "saveEditProdP";
-        }else if(newCategories.isEmpty()){  //why this? th:checked doesn't work if th:field is present, so I can't check it on the product object, I have to get it separately and check it separately
+        } else if (newCategories.isEmpty()) {  //why this? th:checked doesn't work if th:field is present, so I can't check it on the product object, I have to get it separately and check it separately
             model.addAttribute("productDto", productDto);
             model.addAttribute("formAction", "/productC/saveProd");
-            
-             redirectAttrs
-                .addFlashAttribute("message", "The product must have at least 1 category")
-                .addFlashAttribute("class", "danger");
+
+            redirectAttrs
+                    .addFlashAttribute("message", "The product must have at least 1 category")
+                    .addFlashAttribute("class", "danger");
             return "saveEditProdP";
         }
         productDto.setNewCategories(newCategories);
@@ -109,13 +112,13 @@ public class ProductC {
             model.addAttribute("productDto", productDto);
             model.addAttribute("formAction", "/productC/saveProd");
             return "saveEditProdP";
-        }else if(newCategories.isEmpty()){  //why this? th:checked doesn't work if th:field is present, so I can't check it on the product object, I have to get it separately and check it separately
+        } else if (newCategories.isEmpty()) {  //why this? th:checked doesn't work if th:field is present, so I can't check it on the product object, I have to get it separately and check it separately
             model.addAttribute("productDto", productDto);
             model.addAttribute("formAction", "/productC/saveProd");
-            
-             redirectAttrs
-                .addFlashAttribute("message", "The product must have at least 1 category")
-                .addFlashAttribute("class", "danger");
+
+            redirectAttrs
+                    .addFlashAttribute("message", "The product must have at least 1 category")
+                    .addFlashAttribute("class", "danger");
             return "saveEditProdP";
         }
 
@@ -134,29 +137,46 @@ public class ProductC {
             @RequestParam(name = "sortField", defaultValue = "idProduct") String sortField,
             @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
             @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) throws Exception {
-        
+
         log.info("listAllPage handler");
-        
-        int pageNoInt= Integer.parseInt(pageNo);
-        
-        Page<Product> pageProd=productService.findPaginated(pageNoInt,Integer.parseInt(pageSize),sortField, sortDir);
-        
+
+        int pageNoInt = Integer.parseInt(pageNo);
+
+        Page<Product> pageProd = productService.findPaginated(pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
+
         model.addAttribute("products", pageProd.getContent());
         model.addAttribute("totalPages", pageProd.getTotalPages());
         model.addAttribute("totalItems", pageProd.getTotalElements());
-        model.addAttribute("actualPage",pageNoInt); //I need it to be integer for the pagination of the page to work
+        model.addAttribute("actualPage", pageNoInt); //I need it to be integer for the pagination of the page to work
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        
+
         return "listAllProducts";
     }
 
     @GetMapping(value = "/detailPage/{idProduct}")
-    public String detailPage(@PathVariable String idProduct, Model model) throws Exception{
+    public String detailPage(@PathVariable String idProduct, Model model, HttpServletRequest request) throws Exception {
         log.info("detailPage handler");
-        model.addAttribute("productDto", productService.findProduct(Long.parseLong(idProduct) ) );
+
+        List<Cart> cartList;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            ProductDto product = productService.findProduct(Long.parseLong(idProduct));
+            cartList = (List<Cart>) session.getAttribute("cartList");
+            if (cartList != null) {
+                for (int i = 0; i < cartList.size(); i++) {
+                    if (cartList.get(i).getIdProduct().equals(product.getIdProduct())) {
+                        product.setInCart(true);
+                    }
+                }
+            }
+            model.addAttribute("productDto", product);
+        } else {
+            model.addAttribute("productDto", productService.findProduct(Long.parseLong(idProduct)));
+        }
         return "detailProduct";
     }
+
 }
