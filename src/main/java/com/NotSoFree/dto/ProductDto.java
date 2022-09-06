@@ -3,15 +3,18 @@ package com.NotSoFree.dto;
 
 import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.Product;
+import com.NotSoFree.util.Cart;
 import com.NotSoFree.validator.NotZero;
 import java.io.Serializable;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class ProductDto implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class ProductDto extends Cart implements Serializable {
     
     private Long idProduct;
     
@@ -34,8 +37,6 @@ public class ProductDto implements Serializable {
     private List<String> newCategories;
     
     private List<Category> oldCategories;//To know if the product has categories
-    
-    private boolean inCart = false; //To know if it is in the cart
     
     public ProductDto(){
         

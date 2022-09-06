@@ -160,19 +160,19 @@ public class ProductC {
     public String detailPage(@PathVariable String idProduct, Model model, HttpServletRequest request) throws Exception {
         log.info("detailPage handler");
 
-        List<Cart> cartList;
+        List<ProductDto> cartList;
         HttpSession session = request.getSession(false);
         if (session != null) {
-            ProductDto product = productService.findProduct(Long.parseLong(idProduct));
-            cartList = (List<Cart>) session.getAttribute("cartList");
+            ProductDto productDto = productService.findProduct(Long.parseLong(idProduct));
+            cartList = (List<ProductDto>) session.getAttribute("cartList");
             if (cartList != null) {
                 for (int i = 0; i < cartList.size(); i++) {
-                    if (cartList.get(i).getIdProduct().equals(product.getIdProduct())) {
-                        product.setInCart(true);
+                    if (cartList.get(i).getIdProduct().equals(productDto.getIdProduct())) {
+                        productDto.setInCart(true);
                     }
                 }
             }
-            model.addAttribute("productDto", product);
+            model.addAttribute("productDto", productDto);
         } else {
             model.addAttribute("productDto", productService.findProduct(Long.parseLong(idProduct)));
         }
