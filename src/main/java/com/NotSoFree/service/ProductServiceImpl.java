@@ -4,9 +4,11 @@ import com.NotSoFree.domain.Product;
 import com.NotSoFree.dao.ProductDao;
 import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.ProdCate;
+import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.exception.ProductNotFoundById;
 import java.io.IOException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -131,6 +133,34 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
+    public PageDto findProductsPaginated(List<Long> products, int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+
+        Page<Product> productsPage;
+        List<ProductDto> listProductDto= new ArrayList<>();
+
+        try {
+            productsPage = productDao.findProductsByIdPaginated(products, pageable);
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+
+        if(!productsPage.isEmpty()){
+            for (int i = 0; i < productsPage.getContent().size(); i++) {
+                listProductDto.add(new ProductDto(productsPage.getContent().get(i)));
+            }
+            return new PageDto<>(listProductDto, productsPage.getTotalPages(), productsPage.getTotalElements());
+        }
+        
+        return null; 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<Product> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
 
@@ -162,5 +192,4 @@ public class ProductServiceImpl implements ProductService {
             throw new Exception("Unknown Error");
         }
     }
-
 }

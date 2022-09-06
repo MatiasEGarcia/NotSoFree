@@ -15,7 +15,7 @@
                 <div class="collapse navbar-collapse" id="nav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item" th:if="${!#ctx.session.isEmpty()} and ${#ctx.session.cartList != null}" >
-                            <a class="nav-link" href="#" role="button" >
+                            <a class="nav-link"  th:href="@{/cartC/cartList}" >
                                <i class="bi bi-cart"></i>
                                <span th:text="${#lists.size(#ctx.session.cartList)}"></span>
                             </a>

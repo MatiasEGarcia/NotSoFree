@@ -37,6 +37,8 @@ public class ProductDto implements Serializable {
     
     private boolean inCart = false; //To know if it is in the cart
     
+    private int amountInCart;
+    
     public ProductDto(){
         
     }
