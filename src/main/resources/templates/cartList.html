@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>Page to see products in cart</title>
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div th:replace="layout/alert :: alert"></div>
+
+
+        <div class="container">
+            <div th:unless="${products}">
+                <h3>There are no products in the cart</h3>
+            </div>
+            <table class="table"  th:if="${products}">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">mark</th>
+                        <th scope="col">price</th>
+                        <th scope="col">#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="product:${products}">
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.mark}"></td>
+                        <td th:text="${product.price}"></td>
+                        <td th:text="${product.amountToBuy}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+    </body>
+</html>

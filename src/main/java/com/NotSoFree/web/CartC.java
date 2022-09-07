@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -40,6 +42,16 @@ public class CartC {
                 .addFlashAttribute("class", "success");
         return "redirect:" + url;
     }
+    
+    
+    @GetMapping(value = "/cartList")
+    public String cartList(Model model,HttpSession session){
+        model.addAttribute("products", session.getAttribute("cartList"));
+        return "cartList";
+    }
+    
+    
+    
     //This handler is for Authenticated user
     @PostMapping(value = "UserPurchase")
     public String userPurchase() {
