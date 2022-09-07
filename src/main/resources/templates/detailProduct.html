@@ -39,10 +39,9 @@
                                 <input type="hidden" name="mark" th:field="*{mark}"/>
                                 <input type="hidden" name="stock" th:field="*{stock}"/>
                                 <input type="hidden" name="price" th:field="*{price}"/>
-                                <input type="hidden" name="oldCategories" th:field="*{oldCategories}"/>
                                 <div class="row row-cols-auto">
                                     <div class="col">
-                                        <select th:field="*{amountToBuy}" class="form-select amountSelect" >
+                                        <select th:field="*{quantity}" class="form-select amountSelect" >
                                             <option th:each="i: ${#numbers.sequence(1,productDto.stock)}"   th:text=" ${i}" th:value="${i}" /> 
                                         </select>
                                     </div>

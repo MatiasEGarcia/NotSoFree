@@ -47,9 +47,15 @@ public class CartC {
     @GetMapping(value = "/cartList")
     public String cartList(Model model, HttpSession session) {
         log.info("cartList handler");
+        float totalAmount= 0;
          List<ProductDto> listProd = (List<ProductDto>) session.getAttribute("cartList");
          if(!listProd.isEmpty()){
+             for(ProductDto p : listProd){
+                totalAmount += p.getPrice()*p.getQuantity();
+             }
+             
              model.addAttribute("products",listProd );
+             model.addAttribute("totalAmount",totalAmount);
          }
         return "cartList";
     }
