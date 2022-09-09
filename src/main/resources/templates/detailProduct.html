@@ -32,7 +32,7 @@
                                 <li th:each="category:${productDto.oldCategories}" th:text="${category.name}"></li>
                             </ul>
 
-                            <form th:action="@{/cartC/add}" method="POST" th:if="${!productDto.inCart}" th:object="${productDto}">
+                            <form th:action="@{/cartC/add}" method="POST" th:unless="${productDto.inCart} or ${productDto.stock == 0} " th:object="${productDto}">
                                 <input type="text" hidden="true" th:field="*{image}"  th:value="${productDto.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
                                 <input type="hidden" name="idProducto" th:field="*{idProduct}"/>
                                 <input type="hidden" name="name" th:field="*{name}"/>
@@ -42,14 +42,16 @@
                                 <div class="row row-cols-auto">
                                     <div class="col">
                                         <select th:field="*{quantity}" class="form-select amountSelect" >
-                                            <option th:each="i: ${#numbers.sequence(1,productDto.stock)}"   th:text=" ${i}" th:value="${i}" /> 
+                                            <option th:each="i: ${#numbers.sequence(0,productDto.stock)}"   th:text=" ${i}" th:value="${i}" /> 
                                         </select>
                                     </div>
                                     <div class="col">
                                         <button type="submit" class="btn btn-primary"><i class="bi bi-cart-plus"></i></button>
                                     </div>
                                 </div>
+                                
                             </form>
+                            <span th:if="${productDto.stock == 0} ">There is no stock at the moment</span>
                             <span  th:if="${productDto.inCart}">This product is already in the cart</span>
                         </div>
                     </div>

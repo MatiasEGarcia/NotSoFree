@@ -22,17 +22,22 @@
                         <th scope="col">mark</th>
                         <th scope="col">price c/u</th>
                         <th scope="col">Quantity</th>
-                         <th scope="col">Amount</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Image</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="product:${products}">
+                    <tr th:each="product:${products}" th:class="${product.notEnoughStock} ? 'table-danger' : '' ">
                         <td th:text="${product.name}"></td>
                         <td th:text="${product.mark}"></td>
                         <td th:text="${product.price}"></td>
                         <td th:text="${product.quantity}"></td>
                         <td th:text="${product.price*product.quantity}"></td>
+                        <td>
+                            <img th:if="${product.image}  and ${product.image!='' }"   th:src="@{'data:image/jpeg;charset=utf-8;base64,' + ${product.image}}"  th:alt="${product.image}" style="max-width: 40px"/>
+                            <img th:unless="${product.image} and ${product.image!= '' }"   src="/img/productDefault.jpg"  alt="The product currently has no image" style="max-width: 40px"/>
+                        </td>
                         <td>
                             <a class="btn btn-danger" th:href="@{/cartC/delete/} + ${product.idProduct}">
                                 <i class="bi bi-trash"></i>
@@ -42,8 +47,17 @@
                 </tbody>
             </table>
             <div>
-                    <span th:text="${totalAmount}"></span>
-                </div>
+                <span th:text="${totalAmount}"></span>
+
+                <button sec:authorize="isAuthenticated()">Buy user autenticated</button>
+                <a sec:authorize="isAnonymous()"  class="btn btn-primary" th:href="@{/cartC/noUserData}">
+                    Buy no user
+                </a>
+            </div>
+
+
+
+
         </div>
 
 

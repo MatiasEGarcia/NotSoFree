@@ -14,9 +14,13 @@ public interface ProductService {
     
     public void saveProduct(ProductDto productDto,MultipartFile image) throws Exception;
     
+     public void updateProductsStock(List<ProductDto> products) throws Exception;
+    
     public void removeProduct(Long idProduct) throws Exception;
     
     public ProductDto findProduct(Long idProduct) throws Exception;
+    
+    public List<ProductDto> findAllProductsById(List<Long> idProduct) throws Exception;
     
     public Page<Product> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) throws Exception;
     

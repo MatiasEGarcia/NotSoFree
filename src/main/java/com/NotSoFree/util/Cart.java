@@ -9,4 +9,6 @@ public class Cart {
     
     private int quantity;
     
+    private boolean notEnoughStock = false; // if this is true, it means that there is not enough stock in the database for your purchase
+    
 }

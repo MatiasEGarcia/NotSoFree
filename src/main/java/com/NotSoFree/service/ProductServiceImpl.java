@@ -94,6 +94,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    public void updateProductsStock(List<ProductDto> products) throws Exception {
+        
+        
+        
+         try {
+            for(int i=0;i<products.size();i++){
+                products.get(i).setStock(products.get(i).getStock() - products.get(i).getQuantity());
+                productDao.updateProductStock(products.get(i));
+            }
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+    }
+
+    @Override
+    @Transactional
     public void removeProduct(Long idProduct) throws Exception {
         try {
             productDao.delete(productDao.findById(idProduct).orElseThrow(() -> new ProductNotFoundById(idProduct)));
@@ -131,6 +150,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<ProductDto> findAllProductsById(List<Long> idProducts) throws Exception {
+        List<Product> products;
+        List<ProductDto> productsDto = new ArrayList<>();
+
+        try {
+            products = productDao.findAllById(idProducts);
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+
+        for (Product product : products) {
+            productsDto.add(new ProductDto(product));
+        }
+
+        return productsDto;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<Product> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
 
@@ -149,6 +190,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Product> findPaginatedByCategory(int pageNo, int pageSize, String sortField, String sortDir, Category category) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
@@ -162,5 +204,4 @@ public class ProductServiceImpl implements ProductService {
             throw new Exception("Unknown Error");
         }
     }
-
 }
