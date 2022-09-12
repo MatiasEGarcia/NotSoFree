@@ -174,12 +174,9 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public Page<Product> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-
-        //Pageable provides the info for the pagination
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort); // the pagination starts at 1 that's why I subtract 1
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 
         try {
-            //if you only wanted to use sort, you would have to pass instead of the pageable, just the sort
             return this.productDao.findAll(pageable);
         } catch (DataAccessException e) {
             throw new Exception("Database Error");

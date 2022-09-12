@@ -231,14 +231,11 @@ public class UserService implements UserDetailsService, UserDService {
             e.printStackTrace();
             throw new UserDNotFoundByUsername("Unknown Error");
         }
-
         if (!pageUserD.isEmpty()) {
             listUserD = pageUserD.getContent();
-
             for (int i = 0; i < listUserD.size(); i++) {
                 listAEDto.add(new UserAEDto(listUserD.get(i)));
             }
-
             return new PageDto<>(listAEDto, pageUserD.getTotalPages(), pageUserD.getTotalElements());
         }
 
