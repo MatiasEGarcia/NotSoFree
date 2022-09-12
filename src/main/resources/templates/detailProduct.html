@@ -42,7 +42,7 @@
                                 <div class="row row-cols-auto">
                                     <div class="col">
                                         <select th:field="*{quantity}" class="form-select amountSelect" >
-                                            <option th:each="i: ${#numbers.sequence(0,productDto.stock)}"   th:text=" ${i}" th:value="${i}" /> 
+                                            <option th:each="i: ${#numbers.sequence(1,productDto.stock)}"   th:text=" ${i}" th:value="${i}" /> 
                                         </select>
                                     </div>
                                     <div class="col">

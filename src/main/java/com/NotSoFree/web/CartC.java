@@ -86,11 +86,29 @@ public class CartC {
     }
 
     //This handler is for Authenticated user
-    @PostMapping(value = "userPurchase")
-    public String userPurchase() {
+    @GetMapping(value = "/userPurchase")
+    public String userPurchase(HttpSession session,
+            RedirectAttributes redirectAttrs) throws Exception {
+        List<ProductDto> listProd = new ArrayList<>();
+        List<ProductDto> listNoStock = new ArrayList<>();
+        listProd = (List<ProductDto>) session.getAttribute("cartList");
+        listNoStock = this.noStock(listProd, productService.findAllProductsById(listProd.stream().map(prod -> prod.getIdProduct()).collect(Collectors.toList())));
+        if (!listNoStock.isEmpty()) {
+            session.setAttribute("cartList", this.setNotEnoughStock(listNoStock, listProd));
+            redirectAttrs
+                    .addFlashAttribute("message", "Some of the products has no stock")
+                    .addFlashAttribute("class", "danger");
 
-        return null;
+            return "redirect:/cartC/cartList";
+        }
+        productService.updateProductsStock(listProd);
+        session.removeAttribute("cartList");
 
+        redirectAttrs
+                .addFlashAttribute("message", "Your products were purchased, your purchase id is : x")
+                .addFlashAttribute("class", "success");
+
+        return "redirect:/";
     }
 
     @GetMapping(value = "/noUserData")

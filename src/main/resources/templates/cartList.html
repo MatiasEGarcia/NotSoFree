@@ -15,7 +15,7 @@
             <div th:unless="${products}">
                 <h3>There are no products in the cart</h3>
             </div>
-            <table class="table"  th:if="${products}">
+            <table class="table table-hover"  th:if="${products}">
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
@@ -46,18 +46,19 @@
                     </tr>
                 </tbody>
             </table>
-            <div>
-                <span th:text="${totalAmount}"></span>
-
-                <button sec:authorize="isAuthenticated()">Buy user autenticated</button>
-                <a sec:authorize="isAnonymous()"  class="btn btn-primary" th:href="@{/cartC/noUserData}">
-                    Buy no user
-                </a>
+            <div class=" row">
+                <div class="col-12">
+                    <span class="h4" th:text="'Total amount= '+${totalAmount}"></span>
+                </div>
+                <div class="mt-3 col-12 col-md-3 d-grid">
+                    <a sec:authorize="isAuthenticated()" class="btn btn-success " th:href="@{/cartC/userPurchase}">
+                        <span>Buy</span><i class="bi bi-check-all" style="font-size: 1.5rem;"></i>
+                    </a>
+                    <a sec:authorize="isAnonymous()"  class="btn btn-success " th:href="@{/cartC/noUserData}">
+                        <span class="h3">Buy</span><i class="bi bi-check-all fa-lg" style="font-size: 1.5rem;"></i>
+                    </a>
+                </div>
             </div>
-
-
-
-
         </div>
 
 
