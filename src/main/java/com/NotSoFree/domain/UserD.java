@@ -1,6 +1,7 @@
 
 package com.NotSoFree.domain;
 
+import com.NotSoFree.dto.UserCDto;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -48,5 +49,19 @@ public class UserD implements Serializable{
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<Rol> roles;
     
+    public UserD(){
+        
+    }
     
+    public UserD(UserCDto user){
+        Person person= new Person();
+        person.setNames(user.getNames());
+        person.setSurnames(user.getSurnames());
+        person.setEmail(user.getEmail());
+        person.setPhone(user.getPhone());
+        person.setEmail(user.getSurnames());
+        setPerson(person);
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+    }
 }
