@@ -39,4 +39,13 @@ public class Favorite implements Serializable{
     @JoinColumn(name="user")
     private UserD user;
     
+    public Favorite(){
+        
+    }
+    
+    public Favorite(Product product,UserD user){
+        this.product = product;
+        this.user = user;
+    }
+    
 }

@@ -22,7 +22,10 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-around">
                             <h2 th:text="${productDto.name}"></h2>
-                            <button class="favoriteButton"><i class="bi bi-suit-heart-fill"></i></button>
+                            <form th:action="@{/favoriteC/add}" method="POST">
+                                <input hidden="true" th:value="${productDto.idProduct}" name="idProduct"/>
+                                <button class="favoriteButton" type="submit"><i class="bi bi-suit-heart-fill"></i></button>
+                            </form>
                         </div>
                         <div class="card-body d-grid gap-3">
                             <h4 class="card-title" th:text="'Price: ' + ${productDto.price}"/>

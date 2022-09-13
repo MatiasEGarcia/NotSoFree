@@ -1,5 +1,6 @@
 package com.NotSoFree.service;
 
+import com.NotSoFree.dao.FavoriteDao;
 import com.NotSoFree.dao.UserDao;
 import com.NotSoFree.domain.Favorite;
 import com.NotSoFree.domain.Product;
@@ -15,18 +16,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@Service
 public class FavoriteServiceImpl implements FavoriteService{
     
     @Autowired
     private UserDao userDao;
     
+     @Autowired
+    private FavoriteDao favoriteDao;
+    
 
     @Override
-    public void saveFavorite(Favorite favorite) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void saveFavorite(Favorite favorite) throws Exception { 
+         try {
+             favoriteDao.save(favorite);
+        } catch (DataAccessException e) {
+            throw new UserDNotFoundByUsername("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDNotFoundByUsername("Unknown Error");
+        }
     }
 
     @Override
