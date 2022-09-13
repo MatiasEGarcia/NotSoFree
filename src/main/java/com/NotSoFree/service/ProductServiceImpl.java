@@ -95,9 +95,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void updateProductsStock(List<ProductDto> products) throws Exception {
-        
-        
-        
          try {
             for(int i=0;i<products.size();i++){
                 products.get(i).setStock(products.get(i).getStock() - products.get(i).getQuantity());
