@@ -3,7 +3,6 @@ package com.NotSoFree.web;
 import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.UserAEDto;
 import com.NotSoFree.dto.UserCDto;
-import com.NotSoFree.dto.UserEDto;
 import com.NotSoFree.dto.UserEPUDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
@@ -38,15 +37,6 @@ public class UserC {
         return "login";
     }
 
-    @GetMapping(value = "/editPage")
-    public String editPage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) throws UserDNotFoundByUsername {
-        log.info("editPage handler");
-
-        UserEDto userEDto = new UserEDto(userDService.findUserByUsername(loggedUser.getUsername() ) ) ;
-        model.addAttribute("userEDto", userEDto);
-        return "editUser";
-    }
-
     @GetMapping(value = "/savePage")
     public String savePage(Model model) {
         log.info("savePage handler");
@@ -74,27 +64,6 @@ public class UserC {
                 .addFlashAttribute("class", "success");
 
         return "redirect:/userC/login";
-    }
-
-    @PostMapping(value = "/editUser")
-    public String editUser(Model model, @Valid UserEDto userEDto,
-            BindingResult result,
-            @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs) throws Exception {
-        log.info("editUser handler");
-
-        if (result.hasErrors()) {
-            model.addAttribute("userEDto", userEDto);
-            return "editUser";
-        }
-
-        userDService.userEdit(userEDto, image);
-
-        redirectAttrs
-                .addFlashAttribute("message", "User edited successfully")
-                .addFlashAttribute("class", "success");
-
-        return "redirect:/userC/editPage";
     }
 
     @GetMapping(value = "/passUNamePage")
@@ -192,5 +161,33 @@ public class UserC {
         return "redirect:/userC/listAllPage";
     }
     
+     @GetMapping(value = "/editImagePage")
+    public String editImagePage(Model model,@AuthenticationPrincipal CustomUserDetails loggedUser)throws Exception{
+        log.info("editImagePage handler");
+        model.addAttribute("userId", loggedUser.getId());
+        model.addAttribute("oldImage", userDService.findUserByUsername(loggedUser.getUsername()).getImage());
+        return "editImage";
+    }
+    @PostMapping(value = "/editImage")
+    public String editImage(@RequestParam(name = "file", required = false) MultipartFile image, 
+            @RequestParam(name = "userId") String userId, 
+            RedirectAttributes redirectAttrs) throws Exception{
+        log.info("editImage handler");
+
+        if(image.isEmpty()){
+            redirectAttrs
+                .addFlashAttribute("message", "There is no image")
+                .addFlashAttribute("class", "danger");
+            return "redirect:/userC/editImagePage";
+        }
+        
+        userDService.userImageEdit(image, userId);
+        
+        redirectAttrs
+                .addFlashAttribute("message", "User image saved successfully")
+                .addFlashAttribute("class", "success");
+
+        return "redirect:/personC/editPage";
+    }
     
 }

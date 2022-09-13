@@ -7,7 +7,6 @@ import com.NotSoFree.domain.UserD;
 import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.UserAEDto;
 import com.NotSoFree.dto.UserCDto;
-import com.NotSoFree.dto.UserEDto;
 import com.NotSoFree.dto.UserEPUDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.util.BCPasswordEncoder;
@@ -105,37 +104,6 @@ public class UserService implements UserDetailsService, UserDService {
 
     @Override
     @Transactional
-    public void userEdit(UserEDto user, MultipartFile image) throws Exception {
-        UserD userD = new UserD();
-        Person person = new Person();
-
-        userD.setIdUser(user.getIdUser());
-        person.setIdPerson(user.getIdPerson());
-        person.setNames(user.getNames());
-        person.setSurnames(user.getSurnames());
-        person.setPhone(user.getPhone());
-        person.setEmail(user.getEmail());
-        person.setAddress(user.getAddress());
-        userD.setPerson(person);
-
-        try {
-            if (!image.isEmpty()) {
-                userD.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
-            }
-            userDao.updateWithoutPasswordUsername(userD.getIdUser(), userD);
-        } catch (IOException e) {
-            throw new Exception("There was an error with the image");
-        } catch (DataAccessException e) {
-            throw new Exception("Database Error");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
-        }
-
-    }
-
-    @Override
-    @Transactional
     public void userEditByAdmin(UserAEDto user, List<RolEnum> listRolEnum) throws Exception {
         UserD userD = new UserD();
         RolEnum[] allRolesEnum = RolEnum.values();
@@ -190,6 +158,24 @@ public class UserService implements UserDetailsService, UserDService {
         }
         //User must re-login
         SecurityContextHolder.clearContext();
+    }
+    
+    @Override
+    @Transactional
+    public void userImageEdit(MultipartFile image, String user) throws Exception{
+        String imageString;
+         try {
+           imageString = Base64.getEncoder().encodeToString(image.getBytes());
+           userDao.updateUserImage(imageString, Long.parseLong(user));
+        } catch (IOException e) {
+            throw new Exception("There was an error with the image");
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+        
     }
 
     @Override

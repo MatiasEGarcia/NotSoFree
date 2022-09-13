@@ -15,19 +15,19 @@
                 <thead>
                     <tr>
                         <th scope="col">
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=idProduct&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Id</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=idProduct&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Id</a>
                         </th>
                         <th scope="col">
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=name&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Name</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=name&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Name</a>
                         </th>
                         <th scope="col">
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=stock&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Stock</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=stock&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Stock</a>
                         </th>
                         <th scope="col">
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=mark&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Mark</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=mark&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Mark</a>
                         </th>
                         <th scope="col"> <!--problema, dice que Product no tiene la propiedad price -->
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=price&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Precio</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=price&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Precio</a>
                         </th>
                         <th scope="col">Image</th>
                         <th scope="col">Delete</th>
@@ -52,7 +52,7 @@
                             </form>
                         </td>
                         <td>
-                            <a class="btn btn-secondary" th:href="@{/productC/editPage/} + ${product.idProduct}">
+                            <a class="btn btn-secondary linksNoDeco" th:href="@{/productC/editPage/} + ${product.idProduct}">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
                         </td>

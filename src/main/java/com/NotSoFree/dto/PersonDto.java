@@ -41,7 +41,5 @@ public class PersonDto implements Serializable{
         this.phone= person.getPhone();
         this.email= person.getEmail();
         this.address= person.getAddress();
-    }
-    
-            
+    }       
 }

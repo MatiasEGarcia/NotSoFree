@@ -4,7 +4,6 @@ import com.NotSoFree.domain.Product;
 import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.service.CategoryService;
 import com.NotSoFree.service.ProductService;
-import com.NotSoFree.util.Cart;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

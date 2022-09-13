@@ -17,13 +17,13 @@
                         <thead>
                             <tr>
                                 <th scope="col">
-                                     <a class="h6" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=idCategory&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Id</a>
+                                     <a class="h6 linksNoDeco" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=idCategory&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Id</a>
                                 </th>
                                 <th scope="col">
-                                    <a class="h6" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=name&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Name</a>
+                                    <a class="h6 linksNoDeco" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=name&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Name</a>
                                 </th>
                                 <th scope="col">
-                                    <a class="h6" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=state&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#State</a>
+                                    <a class="h6 linksNoDeco" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=state&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#State</a>
                                 </th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Delete</th>
@@ -46,7 +46,7 @@
                                     </form>
                                 </td>
                                 <td> 
-                                    <a class="btn btn-secondary" th:href="@{/categoryC/editPage/} + ${category.idCategory}">
+                                    <a class="btn btn-secondary linksNoDeco" th:href="@{/categoryC/editPage/} + ${category.idCategory}">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                 </td>

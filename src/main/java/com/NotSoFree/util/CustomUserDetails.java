@@ -3,7 +3,6 @@ package com.NotSoFree.util;
 import com.NotSoFree.domain.Person;
 import com.NotSoFree.domain.Rol;
 import com.NotSoFree.domain.UserD;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;

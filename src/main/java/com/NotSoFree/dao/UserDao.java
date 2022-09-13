@@ -12,10 +12,9 @@ public interface UserDao extends JpaRepository<UserD, Long> {
     UserD findByUsername(String username);
 
     @Modifying
-    @Query(value="UPDATE UserD u SET u.person= :#{#userD.person}"
-            + ",u.image = :#{#userD.image}"
-            + " WHERE u.idUser= :id")
-    void updateWithoutPasswordUsername(@Param(value = "id") long id, @Param("userD")UserD userD);
+    @Query(value="UPDATE UserD u SET u.image = :image"
+            + " WHERE u.idUser= :user")
+    void updateUserImage(@Param("image")String image,@Param("user") Long user);
     
     @Modifying
     @Query(value="UPDATE UserD u SET u.password= :#{#user.newPassword}"

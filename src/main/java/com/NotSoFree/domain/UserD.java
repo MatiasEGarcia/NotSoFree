@@ -28,7 +28,7 @@ public class UserD implements Serializable{
     @Column(name="id_user")
     private Long idUser;
     
-    @OneToOne(fetch = FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.REMOVE,CascadeType.REFRESH})
+    @OneToOne(fetch = FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.REMOVE,CascadeType.REFRESH,CascadeType.MERGE})
     @JoinColumn(name="person")
     private Person person;
     

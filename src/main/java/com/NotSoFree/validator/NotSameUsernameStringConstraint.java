@@ -1,6 +1,6 @@
 package com.NotSoFree.validator;
 
-import com.NotSoFree.dto.UserEDto;
+import com.NotSoFree.domain.UserD;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
 import javax.validation.ConstraintValidator;
@@ -14,11 +14,11 @@ public class NotSameUsernameStringConstraint implements ConstraintValidator<NotS
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext cvc) {
-        UserEDto user = null;
+        UserD user = null;
 
         if (username != null && !username.contains("")) {
             try {
-               user= new UserEDto(userDService.findUserByUsername(username));
+               user= userDService.findUserByUsername(username);
             } catch (UserDNotFoundByUsername ex) {
                 ex.printStackTrace();
             }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>Page to edit user image</title>
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div th:replace="layout/alert :: alert"></div>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-5">
+                    <div class="editImageContainer" <div th:unless="${oldImage} and ${userImage!= '' }" > 
+                        <img class="editImageOld" src="/img/userDefault.jpg" alt="basicUserImage"/>
+                    </div>
+                    <div class="editImageContainer" <div th:if="${oldImage} and ${oldImage!= '' }" > 
+                        <img  class="editImageOld" th:src="${'data:image/jpeg;charset=utf-8;base64,' + oldImage}"  alt="The user image had an error"/>
+                    </div>
+                    <form class="d-grid " th:action="@{/userC/editImage}" method="POST" enctype="multipart/form-data">
+                        <input hidden="true" th:value="${userId}" name="userId" />
+                        <h4 class="text-center mb-3">Select new Image</h4>
+                        <div class="form_group">
+                            <input id="image" name="file" type="file" class="form-control"/>
+                        </div>
+                        <button type="submit" class="btn btn-success mt-4 "><span class="me-1 h4">Save</span><i class="bi bi-check-circle"></i></button>
+                    </form>  
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+    </body>
+</html>

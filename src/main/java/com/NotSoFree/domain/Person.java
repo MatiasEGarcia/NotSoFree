@@ -1,5 +1,6 @@
 package com.NotSoFree.domain;
 
+import com.NotSoFree.dto.PersonDto;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,5 +36,19 @@ public class Person implements Serializable {
   
     @Column(name="address")
     private String address; 
+    
+    public Person(){
+        
+    }
+    
+    public Person(PersonDto personDto){
+        this.idPerson = personDto.getIdPerson();
+        this.names = personDto.getNames();
+        this.surnames = personDto.getSurnames();
+        this.phone = personDto.getPhone();
+        this.email = personDto.getEmail();
+        this.address = personDto.getAddress();
+    }
+    
     
 }
