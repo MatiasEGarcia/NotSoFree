@@ -1,16 +1,21 @@
 package com.NotSoFree.web;
 
 import com.NotSoFree.domain.Product;
+import com.NotSoFree.domain.UserD;
 import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.service.CategoryService;
 import com.NotSoFree.service.ProductService;
+import com.NotSoFree.service.UserDService;
+import com.NotSoFree.util.CustomUserDetails;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +37,9 @@ public class ProductC {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private UserDService userDService;
 
     @GetMapping(value = "/savePage")
     public String savePage(Model model) throws Exception {
@@ -156,11 +164,27 @@ public class ProductC {
     }
 
     @GetMapping(value = "/detailPage/{idProduct}")
-    public String detailPage(@PathVariable String idProduct, Model model, HttpServletRequest request) throws Exception {
+    public String detailPage(@PathVariable String idProduct,
+            Model model,
+            HttpServletRequest request,
+            @AuthenticationPrincipal CustomUserDetails loggedUser) throws Exception {
         log.info("detailPage handler");
 
         List<ProductDto> cartList;
         HttpSession session = request.getSession(false);
+
+        if (loggedUser != null) {
+            UserD user = userDService.findUserByUsername(loggedUser.getUsername());
+            Optional<Product> productFav = user.getFavorites().stream()
+                    .map(favorite -> favorite.getProduct())
+                    .filter(product -> product.getIdProduct() == Long.parseLong(idProduct)).findFirst(); 
+            if (productFav.isPresent()) {
+                model.addAttribute("inFavorites", true);
+            } else {
+                model.addAttribute("inFavorites", false);
+            }
+        }
+
         if (session != null) {
             ProductDto productDto = productService.findProduct(Long.parseLong(idProduct));
             cartList = (List<ProductDto>) session.getAttribute("cartList");
@@ -175,6 +199,7 @@ public class ProductC {
         } else {
             model.addAttribute("productDto", productService.findProduct(Long.parseLong(idProduct)));
         }
+
         return "detailProduct";
     }
 

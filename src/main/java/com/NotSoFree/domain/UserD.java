@@ -49,6 +49,10 @@ public class UserD implements Serializable{
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<Rol> roles;
     
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, mappedBy = "user")
+    private List<Favorite> favorites;
+    
     public UserD(){
         
     }

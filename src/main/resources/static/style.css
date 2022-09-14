@@ -67,6 +67,10 @@
     color: red;
 }
 
+.favoriteHeartRed {
+    color:red;
+}
+
 #productDetail .favoriteButton{
     background: none;
     color: inherit;
