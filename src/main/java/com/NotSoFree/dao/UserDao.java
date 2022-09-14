@@ -30,7 +30,7 @@ public interface UserDao extends JpaRepository<UserD, Long> {
             + "  WHERE u.idUser= :#{#user.idUser}")
     void updateState(@Param("user")UserD user);
     
-    @Query(value = "SELECT p FROM Product p WHERE p.idProduct = ANY (SELECT f.product FROM Favorite f WHERE f.user =  :#{#user.idUser})")
+    @Query(value = "SELECT p FROM Product p WHERE p.idProduct = ANY (SELECT f.product FROM Favorite f WHERE f.user =  :user)")
     Page<Product> findFavoriteProducts(@Param("user")UserD user, Pageable pageable);
     
 }
