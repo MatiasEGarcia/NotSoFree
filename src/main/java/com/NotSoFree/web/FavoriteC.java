@@ -72,7 +72,7 @@ public class FavoriteC {
         
         int pageNoInt= Integer.parseInt(pageNo);
         byte active=1;
-        PageDto<Product> pageProd = favoriteService.favoriteListByUser(loggedUser.getUser(), pageNoInt, Integer.parseInt(pageSize), sortField, sortDir); 
+        PageDto<Product> pageProd = favoriteService.favoriteList(loggedUser.getUser(), pageNoInt, Integer.parseInt(pageSize), sortField, sortDir); 
         List<Category> activeCategories= categoryService.listByState(active);
         
         model.addAttribute("categories", activeCategories);
@@ -87,5 +87,36 @@ public class FavoriteC {
         
         return "listFavorites";
     }
+    
+    @GetMapping("/listByCategory")
+    public String listByCategory(Model model,
+            @RequestParam(name = "categorySelect") String categorySelected,
+            @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
+            @RequestParam(name = "sortField",defaultValue = "idProduct") String sortField,
+            @RequestParam(name = "sortDir",defaultValue = "asc") String sortDir, 
+            @RequestParam(name = "pageSize",defaultValue = "10") String pageSize,
+            @AuthenticationPrincipal CustomUserDetails loggedUser
+        ) throws Exception{
+        
+        int pageNoInt= Integer.parseInt(pageNo);
+        byte active=1;
+        PageDto<Product> pageProd = favoriteService.favoriteListByCategory(loggedUser.getUser(),
+                new Category(Long.parseLong(categorySelected)), pageNoInt, Integer.parseInt(pageSize), sortField, sortDir); 
+        List<Category> activeCategories= categoryService.listByState(active);
+        
+        model.addAttribute("categories", activeCategories);
+        model.addAttribute("products", pageProd.getContent());
+        model.addAttribute("totalPages", pageProd.getTotalPages());
+        model.addAttribute("totalItems", pageProd.getTotalElements());
+        model.addAttribute("actualPage", pageNoInt); //I need it to be integer for the pagination of the page to work
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        
+        return "listFavorites";
+    }
+    
+    
     
 }

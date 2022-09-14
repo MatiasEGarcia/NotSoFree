@@ -2,6 +2,7 @@ package com.NotSoFree.service;
 
 import com.NotSoFree.dao.FavoriteDao;
 import com.NotSoFree.dao.UserDao;
+import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.Favorite;
 import com.NotSoFree.domain.Product;
 import com.NotSoFree.domain.UserD;
@@ -100,7 +101,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageDto favoriteListByUser(UserD user, int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
+    public PageDto favoriteList(UserD user, int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort); // the pagination starts at 1 that's why I subtract 1
         Page<Product> productsPage;
@@ -109,6 +110,35 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         try {
             productsPage = userDao.findFavoriteProducts(user, pageable);
+        } catch (DataAccessException e) {
+            throw new UserDNotFoundByUsername("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDNotFoundByUsername("Unknown Error");
+        }
+
+        if (!productsPage.isEmpty()) {
+            productList = productsPage.getContent();
+            for (Product product : productList) {
+                productDtoList.add(new ProductDto(product));
+            }
+
+            return new PageDto<>(productDtoList, productsPage.getTotalPages(), productsPage.getTotalElements());
+        }
+
+        return null;
+    }
+
+    @Override
+    public PageDto favoriteListByCategory(UserD user, Category category, int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort); // the pagination starts at 1 that's why I subtract 1
+        Page<Product> productsPage;
+        List<Product> productList = new ArrayList<>();
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        try {
+            productsPage = favoriteDao.findProdInFavByCate(user,category, pageable);
         } catch (DataAccessException e) {
             throw new UserDNotFoundByUsername("Database Error");
         } catch (Exception e) {

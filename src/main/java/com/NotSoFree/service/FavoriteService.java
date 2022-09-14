@@ -1,5 +1,6 @@
 package com.NotSoFree.service;
 
+import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.Favorite;
 import com.NotSoFree.domain.Product;
 import com.NotSoFree.domain.UserD;
@@ -17,6 +18,8 @@ public interface FavoriteService {
     
     void deleteFavoriteByProduct(Product product) throws Exception;
     
-    public PageDto favoriteListByUser(UserD user,int pageNo, int pageSize, String sortField, String sortDir) throws Exception;
+    public PageDto favoriteList(UserD user,int pageNo, int pageSize, String sortField, String sortDir) throws Exception;
+    
+    public PageDto favoriteListByCategory(UserD user,Category category,int pageNo, int pageSize, String sortField, String sortDir) throws Exception;
     
 }
