@@ -7,6 +7,7 @@ import com.NotSoFree.domain.Product;
 import com.NotSoFree.domain.UserD;
 import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.ProductDto;
+import com.NotSoFree.exception.FavoriteNotFoundById;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,19 +21,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class FavoriteServiceImpl implements FavoriteService{
-    
+public class FavoriteServiceImpl implements FavoriteService {
+
     @Autowired
     private UserDao userDao;
-    
-     @Autowired
+
+    @Autowired
     private FavoriteDao favoriteDao;
-    
 
     @Override
-    public void saveFavorite(Favorite favorite) throws Exception { 
-         try {
-             favoriteDao.save(favorite);
+    @Transactional
+    public void saveFavorite(Favorite favorite) throws Exception {
+        try {
+            favoriteDao.save(favorite);
         } catch (DataAccessException e) {
             throw new UserDNotFoundByUsername("Database Error");
         } catch (Exception e) {
@@ -42,16 +43,62 @@ public class FavoriteServiceImpl implements FavoriteService{
     }
 
     @Override
-    public Favorite findFavorite(Long idFavorite) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    @Transactional(readOnly = true)
+    public Favorite findFavoriteById(Long idFavorite) throws Exception {
+        try {
+            return favoriteDao.findById(idFavorite).orElseThrow(() -> new FavoriteNotFoundById(idFavorite));
+        } catch (FavoriteNotFoundById e) {
+            throw new Exception(e.getMessage());
+        } catch (DataAccessException e) {
+            throw new UserDNotFoundByUsername("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDNotFoundByUsername("Unknown Error");
+        }
     }
 
     @Override
-    public void deleteFavorteById(Long idFavorite) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    @Transactional(readOnly = true)
+    public Favorite findFavoriteByProduct(Product Product) throws Exception {
+        try {
+            return favoriteDao.findByProduct(Product);
+        } catch (DataAccessException e) {
+            throw new UserDNotFoundByUsername("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDNotFoundByUsername("Unknown Error");
+        }
     }
 
-@Override
+    @Override
+    @Transactional
+    public void deleteFavoriteById(Long idFavorite) throws Exception {
+        try {
+            favoriteDao.delete(this.findFavoriteById(idFavorite));
+        } catch (DataAccessException e) {
+            throw new UserDNotFoundByUsername("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDNotFoundByUsername("Unknown Error");
+        }
+
+    }
+    
+    @Override
+    @Transactional
+    public void deleteFavoriteByProduct(Product product) throws Exception{
+         try {
+            favoriteDao.delete(this.findFavoriteByProduct(product));
+        } catch (DataAccessException e) {
+            throw new UserDNotFoundByUsername("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDNotFoundByUsername("Unknown Error");
+        }
+    }
+    
+
+    @Override
     @Transactional(readOnly = true)
     public PageDto favoriteListByUser(UserD user, int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
@@ -80,5 +127,5 @@ public class FavoriteServiceImpl implements FavoriteService{
 
         return null;
     }
-    
+
 }

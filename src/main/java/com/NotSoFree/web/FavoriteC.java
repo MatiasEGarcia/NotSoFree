@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +36,21 @@ public class FavoriteC {
                 .addFlashAttribute("message", "Favorite added")
                 .addFlashAttribute("class", "success");
         return "redirect:" + url;
+    }
+    
+    @GetMapping(value="/delete/{idProduct}")
+    public String deleteFavorite(Product product,RedirectAttributes redirectAttrs) throws Exception{
+        log.info("deleteFavorite handler");
+        
+        favoriteService.deleteFavoriteByProduct(product);
+        
+        redirectAttrs
+                .addFlashAttribute("message", "Product deleted from favorites")
+                .addFlashAttribute("class", "success")
+                .addAttribute("idProduct", product.getIdProduct());
+        
+        return "redirect:/productC/detailPage/{idProduct}";
+
     }
     
 }
