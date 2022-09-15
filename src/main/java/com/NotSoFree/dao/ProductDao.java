@@ -20,5 +20,8 @@ public interface ProductDao extends JpaRepository<Product, Long> {
     void updateProductStock(@Param("product")ProductDto product);
     
     Page<Product> findByNameContaining(String name,Pageable pageable);
+    
+    @Query(value = "SELECT p FROM Product p WHERE p.name LIKE %:name% AND p.idProduct = ANY (SELECT r.product FROM ProdCate r WHERE r.category = :category)" )
+    Page<Product> findByNameContainingByCategory(@Param("name")String name,@Param("category")Category category,Pageable pageable);
 
 }

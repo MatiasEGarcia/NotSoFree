@@ -227,4 +227,31 @@ public class ProductServiceImpl implements ProductService {
 
         return null;
     }
+
+    @Override
+    public PageDto findPaginatedLikeByCategory(String name, int pageNo, int pageSize, String sortField, String sortDir, Category category) throws Exception {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Product> pageProduct;
+        List<Product> listProduct;
+        List<ProductDto> listProductDto = new ArrayList<>();
+
+        try {
+            pageProduct = productDao.findByNameContainingByCategory(name, category, pageable);
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+        if (!pageProduct.isEmpty()) {
+            listProduct = pageProduct.getContent();
+            for (int i = 0; i < listProduct.size(); i++) {
+                listProductDto.add(new ProductDto(listProduct.get(i)));
+            }
+            return new PageDto<>(listProductDto, pageProduct.getTotalPages(), pageProduct.getTotalElements());
+        }
+
+        return null;
+    }
 }

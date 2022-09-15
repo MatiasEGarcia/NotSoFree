@@ -205,8 +205,8 @@ public class ProductC {
         return "detailProduct";
     }
     
-    @PostMapping(value = "/search")//TENGO QUE HACER LA PAGINA 
-    public String detailPage(Model model,
+    @PostMapping(value = "/search")
+    public String search(Model model,
             @RequestParam(name = "search") String search,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField", defaultValue = "idProduct") String sortField,
@@ -220,6 +220,7 @@ public class ProductC {
         PageDto pageProd = productService.findPaginatedLike(search,pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
         List<Category> activeCategories= categoryService.listByState(active);
         
+        model.addAttribute("search", search);
         model.addAttribute("categories", activeCategories);
         model.addAttribute("products", pageProd.getContent());
         model.addAttribute("totalPages", pageProd.getTotalPages());
@@ -233,5 +234,35 @@ public class ProductC {
         return "search";
     }
     
+    @GetMapping(value = "/searchByCategory")
+    public String searchByCategory(Model model,
+            @RequestParam(name = "categorySelect") String category,
+            @RequestParam(name = "search") String search,
+            @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
+            @RequestParam(name = "sortField", defaultValue = "idProduct") String sortField,
+            @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
+            @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) throws Exception{
+        log.info("searchByCategory handler");
+
+        int pageNoInt = Integer.parseInt(pageNo);
+        byte active=1;
+
+        PageDto pageProd = productService.findPaginatedLikeByCategory(search,pageNoInt, Integer.parseInt(pageSize), sortField, sortDir,new Category(Long.parseLong(category)));
+        List<Category> activeCategories= categoryService.listByState(active);
+        
+        model.addAttribute("search", search);
+        model.addAttribute("categorySelect", category);
+        model.addAttribute("categories", activeCategories);
+        model.addAttribute("products", pageProd.getContent());
+        model.addAttribute("totalPages", pageProd.getTotalPages());
+        model.addAttribute("totalItems", pageProd.getTotalElements());
+        model.addAttribute("actualPage", pageNoInt); //I need it to be integer for the pagination of the page to work
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        
+        return "search";
+    }
 
 }
