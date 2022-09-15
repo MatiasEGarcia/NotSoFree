@@ -16,7 +16,7 @@
                     <h3 class="mt-5 mb-3">Categories</h3>
                     <ul class="list-group listCategoriesIndex">
                         <li class="list-group-item"  th:each="category:${categories}">
-                            <a class="linksNoDeco" th:text="${category.name}" th:href="@{/productC/searchByCategory}+ '?categorySelect=' + ${category.idCategory}+'&search=' + ${search}"></a>
+                            <a class="linksNoDeco" th:text="${category.name}" th:href="@{/productC/search}+ '?categorySelect=' + ${category.idCategory}+'&search=' + ${search}"></a>
                         </li>
                     </ul>
                 </div>
@@ -60,7 +60,7 @@
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                             <!-- For when the list is by category -->
-                                            <a th:if="${categorySelected}" class="page-link"  th:href="@{/productC/searchByCategory}+
+                                            <a th:if="${categorySelected}" class="page-link"  th:href="@{/productC/search}+
                                                '?categorySelect=' + ${categorySelected}+ 
                                                '&search=' + ${search} +
                                                '&pageNo=' + ${actualPage-1} +
@@ -80,7 +80,7 @@
                                                '&pageSize=' + ${pageSize}">[[${i}]]</a>
 
                                             <!-- For when the list is by category -->
-                                            <a th:if="${categorySelected}" class="page-link"  th:href="@{/productC/searchByCategory}+ 
+                                            <a th:if="${categorySelected}" class="page-link"  th:href="@{/productC/search}+ 
                                                '?categorySelect=' + ${categorySelected} + 
                                                '&search=' + ${search} +
                                                '&pageNo=' + ${i} +
@@ -100,7 +100,7 @@
                                             </a>
 
                                             <!-- For when the list is by category -->
-                                            <a th:if="${categorySelected}" class="page-link"  th:href="@{/productC/searchByCategory}+ 
+                                            <a th:if="${categorySelected}" class="page-link"  th:href="@{/productC/search}+ 
                                                '?categorySelect=' + ${categorySelected} + 
                                                '&search=' + ${search} +
                                                '&pageNo=' + ${actualPage+1} +

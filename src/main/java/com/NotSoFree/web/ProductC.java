@@ -179,7 +179,7 @@ public class ProductC {
             UserD user = userDService.findUserByUsername(loggedUser.getUsername());
             Optional<Product> productFav = user.getFavorites().stream()
                     .map(favorite -> favorite.getProduct())
-                    .filter(product -> product.getIdProduct() == Long.parseLong(idProduct)).findFirst(); 
+                    .filter(product -> product.getIdProduct() == Long.parseLong(idProduct)).findFirst();
             if (productFav.isPresent()) {
                 model.addAttribute("inFavorites", true);
             } else {
@@ -204,22 +204,22 @@ public class ProductC {
 
         return "detailProduct";
     }
-    
-    @PostMapping(value = "/search")
+
+    @PostMapping(value = "/navSearch")
     public String search(Model model,
             @RequestParam(name = "search") String search,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField", defaultValue = "idProduct") String sortField,
             @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
-            @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) throws Exception{
+            @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) throws Exception {
         log.info("search handler");
 
         int pageNoInt = Integer.parseInt(pageNo);
-        byte active=1;
+        byte active = 1;
 
-        PageDto pageProd = productService.findPaginatedLike(search,pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
-        List<Category> activeCategories= categoryService.listByState(active);
-        
+        PageDto pageProd = productService.findPaginatedLike(search, pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
+        List<Category> activeCategories = categoryService.listByState(active);
+
         model.addAttribute("search", search);
         model.addAttribute("categories", activeCategories);
         model.addAttribute("products", pageProd.getContent());
@@ -230,28 +230,33 @@ public class ProductC {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        
+
         return "search";
     }
-    
-    @GetMapping(value = "/searchByCategory")
+
+    @GetMapping(value = "/search")
     public String searchByCategory(Model model,
-            @RequestParam(name = "categorySelect") String category,
+            @RequestParam(name = "categorySelect", defaultValue = "0") String category,
             @RequestParam(name = "search") String search,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField", defaultValue = "idProduct") String sortField,
             @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
-            @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) throws Exception{
+            @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) throws Exception {
         log.info("searchByCategory handler");
 
         int pageNoInt = Integer.parseInt(pageNo);
-        byte active=1;
+        byte active = 1;
+        PageDto pageProd;
 
-        PageDto pageProd = productService.findPaginatedLikeByCategory(search,pageNoInt, Integer.parseInt(pageSize), sortField, sortDir,new Category(Long.parseLong(category)));
-        List<Category> activeCategories= categoryService.listByState(active);
-        
+        if (category.equalsIgnoreCase("0")) {
+            pageProd = productService.findPaginatedLike(search, pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
+        } else {
+            pageProd = productService.findPaginatedLikeByCategory(search, pageNoInt, Integer.parseInt(pageSize), sortField, sortDir, new Category(Long.parseLong(category)));
+            model.addAttribute("categorySelect", category);
+        }
+        List<Category> activeCategories = categoryService.listByState(active);
+
         model.addAttribute("search", search);
-        model.addAttribute("categorySelect", category);
         model.addAttribute("categories", activeCategories);
         model.addAttribute("products", pageProd.getContent());
         model.addAttribute("totalPages", pageProd.getTotalPages());
@@ -261,7 +266,7 @@ public class ProductC {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        
+
         return "search";
     }
 
