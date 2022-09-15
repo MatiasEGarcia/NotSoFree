@@ -4,6 +4,7 @@ import com.NotSoFree.domain.Product;
 import com.NotSoFree.dao.ProductDao;
 import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.ProdCate;
+import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.exception.ProductNotFoundById;
 import java.io.IOException;
@@ -95,8 +96,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void updateProductsStock(List<ProductDto> products) throws Exception {
-         try {
-            for(int i=0;i<products.size();i++){
+        try {
+            for (int i = 0; i < products.size(); i++) {
                 products.get(i).setStock(products.get(i).getStock() - products.get(i).getQuantity());
                 productDao.updateProductStock(products.get(i));
             }
@@ -197,5 +198,33 @@ public class ProductServiceImpl implements ProductService {
             e.printStackTrace();
             throw new Exception("Unknown Error");
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageDto findPaginatedLike(String name, int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Product> pageProduct;
+        List<Product> listProduct;
+        List<ProductDto> listProductDto = new ArrayList<>();
+
+        try {
+            pageProduct = productDao.findByNameContaining(name, pageable);
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+        if (!pageProduct.isEmpty()) {
+            listProduct = pageProduct.getContent();
+            for (int i = 0; i < listProduct.size(); i++) {
+                listProductDto.add(new ProductDto(listProduct.get(i)));
+            }
+            return new PageDto<>(listProductDto, pageProduct.getTotalPages(), pageProduct.getTotalElements());
+        }
+
+        return null;
     }
 }

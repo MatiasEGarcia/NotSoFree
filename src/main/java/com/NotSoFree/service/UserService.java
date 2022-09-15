@@ -1,11 +1,9 @@
 package com.NotSoFree.service;
 
 import com.NotSoFree.dao.UserDao;
-import com.NotSoFree.domain.Product;
 import com.NotSoFree.domain.Rol;
 import com.NotSoFree.domain.UserD;
 import com.NotSoFree.dto.PageDto;
-import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.dto.UserAEDto;
 import com.NotSoFree.dto.UserCDto;
 import com.NotSoFree.dto.UserEPUDto;

@@ -3,6 +3,7 @@ package com.NotSoFree.service;
 import com.NotSoFree.domain.Category;
 import java.util.List;
 import com.NotSoFree.domain.Product;
+import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.ProductDto;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,4 +27,5 @@ public interface ProductService {
     
     public Page<Product> findPaginatedByCategory(int pageNo, int pageSize, String sortField, String sortDir,Category category) throws Exception;
     
+     public PageDto findPaginatedLike(String name ,int pageNo, int pageSize, String sortField, String sortDir) throws Exception;
 }

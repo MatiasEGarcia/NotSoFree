@@ -1,7 +1,9 @@
 package com.NotSoFree.web;
 
+import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.Product;
 import com.NotSoFree.domain.UserD;
+import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.service.CategoryService;
 import com.NotSoFree.service.ProductService;
@@ -202,5 +204,34 @@ public class ProductC {
 
         return "detailProduct";
     }
+    
+    @PostMapping(value = "/search")//TENGO QUE HACER LA PAGINA 
+    public String detailPage(Model model,
+            @RequestParam(name = "search") String search,
+            @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
+            @RequestParam(name = "sortField", defaultValue = "idProduct") String sortField,
+            @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
+            @RequestParam(name = "pageSize", defaultValue = "20") String pageSize) throws Exception{
+        log.info("search handler");
+
+        int pageNoInt = Integer.parseInt(pageNo);
+        byte active=1;
+
+        PageDto pageProd = productService.findPaginatedLike(search,pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
+        List<Category> activeCategories= categoryService.listByState(active);
+        
+        model.addAttribute("categories", activeCategories);
+        model.addAttribute("products", pageProd.getContent());
+        model.addAttribute("totalPages", pageProd.getTotalPages());
+        model.addAttribute("totalItems", pageProd.getTotalElements());
+        model.addAttribute("actualPage", pageNoInt); //I need it to be integer for the pagination of the page to work
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        
+        return "search";
+    }
+    
 
 }
