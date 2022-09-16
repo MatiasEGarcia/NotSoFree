@@ -258,11 +258,14 @@ public class ProductC {
         }
         List<Category> activeCategories = categoryService.listByState(active);
 
-        model.addAttribute("search", search);
-        model.addAttribute("categories", activeCategories);
+        if(pageProd != null){
         model.addAttribute("products", pageProd.getContent());
         model.addAttribute("totalPages", pageProd.getTotalPages());
         model.addAttribute("totalItems", pageProd.getTotalElements());
+        }
+        
+        model.addAttribute("search", search);
+        model.addAttribute("categories", activeCategories);
         model.addAttribute("actualPage", pageNoInt); //I need it to be integer for the pagination of the page to work
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
