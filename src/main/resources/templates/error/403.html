@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>Page for error 404</title>
+    </head>
+    <body>
+        <div class=" container error">
+            <div class="errorContainer">
+                <div class="header mt-1 text-center">
+                    <h4 class="display-5" ><span th:text="${error}"></span> - <span th:text="${status}"></span></h4>
+                </div>
+                <div class="body">
+                    <div class="imgContainer">
+                        <img class="imgError" src="../../static/img/error/error403.jpg"  th:src="@{/img/error/error403.jpg}"alt="error403Image"/>
+                    </div>
+                </div>
+                <div class="footer text-center">
+                    <h3>You don't have the authorization to enter in this page</h3>
+                    <span><a class="" th:href="@{/}">Return to home page</a></span>
+                </div>
+            </div>
+        </div>
+
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+    </body>
+</html>

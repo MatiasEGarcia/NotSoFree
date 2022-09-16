@@ -29,14 +29,22 @@ public class SecurityConfig {
 
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/userC/auth/**").authenticated()
+                .antMatchers("/userC/admin/**").hasRole("ADMIN")
+                .antMatchers("/productC/admin/**").hasRole("ADMIN")
+                .antMatchers("/personC/auth/**").authenticated()
+                .antMatchers("/favoriteC/auth/**").authenticated()
+                .antMatchers("/categoryC/admin/**").hasRole("ADMIN")
+                .antMatchers("/cartC/auth/**").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/userC/login")
                 .permitAll()
                 .defaultSuccessUrl("/", true)
-                .failureUrl("/login?error")
+                .failureUrl("/userC/login?error")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
+       
 
         return http.build();
     }

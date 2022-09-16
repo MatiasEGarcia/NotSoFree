@@ -142,7 +142,7 @@ public class ProductC {
         return "redirect:/productC/admin/savePage";
     }
 
-    @GetMapping(value = "/listAllPage")
+    @GetMapping(value = "/admin/listAllPage")
     public String listAllPage(Model model,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField", defaultValue = "idProduct") String sortField,
