@@ -66,7 +66,7 @@ public class UserC {
         return "redirect:/userC/login";
     }
 
-    @GetMapping(value = "/passUNamePage")
+    @GetMapping(value = "/auth/passUNamePage")
     public String passUNamePage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) {
         log.info("passUNamePage handler");
 
@@ -78,7 +78,7 @@ public class UserC {
         return "editPassUName";
     }
 
-    @PostMapping(value = "editPassUName")
+    @PostMapping(value = "/auth/editPassUName")
     public String editPassUName(Model model, @Valid UserEPUDto userEPUDto,
             BindingResult result,
             RedirectAttributes redirectAttrs) throws Exception {
@@ -96,7 +96,7 @@ public class UserC {
         return "redirect:/userC/login";
     }
 
-    @GetMapping(value = "/listAllPage")
+    @GetMapping(value = "/admin/listAllPage")
     public String listAllPage(Model model,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField", defaultValue = "idUser") String sortField,
@@ -119,7 +119,7 @@ public class UserC {
         return "listAllUsers";
     }
     
-    @GetMapping(value = "/editByAdminPage/{userName}")
+    @GetMapping(value = "/admin/editByAdminPage/{userName}")
     public String editByAdminPage(Model model,@PathVariable(name = "userName") String username) throws UserDNotFoundByUsername{
         log.info("editByAdminPage handler");
         
@@ -129,7 +129,7 @@ public class UserC {
         return "editByAdmin";
     }
     
-    @PostMapping(value = "editByAdmin")
+    @PostMapping(value = "/admin/editByAdmin")
     public String editByAdmin(Model model
             ,UserAEDto userAEDto
             ,@RequestParam(name = "rolCheckbox", required = false) List<RolEnum> listRolEnum
@@ -145,12 +145,12 @@ public class UserC {
                 .addFlashAttribute("class", "success")
                 .addAttribute("userName", userAEDto.getUserName());
 
-        return "redirect:/userC/editByAdminPage/{userName}";
+        return "redirect:/userC/admin/editByAdminPage/{userName}";
     }
     
-    @PostMapping(value = "/delete")
-    public String deleteProduct(@RequestParam(name = "userName") String userName, RedirectAttributes redirectAttrs) throws Exception{
-        log.info("deleteProduct handler");
+    @PostMapping(value = "/admin/delete")
+    public String deleteUser(@RequestParam(name = "userName") String userName, RedirectAttributes redirectAttrs) throws Exception{
+        log.info("deleteUser handler");
 
         userDService.deleteByuserName(userName);
 
@@ -161,14 +161,14 @@ public class UserC {
         return "redirect:/userC/listAllPage";
     }
     
-     @GetMapping(value = "/editImagePage")
+     @GetMapping(value = "/auth/editImagePage")
     public String editImagePage(Model model,@AuthenticationPrincipal CustomUserDetails loggedUser)throws Exception{
         log.info("editImagePage handler");
         model.addAttribute("userId", loggedUser.getId());
         model.addAttribute("oldImage", userDService.findUserByUsername(loggedUser.getUsername()).getImage());
         return "editImage";
     }
-    @PostMapping(value = "/editImage")
+    @PostMapping(value = "auth/editImage")
     public String editImage(@RequestParam(name = "file", required = false) MultipartFile image, 
             @RequestParam(name = "userId") String userId, 
             RedirectAttributes redirectAttrs) throws Exception{
@@ -178,7 +178,7 @@ public class UserC {
             redirectAttrs
                 .addFlashAttribute("message", "There is no image")
                 .addFlashAttribute("class", "danger");
-            return "redirect:/userC/editImagePage";
+            return "redirect:/userC/auth/editImagePage";
         }
         
         userDService.userImageEdit(image, userId);
@@ -187,7 +187,7 @@ public class UserC {
                 .addFlashAttribute("message", "User image saved successfully")
                 .addFlashAttribute("class", "success");
 
-        return "redirect:/personC/editPage";
+        return "redirect:/personC/auth/editPage";
     }
     
 }

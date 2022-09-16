@@ -46,13 +46,13 @@
                             <img th:unless="${product.image} and ${product.image!= '' }"   src="/img/productDefault.jpg"  alt="The product currently has no image" style="max-width: 40px"/>
                         </td>
                         <td>
-                            <form id="formDeleteProduct"  th:action="@{/productC/deleteProd}" method="post">
+                            <form id="formDeleteProduct"  th:action="@{/productC/admin/deleteProd}" method="post">
                                 <input name="idProduct" hidden="true" th:value="${product.idProduct}"> 
                                     <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                             </form>
                         </td>
                         <td>
-                            <a class="btn btn-secondary linksNoDeco" th:href="@{/productC/editPage/} + ${product.idProduct}">
+                            <a class="btn btn-secondary linksNoDeco" th:href="@{/productC/admin/editPage/} + ${product.idProduct}">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
                         </td>

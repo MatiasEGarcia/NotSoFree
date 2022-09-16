@@ -19,7 +19,7 @@
                     <div class="editImageContainer" <div th:if="${oldImage} and ${oldImage!= '' }" > 
                         <img  class="editImageOld" th:src="${'data:image/jpeg;charset=utf-8;base64,' + oldImage}"  alt="The user image had an error"/>
                     </div>
-                    <form class="d-grid " th:action="@{/userC/editImage}" method="POST" enctype="multipart/form-data">
+                    <form class="d-grid " th:action="@{/userC/auth/editImage}" method="POST" enctype="multipart/form-data">
                         <input hidden="true" th:value="${userId}" name="userId" />
                         <h4 class="text-center mb-3">Select new Image</h4>
                         <div class="form_group">

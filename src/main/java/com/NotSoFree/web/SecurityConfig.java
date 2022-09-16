@@ -31,10 +31,10 @@ public class SecurityConfig {
                 .antMatchers("/").permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/userC/login")
                 .permitAll()
                 .defaultSuccessUrl("/", true)
-                .failureUrl("/userC/login?error")
+                .failureUrl("/login?error")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
 

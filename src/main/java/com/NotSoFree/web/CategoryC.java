@@ -26,7 +26,7 @@ public class CategoryC {
     @Autowired
     public CategoryService categoryService;
 
-    @GetMapping(value="/listAllPage")
+    @GetMapping(value="/admin/listAllPage")
     public String listAllCategories(Model model,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField",defaultValue = "idCategory") String sortField,
@@ -50,7 +50,7 @@ public class CategoryC {
         return "listAllCategories";
     }
     
-    @PostMapping(value="/deleteCateg")
+    @PostMapping(value="/admin/deleteCateg")
     public String deleteCategory(@RequestParam(name = "idCategory") String idCategory,
             RedirectAttributes redirectAttrs) throws Exception{
         log.info("delete handler");
@@ -59,30 +59,30 @@ public class CategoryC {
             .addFlashAttribute("message", "Category deleted successfully")
             .addFlashAttribute("class", "success");
         
-        return "redirect:/categoryC/listAllPage";
+        return "redirect:/categoryC/admin/listAllPage";
     }
     
-    @GetMapping(value="/editPage/{idCategory}")
+    @GetMapping(value="/admin/editPage/{idCategory}")
     public String editPage(Category category,Model model) throws CategoryNotFoundById{
         log.info("editPage handler");
         
         model.addAttribute("category", categoryService.findCategory(category.getIdCategory() ) );
-        model.addAttribute("formAction", "/categoryC/editCateg");
+        model.addAttribute("formAction", "/categoryC/admin/editCateg");
         return "saveEditCategP";
     }    
     
-    @GetMapping(value = "/savePage")
+    @GetMapping(value = "/admin/savePage")
     public String savePage(Model model) {
         log.info("savePage handler");
 
         Category category = new Category();
 
         model.addAttribute("category", category);
-        model.addAttribute("formAction", "/categoryC/saveCateg");
+        model.addAttribute("formAction", "/categoryC/admin/saveCateg");
         return "saveEditCategP";
     }
 
-    @PostMapping(value="/editCateg")
+    @PostMapping(value="/admin/editCateg")
     public String editCategory(Model model,@Valid Category category,
              BindingResult result,
             @RequestParam(name = "flexRadio", required = true) byte state,
@@ -92,7 +92,7 @@ public class CategoryC {
         
          if (result.hasErrors()) {
             model.addAttribute("category",category );
-            model.addAttribute("formAction", "/categoryC/editCateg");
+            model.addAttribute("formAction", "/categoryC/admin/editCateg");
             return "saveEditCategP";
         }
             category.setState(state);
@@ -104,10 +104,10 @@ public class CategoryC {
                 .addFlashAttribute("class", "success")
                 .addAttribute("idCategory", category.getIdCategory());
         
-        return "redirect:/categoryC/editPage/{idCategory}";
+        return "redirect:/categoryC/admin/editPage/{idCategory}";
     }
     
-    @PostMapping(value = "/saveCateg")
+    @PostMapping(value = "/admin/saveCateg")
     public String saveCategory(Model model,@Valid Category category,
             BindingResult result,
             @RequestParam(name = "flexRadio", required = true) byte state,
@@ -117,7 +117,7 @@ public class CategoryC {
 
          if (result.hasErrors()) {
             model.addAttribute("category",category );
-            model.addAttribute("formAction", "/categoryC/saveCateg");
+            model.addAttribute("formAction", "/categoryC/admin/saveCateg");
             return "saveEditCategP";
         }
          
@@ -130,7 +130,7 @@ public class CategoryC {
                 .addFlashAttribute("message", "Category create successfully")
                 .addFlashAttribute("class", "success");
 
-        return "redirect:/categoryC/savePage";
+        return "redirect:/categoryC/admin/savePage";
     }
 
 }

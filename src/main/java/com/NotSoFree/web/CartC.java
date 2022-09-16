@@ -86,7 +86,7 @@ public class CartC {
     }
 
     //This handler is for Authenticated user
-    @GetMapping(value = "/userPurchase")
+    @GetMapping(value = "/auth/userPurchase")
     public String userPurchase(HttpSession session,
             RedirectAttributes redirectAttrs) throws Exception {
         List<ProductDto> listProd = new ArrayList<>();

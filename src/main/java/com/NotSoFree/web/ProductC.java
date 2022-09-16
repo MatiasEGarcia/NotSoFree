@@ -43,28 +43,28 @@ public class ProductC {
     @Autowired
     private UserDService userDService;
 
-    @GetMapping(value = "/savePage")
+    @GetMapping(value = "/admin/savePage")
     public String savePage(Model model) throws Exception {
         log.info("savePage handler");
 
         model.addAttribute("productDto", new ProductDto());
         model.addAttribute("listCategories", categoryService.listByState(new Byte("1")));
-        model.addAttribute("formAction", "/productC/saveProd");
+        model.addAttribute("formAction", "/productC/admin/saveProd");
         return "saveEditProdP";
     }
 
-    @GetMapping(value = "/editPage/{idProduct}")
+    @GetMapping(value = "/admin/editPage/{idProduct}")
     public String editPage(Product product, Model model) throws Exception {
         log.info("editPage handler");
 
         model.addAttribute("productDto", productService.findProduct(product.getIdProduct()));
         model.addAttribute("listCategories", categoryService.listByState(new Byte("1")));
-        model.addAttribute("formAction", "/productC/editProd");
+        model.addAttribute("formAction", "/productC/admin/editProd");
 
         return "saveEditProdP";
     }
 
-    @PostMapping(value = "/deleteProd")
+    @PostMapping(value = "/admin/deleteProd")
     public String deleteProduct(@RequestParam(name = "idProduct") String idProduct, RedirectAttributes redirectAttrs) throws Exception {
         log.info("deleteProduct handler");
 
@@ -77,7 +77,7 @@ public class ProductC {
         return "redirect:/";
     }
 
-    @PostMapping(value = "/editProd")
+    @PostMapping(value = "/admin/editProd")
     public String editProd(Model model, @Valid ProductDto productDto,
             BindingResult result,
             @RequestParam(name = "boxCategory", required = false) List<String> newCategories,
@@ -87,11 +87,11 @@ public class ProductC {
 
         if (result.hasErrors()) {
             model.addAttribute("productDto", productDto);
-            model.addAttribute("formAction", "/productC/editProd");
+            model.addAttribute("formAction", "/productC/admin/editProd");
             return "saveEditProdP";
         } else if (newCategories.isEmpty()) {  //why this? th:checked doesn't work if th:field is present, so I can't check it on the product object, I have to get it separately and check it separately
             model.addAttribute("productDto", productDto);
-            model.addAttribute("formAction", "/productC/saveProd");
+            model.addAttribute("formAction", "/productC/admin/saveProd");
 
             redirectAttrs
                     .addFlashAttribute("message", "The product must have at least 1 category")
@@ -106,10 +106,10 @@ public class ProductC {
                 .addFlashAttribute("class", "success")
                 .addAttribute("idProduct", productDto.getIdProduct());
 
-        return "redirect:/productC/editPage/{idProduct}";
+        return "redirect:/productC/admin/editPage/{idProduct}";
     }
 
-    @PostMapping(value = "/saveProd")
+    @PostMapping(value = "/admin/saveProd")
     public String saveProduct(Model model, @Valid ProductDto productDto,
             BindingResult result,
             @RequestParam(name = "boxCategory", required = false) List<String> newCategories,
@@ -119,11 +119,13 @@ public class ProductC {
 
         if (result.hasErrors()) {
             model.addAttribute("productDto", productDto);
-            model.addAttribute("formAction", "/productC/saveProd");
+            model.addAttribute("listCategories", categoryService.listByState(new Byte("1")));
+            model.addAttribute("formAction", "/productC/admin/saveProd");
             return "saveEditProdP";
         } else if (newCategories.isEmpty()) {  //why this? th:checked doesn't work if th:field is present, so I can't check it on the product object, I have to get it separately and check it separately
             model.addAttribute("productDto", productDto);
-            model.addAttribute("formAction", "/productC/saveProd");
+            model.addAttribute("listCategories", categoryService.listByState(new Byte("1")));
+            model.addAttribute("formAction", "/productC/admin/saveProd");
 
             redirectAttrs
                     .addFlashAttribute("message", "The product must have at least 1 category")
@@ -137,7 +139,7 @@ public class ProductC {
                 .addFlashAttribute("message", "Product created successfully")
                 .addFlashAttribute("class", "success");
 
-        return "redirect:/productC/savePage";
+        return "redirect:/productC/admin/savePage";
     }
 
     @GetMapping(value = "/listAllPage")

@@ -17,13 +17,13 @@
                         <thead>
                             <tr>
                                 <th scope="col">
-                                     <a class="h6 linksNoDeco" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=idCategory&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Id</a>
+                                     <a class="h6 linksNoDeco" th:href="@{/categoryC/admin/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=idCategory&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Id</a>
                                 </th>
                                 <th scope="col">
-                                    <a class="h6 linksNoDeco" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=name&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Name</a>
+                                    <a class="h6 linksNoDeco" th:href="@{/categoryC/admin/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=name&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Name</a>
                                 </th>
                                 <th scope="col">
-                                    <a class="h6 linksNoDeco" th:href="@{/categoryC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=state&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#State</a>
+                                    <a class="h6 linksNoDeco" th:href="@{/categoryC/admin/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=state&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#State</a>
                                 </th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Delete</th>
@@ -40,13 +40,13 @@
                                     <img th:unless="${category.image} and ${category.image!= '' }"   src="/img/categoryDefault.jpg"  alt="The category currently has no image" style="max-width: 40px"/>
                                 </td>
                                 <td>
-                                    <form id="formDeleteProduct"  th:action="@{/categoryC/deleteCateg}" method="post">
+                                    <form id="formDeleteProduct"  th:action="@{/categoryC/admin/deleteCateg}" method="post">
                                         <input name="idCategory" hidden="true" th:value="${category.idCategory}"> 
                                             <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                                     </form>
                                 </td>
                                 <td> 
-                                    <a class="btn btn-secondary linksNoDeco" th:href="@{/categoryC/editPage/} + ${category.idCategory}">
+                                    <a class="btn btn-secondary linksNoDeco" th:href="@{/categoryC/admin/editPage/} + ${category.idCategory}">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                 </td>
@@ -62,7 +62,7 @@
                             <nav aria-label="...">
                                 <ul class="pagination justify-content-center">
                                     <li  th:class="${actualPage == 1 } ? 'page-item disabled' : 'page-item ' "> 
-                                        <a class="page-link"  th:href="@{/categoryC/listAllPage}+ 
+                                        <a class="page-link"  th:href="@{/categoryC/admin/listAllPage}+ 
                                            '?pageNo=' + ${actualPage-1} +
                                            '&sortField=' + ${sortField} +
                                            '&sortDir=' + ${sortDir}+ 
@@ -72,7 +72,7 @@
                                     </li>
 
                                     <li  th:class="${actualPage == i} ? 'page-item active' : 'page-item ' "  th:each="i: ${#numbers.sequence(1,totalPages)}">
-                                        <a class="page-link"  th:href="@{/categoryC/listAllPage}+ 
+                                        <a class="page-link"  th:href="@{/categoryC/admin/listAllPage}+ 
                                            '?pageNo=' + ${i} +
                                            '&sortField=' + ${sortField} +
                                            '&sortDir=' + ${sortDir}+ 
@@ -80,7 +80,7 @@
                                     </li>
 
                                     <li  th:class="${actualPage == totalPages} ? 'page-item disabled' : 'page-item' " >
-                                        <a  class="page-link"  th:href="@{/categoryC/listAllPage}+ 
+                                        <a  class="page-link"  th:href="@{/categoryC/admin/listAllPage}+ 
                                             '?pageNo=' + ${actualPage+1} +
                                             '&sortField=' + ${sortField} +
                                             '&sortDir=' + ${sortDir}+ 

@@ -22,11 +22,11 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <h2 th:text="${productDto.name}"></h2>
-                            <form th:unless="${inFavorites}" th:action="@{/favoriteC/add}" method="POST">
+                            <form th:unless="${inFavorites}" th:action="@{/favoriteC/auth/add}" method="POST">
                                 <input hidden="true" th:value="${productDto.idProduct}" name="idProduct"/>
                                 <button class="favoriteButton" type="submit"><i class="bi bi-suit-heart-fill"></i></button>
                             </form>
-                            <a th:if="${inFavorites}" class="linksNoDeco favoriteButton" th:href="@{/favoriteC/delete/} + ${productDto.idProduct}"><i class="bi bi-suit-heart-fill favoriteHeartRed"></i></a>
+                            <a th:if="${inFavorites}" class="linksNoDeco favoriteButton" th:href="@{/favoriteC/auth/delete/} + ${productDto.idProduct}"><i class="bi bi-suit-heart-fill favoriteHeartRed"></i></a>
                         </div>
                         <div class="card-body d-grid gap-3">
                             <h4 class="card-title" th:text="'Price: ' + ${productDto.price}"/>

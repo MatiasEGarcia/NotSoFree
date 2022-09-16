@@ -25,7 +25,7 @@
                                 Products
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/productC/savePage}">Save a product</a></li>
+                                <li><a class="dropdown-item" th:href="@{/productC/admin/savePage}">Save a product</a></li>
                                  <li><a class="dropdown-item" th:href="@{/productC/listAllPage}">List all products</a></li>
                             </ul>
                         </li>
@@ -34,8 +34,8 @@
                                 Categories
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/categoryC/savePage}">Save a category</a></li>
-                                <li><a class="dropdown-item" th:href="@{/categoryC/listAllPage}">List all categories</a></li>
+                                <li><a class="dropdown-item" th:href="@{/categoryC/admin/savePage}">Save a category</a></li>
+                                <li><a class="dropdown-item" th:href="@{/categoryC/admin/listAllPage}">List all categories</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
@@ -43,8 +43,8 @@
                                 Users
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/userC/saveAdmin}">Save a user</a></li>
-                                <li><a class="dropdown-item" th:href="@{/userC/listAllPage}">List all users</a></li>
+                                <li><a class="dropdown-item" th:href="@{/userC/savePage}">Save a user</a></li>
+                                <li><a class="dropdown-item" th:href="@{/userC/admin/listAllPage}">List all users</a></li>
                             </ul>
                         </li>
                         
@@ -61,8 +61,7 @@
                                 <span sec:authentication="name">Usuario</span><i class="bi bi-person-circle"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/personC/editPage}">Edit profile</a></li>
-                                <li><a class="dropdown-item" >Favorites</a></li>
+                                <li><a class="dropdown-item" th:href="@{/personC/auth/editPage}">Edit profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                    <form method="POST" th:action="@{/logout}"> 
@@ -77,7 +76,7 @@
                             </ul>
                         </li>
                         <li class="nav-item" sec:authorize="isAuthenticated()">
-                            <a class="nav-link" th:href="@{/favoriteC/listAll}">Favorites<i class="bi bi-suit-heart-fill"></i></a>
+                            <a class="nav-link" th:href="@{/favoriteC/auth/listAll}">Favorites<i class="bi bi-suit-heart-fill"></i></a>
                         </li>
                         
                     </ul>

@@ -17,7 +17,7 @@
                         <div class="imgUserLoginContainer">
                             <img class="imgUserLogin" src="/img/userDefault.jpg" alt="basicUserImage"/>
                         </div>
-                        <form class="d-grid gap-3" id="loginForm" method="POST" th:action="@{/login}">
+                        <form class="d-grid gap-3" id="loginForm" method="POST" th:action="@{/userC/login}">
                             <div th:if="${param.error}" class="alert alert-danger text-center">
                                 <h5>Invalid user or password</h5>
                             </div>          

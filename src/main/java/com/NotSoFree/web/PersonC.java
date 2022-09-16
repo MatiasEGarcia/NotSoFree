@@ -29,7 +29,7 @@ public class PersonC {
     @Autowired
     private UserDService userDService;
 
-    @GetMapping(value = "/editPage")
+    @GetMapping(value = "/auth/editPage")
     public String edit(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) throws Exception {
         log.info("editPage handler");
         //Why not simply retrieve the user that is in the customDetails, because it will not be updated once the person is edited
@@ -39,7 +39,7 @@ public class PersonC {
         return "editPersonDetails";
     }
 
-    @PostMapping(value = "/edit")
+    @PostMapping(value = "/auth/edit")
     public String editUser(Model model, @Valid PersonDto personDto,
             BindingResult result,
             RedirectAttributes redirectAttrs) throws Exception {
@@ -53,7 +53,7 @@ public class PersonC {
                 .addFlashAttribute("message", "Person details edited successfully")
                 .addFlashAttribute("class", "success");
 
-        return "redirect:/personC/editPage";
+        return "redirect:/personC/auth/editPage";
     }
 
 }

@@ -31,7 +31,7 @@ public class FavoriteC {
     @Autowired
     private CategoryService categoryService;
     
-    @PostMapping(value="/add")
+    @PostMapping(value="/auth/add")
     public String addFavorite(@RequestParam(name = "idProduct") String idProduct,
             @AuthenticationPrincipal CustomUserDetails loggedUser,
             RedirectAttributes redirectAttrs,HttpServletRequest request) throws Exception{
@@ -46,7 +46,7 @@ public class FavoriteC {
         return "redirect:" + url;
     }
     
-    @GetMapping(value="/delete/{idProduct}")
+    @GetMapping(value="/auth/delete/{idProduct}")
     public String deleteFavorite(Product product,RedirectAttributes redirectAttrs) throws Exception{
         log.info("deleteFavorite handler");
         
@@ -61,7 +61,7 @@ public class FavoriteC {
 
     }
     
-    @GetMapping("/listAll")
+    @GetMapping("/auth/listAll")
     public String list(Model model,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField",defaultValue = "idProduct") String sortField,
@@ -88,7 +88,7 @@ public class FavoriteC {
         return "listFavorites";
     }
     
-    @GetMapping("/listByCategory")
+    @GetMapping("/auth/listByCategory")
     public String listByCategory(Model model,
             @RequestParam(name = "categorySelect") String categorySelected,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
