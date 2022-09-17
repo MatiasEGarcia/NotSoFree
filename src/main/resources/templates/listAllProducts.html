@@ -24,7 +24,7 @@
                             <a class="h6 linksNoDeco" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=stock&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Stock</a>
                         </th>
                         <th scope="col">
-                            <a class="h6 linksNoDeco" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=mark&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Mark</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=brand&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Brand</a>
                         </th>
                         <th scope="col"> <!--problema, dice que Product no tiene la propiedad price -->
                             <a class="h6 linksNoDeco" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=price&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Precio</a>
@@ -39,7 +39,7 @@
                         <td th:text="${product.idProduct}"></td>
                         <td th:text="${product.name}"></td>
                         <td th:text="${product.stock}"></td>
-                        <td th:text="${product.mark}"></td>
+                        <td th:text="${product.brand}"></td>
                         <td th:text="${product.price}"></td>
                         <td>
                             <img th:if="${product.image}  and ${product.image!='' }"   th:src="@{'data:image/jpeg;charset=utf-8;base64,' + ${product.image}}"  th:alt="${product.image}" style="max-width: 40px"/>

@@ -26,7 +26,7 @@ public class ProductDto extends Cart implements Serializable {
     private int stock;
     
     @NotBlank(message="Product mark can't be empty")
-    private String mark;
+    private String brand;
     
     @NotNull(message="Product price can't be null")
     @NotZero
@@ -46,7 +46,7 @@ public class ProductDto extends Cart implements Serializable {
         this.idProduct= product.getIdProduct();
         this.name=product.getName();
         this.stock= product.getStock();
-        this.mark= product.getMark();
+        this.brand= product.getBrand();
         this.price= product.getPrice();
         this.image= product.getImage();
         this.oldCategories=oldCategories;
@@ -56,7 +56,7 @@ public class ProductDto extends Cart implements Serializable {
         this.idProduct= product.getIdProduct();
         this.name=product.getName();
         this.stock= product.getStock();
-        this.mark= product.getMark();
+        this.brand= product.getBrand();
         this.price= product.getPrice();
         this.image= product.getImage();
     }

@@ -19,7 +19,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">mark</th>
+                        <th scope="col">brand</th>
                         <th scope="col">price c/u</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Amount</th>
@@ -30,7 +30,7 @@
                 <tbody>
                     <tr th:each="product:${products}" th:class="${product.notEnoughStock} ? 'table-danger' : '' ">
                         <td th:text="${product.name}"></td>
-                        <td th:text="${product.mark}"></td>
+                        <td th:text="${product.brand}"></td>
                         <td th:text="${new java.text.DecimalFormat('$#,##0.00').format(product.price)}"></td>
                         <td th:text="${product.quantity}"></td>
                         <td th:text="${product.price*product.quantity}"></td>

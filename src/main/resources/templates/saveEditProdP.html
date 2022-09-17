@@ -34,10 +34,10 @@
                             </ul>
                         </div>
                         <div class="form_group">
-                            <label for="mark" class="form-label">Mark</label>
-                            <input id="mark" type="text" class="form-control" th:field="*{mark}"/>
+                            <label for="mark" class="form-label">brand</label>
+                            <input id="mark" type="text" class="form-control" th:field="*{brand}"/>
                             <ul>
-                                <li th:each="error : ${#fields.errors('mark')}" th:text="${error}" class="error" />
+                                <li th:each="error : ${#fields.errors('brand')}" th:text="${error}" class="error" />
                             </ul>
                         </div>
                         <div class="form_group">

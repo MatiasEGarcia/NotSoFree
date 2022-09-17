@@ -30,7 +30,7 @@
                         </div>
                         <div class="card-body d-grid gap-3">
                             <h4 class="card-title" th:text="'Price: ' + ${new java.text.DecimalFormat('$#,##0.00').format(productDto.price)}"/>
-                            <h4 th:text="'Mark : ' + ${productDto.mark}"/>
+                            <h4 th:text="'Brand : ' + ${productDto.brand}"/>
                             <h5>Categories:</h5>
                             <ul class="categoryList">
                                 <li th:each="category:${productDto.oldCategories}" th:text="${category.name}"></li>
@@ -40,7 +40,7 @@
                                 <input type="text" hidden="true" th:field="*{image}"  th:value="${productDto.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
                                 <input type="hidden" name="idProducto" th:field="*{idProduct}"/>
                                 <input type="hidden" name="name" th:field="*{name}"/>
-                                <input type="hidden" name="mark" th:field="*{mark}"/>
+                                <input type="hidden" name="mark" th:field="*{brand}"/>
                                 <input type="hidden" name="stock" th:field="*{stock}"/>
                                 <input type="hidden" name="price" th:field="*{price}"/>
                                 <div class="row row-cols-auto">

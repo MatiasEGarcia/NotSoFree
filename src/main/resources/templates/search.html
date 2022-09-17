@@ -34,7 +34,7 @@
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title" th:text="${product.name}"></h5>
-                                            <p th:text="${product.mark}" ></p>
+                                            <p th:text="${product.brand}" ></p>
                                             <p th:text="'Price ' + ${new java.text.DecimalFormat('$#,##0.00').format(product.price)}"></p>
                                             <a th:href="@{/productC/detailPage/} + ${product.idProduct}" class="btn btn-primary">Detail</a>
                                         </div>
