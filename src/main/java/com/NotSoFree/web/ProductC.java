@@ -133,6 +133,7 @@ public class ProductC {
             return "saveEditProdP";
         }
 
+        productDto.setNewCategories(newCategories);
         productService.saveProduct(productDto, image);
 
         redirectAttrs
