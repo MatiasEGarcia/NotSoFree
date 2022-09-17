@@ -63,7 +63,7 @@ public class UserD implements Serializable{
         person.setSurnames(user.getSurnames());
         person.setEmail(user.getEmail());
         person.setPhone(user.getPhone());
-        person.setEmail(user.getSurnames());
+        person.setEmail(user.getEmail());
         person.setAddress(user.getAddress());
         setPerson(person);
         this.username = user.getUsername();
