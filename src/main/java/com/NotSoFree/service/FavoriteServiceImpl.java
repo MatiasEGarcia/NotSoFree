@@ -9,7 +9,6 @@ import com.NotSoFree.domain.UserD;
 import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.exception.FavoriteNotFoundById;
-import com.NotSoFree.exception.UserDNotFoundByUsername;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +34,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     public void saveFavorite(Favorite favorite) throws Exception {
         try {
             favoriteDao.save(favorite);
-        } catch (DataAccessException e) {
-            throw new UserDNotFoundByUsername("Database Error");
+        }  catch (DataAccessException e) {
+            throw new Exception("Database Error");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new UserDNotFoundByUsername("Unknown Error");
+            throw new Exception("Unknown Error");
         }
     }
 
@@ -50,11 +49,11 @@ public class FavoriteServiceImpl implements FavoriteService {
             return favoriteDao.findById(idFavorite).orElseThrow(() -> new FavoriteNotFoundById(idFavorite));
         } catch (FavoriteNotFoundById e) {
             throw new Exception(e.getMessage());
-        } catch (DataAccessException e) {
-            throw new UserDNotFoundByUsername("Database Error");
+        }  catch (DataAccessException e) {
+            throw new Exception("Database Error");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new UserDNotFoundByUsername("Unknown Error");
+            throw new Exception("Unknown Error");
         }
     }
 
@@ -63,11 +62,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     public Favorite findFavoriteByProduct(Product Product) throws Exception {
         try {
             return favoriteDao.findByProduct(Product);
-        } catch (DataAccessException e) {
-            throw new UserDNotFoundByUsername("Database Error");
+        }  catch (DataAccessException e) {
+            throw new Exception("Database Error");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new UserDNotFoundByUsername("Unknown Error");
+            throw new Exception("Unknown Error");
         }
     }
 
@@ -76,11 +75,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     public void deleteFavoriteById(Long idFavorite) throws Exception {
         try {
             favoriteDao.delete(this.findFavoriteById(idFavorite));
-        } catch (DataAccessException e) {
-            throw new UserDNotFoundByUsername("Database Error");
+        }  catch (DataAccessException e) {
+            throw new Exception("Database Error");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new UserDNotFoundByUsername("Unknown Error");
+            throw new Exception("Unknown Error");
         }
 
     }
@@ -90,11 +89,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     public void deleteFavoriteByProduct(Product product) throws Exception{
          try {
             favoriteDao.delete(this.findFavoriteByProduct(product));
-        } catch (DataAccessException e) {
-            throw new UserDNotFoundByUsername("Database Error");
+        }  catch (DataAccessException e) {
+            throw new Exception("Database Error");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new UserDNotFoundByUsername("Unknown Error");
+            throw new Exception("Unknown Error");
         }
     }
     
@@ -110,11 +109,11 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         try {
             productsPage = userDao.findFavoriteProducts(user, pageable);
-        } catch (DataAccessException e) {
-            throw new UserDNotFoundByUsername("Database Error");
+        }  catch (DataAccessException e) {
+            throw new Exception("Database Error");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new UserDNotFoundByUsername("Unknown Error");
+            throw new Exception("Unknown Error");
         }
 
         if (!productsPage.isEmpty()) {
@@ -139,11 +138,11 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         try {
             productsPage = favoriteDao.findProdInFavByCate(user,category, pageable);
-        } catch (DataAccessException e) {
-            throw new UserDNotFoundByUsername("Database Error");
+        }  catch (DataAccessException e) {
+            throw new Exception("Database Error");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new UserDNotFoundByUsername("Unknown Error");
+            throw new Exception("Unknown Error");
         }
 
         if (!productsPage.isEmpty()) {
