@@ -28,15 +28,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/userC")
 public class UserC {
-
+    
     @Autowired
     private UserDService userDService;
-
+    
     @GetMapping(value = "/login")
     public String login() {
         return "login";
     }
-
+    
     @GetMapping(value = "/savePage")
     public String savePage(Model model) {
         log.info("savePage handler");
@@ -44,40 +44,40 @@ public class UserC {
         model.addAttribute("userCDto", userCDto);
         return "saveUser";
     }
-
+    
     @PostMapping(value = "/saveUser")
     public String saveUser(Model model, @Valid UserCDto userCDto,
             BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception {
         log.info("saveUser handler");
-
+        
         if (result.hasErrors()) {
             model.addAttribute("userCDto", userCDto);
             return "saveUser";
         }
-
+        
         userDService.userCreate(userCDto, image);
-
+        
         redirectAttrs
                 .addFlashAttribute("message", "User created successfully")
                 .addFlashAttribute("class", "success");
-
+        
         return "redirect:/userC/login";
     }
-
+    
     @GetMapping(value = "/auth/passUNamePage")
     public String passUNamePage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) {
         log.info("passUNamePage handler");
-
+        
         UserEPUDto userEPUDto = new UserEPUDto();
         userEPUDto.setIdUser(loggedUser.getId());
         userEPUDto.setUsername(loggedUser.getUsername());
-
+        
         model.addAttribute("userEPUDto", userEPUDto);
         return "editPassUName";
     }
-
+    
     @PostMapping(value = "/auth/editPassUName")
     public String editPassUName(Model model, @Valid UserEPUDto userEPUDto,
             BindingResult result,
@@ -88,14 +88,14 @@ public class UserC {
             return "editPassUName";
         }
         userDService.userEditPassAndUName(userEPUDto);
-
+        
         redirectAttrs
                 .addFlashAttribute("message", "User edited successfully, you must re-login")
                 .addFlashAttribute("class", "success");
-
+        
         return "redirect:/userC/login";
     }
-
+    
     @GetMapping(value = "/admin/listAllPage")
     public String listAllPage(Model model,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
@@ -104,9 +104,9 @@ public class UserC {
             @RequestParam(name = "pageSize", defaultValue = "2") String pageSize) throws Exception {
         log.info("listAllPage handler");
         int pageNoInt = Integer.parseInt(pageNo);
-
+        
         PageDto<UserAEDto> users = userDService.listUsers(pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
-
+        
         model.addAttribute("users", users.getContent());
         model.addAttribute("totalPages", users.getTotalPages());
         model.addAttribute("totalItems", users.getTotalElements());
@@ -115,69 +115,70 @@ public class UserC {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
+        
         return "listAllUsers";
     }
     
     @GetMapping(value = "/admin/editByAdminPage/{userName}")
-    public String editByAdminPage(Model model,@PathVariable(name = "userName") String username) throws UserDNotFoundByUsername{
+    public String editByAdminPage(Model model, @PathVariable(name = "userName") String username) throws UserDNotFoundByUsername {
         log.info("editByAdminPage handler");
         
-        UserAEDto userAEDto= new UserAEDto(userDService.findUserByUsername(username));
+        UserAEDto userAEDto = new UserAEDto(userDService.findUserByUsername(username));
         model.addAttribute("userAEDto", userAEDto);
         
         return "editByAdmin";
     }
     
     @PostMapping(value = "/admin/editByAdmin")
-    public String editByAdmin(Model model
-            ,UserAEDto userAEDto
-            ,@RequestParam(name = "rolCheckbox", required = false) List<RolEnum> listRolEnum
-            ,@RequestParam(name = "stateRadio", required = false) String state
-            ,RedirectAttributes redirectAttrs) throws Exception {
+    public String editByAdmin(Model model,
+             UserAEDto userAEDto,
+             @RequestParam(name = "rolCheckbox", required = false) List<RolEnum> listRolEnum,
+             @RequestParam(name = "stateRadio", required = false) String state,
+             RedirectAttributes redirectAttrs) throws Exception {
         log.info("saveUserByAdmin handler");
         
         userAEDto.setState(state);
-        userDService.userEditByAdmin(userAEDto,listRolEnum);
+        userDService.userEditByAdmin(userAEDto, listRolEnum);
         
         redirectAttrs
                 .addFlashAttribute("message", "User edited successfully")
                 .addFlashAttribute("class", "success")
                 .addAttribute("userName", userAEDto.getUserName());
-
+        
         return "redirect:/userC/admin/editByAdminPage/{userName}";
     }
     
     @PostMapping(value = "/admin/delete")
-    public String deleteUser(@RequestParam(name = "userName") String userName, RedirectAttributes redirectAttrs) throws Exception{
+    public String deleteUser(@RequestParam(name = "userName") String userName, RedirectAttributes redirectAttrs) throws Exception {
         log.info("deleteUser handler");
-
+        
         userDService.deleteByuserName(userName);
-
+        
         redirectAttrs
                 .addFlashAttribute("message", "User deleted successfully")
                 .addFlashAttribute("class", "success");
-
-        return "redirect:/userC/listAllPage";
+        
+        return "redirect:/userC/admin/listAllPage";
     }
     
-     @GetMapping(value = "/auth/editImagePage")
-    public String editImagePage(Model model,@AuthenticationPrincipal CustomUserDetails loggedUser)throws Exception{
+    @GetMapping(value = "/auth/editImagePage")
+    public String editImagePage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) throws Exception {
         log.info("editImagePage handler");
         model.addAttribute("userId", loggedUser.getId());
         model.addAttribute("oldImage", userDService.findUserByUsername(loggedUser.getUsername()).getImage());
         return "editImage";
     }
-    @PostMapping(value = "auth/editImage")
-    public String editImage(@RequestParam(name = "file", required = false) MultipartFile image, 
-            @RequestParam(name = "userId") String userId, 
-            RedirectAttributes redirectAttrs) throws Exception{
-        log.info("editImage handler");
 
-        if(image.isEmpty()){
+    @PostMapping(value = "auth/editImage")
+    public String editImage(@RequestParam(name = "file", required = false) MultipartFile image,
+            @RequestParam(name = "userId") String userId,
+            RedirectAttributes redirectAttrs) throws Exception {
+        log.info("editImage handler");
+        
+        if (image.isEmpty()) {
             redirectAttrs
-                .addFlashAttribute("message", "There is no image")
-                .addFlashAttribute("class", "danger");
+                    .addFlashAttribute("message", "There is no image")
+                    .addFlashAttribute("class", "danger");
             return "redirect:/userC/auth/editImagePage";
         }
         
@@ -186,8 +187,15 @@ public class UserC {
         redirectAttrs
                 .addFlashAttribute("message", "User image saved successfully")
                 .addFlashAttribute("class", "success");
-
+        
         return "redirect:/personC/auth/editPage";
+    }
+    
+    @GetMapping(value = "/auth/deleteMyUser")
+    public String deleteMyUser(@AuthenticationPrincipal CustomUserDetails loggedUser) throws Exception {
+        log.info("deleteMyUser handler");
+        userDService.deleteMyUserByUsername(loggedUser.getUsername());
+        return "redirect:/";
     }
     
 }

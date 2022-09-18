@@ -231,4 +231,10 @@ public class UserService implements UserDetailsService, UserDService {
             throw new UserDNotFoundByUsername("Unknown Error");
         }
     }
+
+    @Override
+    public void deleteMyUserByUsername(String username) throws Exception {
+        this.deleteByuserName(username);
+        SecurityContextHolder.clearContext();
+    }
 }
