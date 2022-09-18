@@ -59,9 +59,9 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional(readOnly = true)
-    public Favorite findFavoriteByProduct(Product Product) throws Exception {
+    public Favorite findFavoriteByProductAndUser(Product Product,UserD user) throws Exception {
         try {
-            return favoriteDao.findByProduct(Product);
+            return favoriteDao.findByProductAndUser(Product,user);
         }  catch (DataAccessException e) {
             throw new Exception("Database Error");
         } catch (Exception e) {
@@ -86,9 +86,9 @@ public class FavoriteServiceImpl implements FavoriteService {
     
     @Override
     @Transactional
-    public void deleteFavoriteByProduct(Product product) throws Exception{
+    public void deleteFavoriteByProductAndUser(Product product,UserD user) throws Exception{
          try {
-            favoriteDao.delete(this.findFavoriteByProduct(product));
+            favoriteDao.delete(this.findFavoriteByProductAndUser(product,user));
         }  catch (DataAccessException e) {
             throw new Exception("Database Error");
         } catch (Exception e) {

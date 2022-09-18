@@ -47,10 +47,10 @@ public class FavoriteC {
     }
 
     @GetMapping(value = "/auth/delete/{idProduct}")
-    public String deleteFavorite(Product product, RedirectAttributes redirectAttrs) throws Exception {
+    public String deleteFavorite(Product product, RedirectAttributes redirectAttrs,@AuthenticationPrincipal CustomUserDetails loggedUser) throws Exception {
         log.info("deleteFavorite handler");
 
-        favoriteService.deleteFavoriteByProduct(product);
+        favoriteService.deleteFavoriteByProductAndUser(product,loggedUser.getUser());
 
         redirectAttrs
                 .addFlashAttribute("message", "Product deleted from favorites")

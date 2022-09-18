@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface FavoriteDao extends JpaRepository<Favorite, Long> {
     
-    Favorite findByProduct(Product product);
+    Favorite findByProductAndUser(Product product,UserD user);
     
     @Query(value = "SELECT p FROM Product p WHERE p = ANY (SELECT f.product FROM Favorite f WHERE f.user =  :user) "
             + "AND p = ANY (SELECT p FROM Product p WHERE p.idProduct = ANY (SELECT r.product FROM ProdCate r WHERE r.category = :cate))")
