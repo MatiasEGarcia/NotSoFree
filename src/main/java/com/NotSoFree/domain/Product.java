@@ -11,7 +11,7 @@ import lombok.ToString;
 
 @Data
 @Entity
-@Table(name = "products", schema = "notanlibre")
+@Table(name = "products", schema = "notsofree")
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,8 +27,8 @@ public class Product implements Serializable {
     @Column(name="stock")
     private int stock;
     
-    @Column(name="mark")
-    private String mark;
+    @Column(name="brand")
+    private String brand;
     
     @Column(name="price")
     private float price;
@@ -52,7 +52,7 @@ public class Product implements Serializable {
         this.idProduct= dto.getIdProduct();
         this.name= dto.getName();
         this.stock= dto.getStock();
-        this.mark= dto.getMark();
+        this.brand= dto.getBrand();
         this.price=dto.getPrice();
         this.image=dto.getImage();
     }

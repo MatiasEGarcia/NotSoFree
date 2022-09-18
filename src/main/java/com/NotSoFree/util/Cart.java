@@ -5,13 +5,10 @@ import lombok.Data;
 @Data
 public class Cart {
     
-    private Long idProduct;
-    private int amount;
+    private boolean inCart = false; //To know if it is in the cart
     
-    public Cart(){   
-    }
-    public Cart(Long idProduct,int amount){
-        this.amount= amount;
-        this.idProduct = idProduct;
-    }
+    private int quantity;
+    
+    private boolean notEnoughStock = false; // if this is true, it means that there is not enough stock in the database for your purchase
+    
 }

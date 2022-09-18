@@ -1,13 +1,11 @@
 package com.NotSoFree.service;
 
 import com.NotSoFree.dao.UserDao;
-import com.NotSoFree.domain.Person;
 import com.NotSoFree.domain.Rol;
 import com.NotSoFree.domain.UserD;
 import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.UserAEDto;
 import com.NotSoFree.dto.UserCDto;
-import com.NotSoFree.dto.UserEDto;
 import com.NotSoFree.dto.UserEPUDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.util.BCPasswordEncoder;
@@ -70,19 +68,10 @@ public class UserService implements UserDetailsService, UserDService {
     public void userCreate(UserCDto user, MultipartFile image) throws Exception {
 
         BCryptPasswordEncoder encoder = bcPasswordEncoder.passwordEncoder();
-        UserD userD = new UserD();
-        Person person = new Person();
+        user.setPassword(encoder.encode(user.getPassword()));
+        UserD userD = new UserD(user);
         byte active = 1;
-
-        userD.setUsername(user.getUsername());
-        userD.setPassword(encoder.encode(user.getPassword()));
         userD.setState(active);
-        person.setNames(user.getNames());
-        person.setSurnames(user.getSurnames());
-        person.setPhone(user.getPhone());
-        person.setEmail(user.getEmail());
-        person.setAddress(user.getAddress());
-        userD.setPerson(person);
 
         try {
             if (!image.isEmpty()) {
@@ -101,37 +90,6 @@ public class UserService implements UserDetailsService, UserDService {
             e.printStackTrace();
             throw new Exception("Unknown Error");
         }
-    }
-
-    @Override
-    @Transactional
-    public void userEdit(UserEDto user, MultipartFile image) throws Exception {
-        UserD userD = new UserD();
-        Person person = new Person();
-
-        userD.setIdUser(user.getIdUser());
-        person.setIdPerson(user.getIdPerson());
-        person.setNames(user.getNames());
-        person.setSurnames(user.getSurnames());
-        person.setPhone(user.getPhone());
-        person.setEmail(user.getEmail());
-        person.setAddress(user.getAddress());
-        userD.setPerson(person);
-
-        try {
-            if (!image.isEmpty()) {
-                userD.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
-            }
-            userDao.updateWithoutPasswordUsername(userD.getIdUser(), userD);
-        } catch (IOException e) {
-            throw new Exception("There was an error with the image");
-        } catch (DataAccessException e) {
-            throw new Exception("Database Error");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
-        }
-
     }
 
     @Override
@@ -193,6 +151,24 @@ public class UserService implements UserDetailsService, UserDService {
     }
 
     @Override
+    @Transactional
+    public void userImageEdit(MultipartFile image, String user) throws Exception {
+        String imageString;
+        try {
+            imageString = Base64.getEncoder().encodeToString(image.getBytes());
+            userDao.updateUserImage(imageString, Long.parseLong(user));
+        } catch (IOException e) {
+            throw new Exception("There was an error with the image");
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public UserD findUserByUsername(String username) throws UserDNotFoundByUsername {
         UserD userD = null;
@@ -217,7 +193,6 @@ public class UserService implements UserDetailsService, UserDService {
     @Transactional(readOnly = true)
     public PageDto listUsers(int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        //Pageable provides the info for the pagination
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort); // the pagination starts at 1 that's why I subtract 1
         Page<UserD> pageUserD;
         List<UserD> listUserD;
@@ -231,14 +206,11 @@ public class UserService implements UserDetailsService, UserDService {
             e.printStackTrace();
             throw new UserDNotFoundByUsername("Unknown Error");
         }
-
         if (!pageUserD.isEmpty()) {
             listUserD = pageUserD.getContent();
-
             for (int i = 0; i < listUserD.size(); i++) {
                 listAEDto.add(new UserAEDto(listUserD.get(i)));
             }
-
             return new PageDto<>(listAEDto, pageUserD.getTotalPages(), pageUserD.getTotalElements());
         }
 
@@ -260,4 +232,9 @@ public class UserService implements UserDetailsService, UserDService {
         }
     }
 
+    @Override
+    public void deleteMyUserByUsername(String username) throws Exception {
+        this.deleteByuserName(username);
+        SecurityContextHolder.clearContext();
+    }
 }

@@ -96,11 +96,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     public Page<Category> findPaginated(int pageNo, int pageSize, String sortField, String sortDir)throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-
-        //Pageable provides the info for the pagination
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort); // the pagination starts at 1 that's why I subtract 1
-
-        //if you only wanted to use sort, you would have to pass instead of the pageable, just the sort
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         try {
             return this.categoryDao.findAll(pageable);
         } catch (DataAccessException e) {

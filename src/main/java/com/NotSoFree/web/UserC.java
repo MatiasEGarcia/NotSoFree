@@ -3,7 +3,6 @@ package com.NotSoFree.web;
 import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.UserAEDto;
 import com.NotSoFree.dto.UserCDto;
-import com.NotSoFree.dto.UserEDto;
 import com.NotSoFree.dto.UserEPUDto;
 import com.NotSoFree.exception.UserDNotFoundByUsername;
 import com.NotSoFree.service.UserDService;
@@ -29,24 +28,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/userC")
 public class UserC {
-
+    
     @Autowired
     private UserDService userDService;
-
+    
     @GetMapping(value = "/login")
     public String login() {
         return "login";
     }
-
-    @GetMapping(value = "/editPage")
-    public String editPage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) throws UserDNotFoundByUsername {
-        log.info("editPage handler");
-
-        UserEDto userEDto = new UserEDto(userDService.findUserByUsername(loggedUser.getUsername() ) ) ;
-        model.addAttribute("userEDto", userEDto);
-        return "editUser";
-    }
-
+    
     @GetMapping(value = "/savePage")
     public String savePage(Model model) {
         log.info("savePage handler");
@@ -54,62 +44,41 @@ public class UserC {
         model.addAttribute("userCDto", userCDto);
         return "saveUser";
     }
-
+    
     @PostMapping(value = "/saveUser")
     public String saveUser(Model model, @Valid UserCDto userCDto,
             BindingResult result,
             @RequestParam(name = "file", required = false) MultipartFile image,
             RedirectAttributes redirectAttrs) throws Exception {
         log.info("saveUser handler");
-
+        
         if (result.hasErrors()) {
             model.addAttribute("userCDto", userCDto);
             return "saveUser";
         }
-
+        
         userDService.userCreate(userCDto, image);
-
+        
         redirectAttrs
                 .addFlashAttribute("message", "User created successfully")
                 .addFlashAttribute("class", "success");
-
+        
         return "redirect:/userC/login";
     }
-
-    @PostMapping(value = "/editUser")
-    public String editUser(Model model, @Valid UserEDto userEDto,
-            BindingResult result,
-            @RequestParam(name = "file", required = false) MultipartFile image,
-            RedirectAttributes redirectAttrs) throws Exception {
-        log.info("editUser handler");
-
-        if (result.hasErrors()) {
-            model.addAttribute("userEDto", userEDto);
-            return "editUser";
-        }
-
-        userDService.userEdit(userEDto, image);
-
-        redirectAttrs
-                .addFlashAttribute("message", "User edited successfully")
-                .addFlashAttribute("class", "success");
-
-        return "redirect:/userC/editPage";
-    }
-
-    @GetMapping(value = "/passUNamePage")
+    
+    @GetMapping(value = "/auth/passUNamePage")
     public String passUNamePage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) {
         log.info("passUNamePage handler");
-
+        
         UserEPUDto userEPUDto = new UserEPUDto();
         userEPUDto.setIdUser(loggedUser.getId());
         userEPUDto.setUsername(loggedUser.getUsername());
-
+        
         model.addAttribute("userEPUDto", userEPUDto);
         return "editPassUName";
     }
-
-    @PostMapping(value = "editPassUName")
+    
+    @PostMapping(value = "/auth/editPassUName")
     public String editPassUName(Model model, @Valid UserEPUDto userEPUDto,
             BindingResult result,
             RedirectAttributes redirectAttrs) throws Exception {
@@ -119,15 +88,15 @@ public class UserC {
             return "editPassUName";
         }
         userDService.userEditPassAndUName(userEPUDto);
-
+        
         redirectAttrs
                 .addFlashAttribute("message", "User edited successfully, you must re-login")
                 .addFlashAttribute("class", "success");
-
+        
         return "redirect:/userC/login";
     }
-
-    @GetMapping(value = "/listAllPage")
+    
+    @GetMapping(value = "/admin/listAllPage")
     public String listAllPage(Model model,
             @RequestParam(name = "pageNo", defaultValue = "1") String pageNo,
             @RequestParam(name = "sortField", defaultValue = "idUser") String sortField,
@@ -135,9 +104,9 @@ public class UserC {
             @RequestParam(name = "pageSize", defaultValue = "2") String pageSize) throws Exception {
         log.info("listAllPage handler");
         int pageNoInt = Integer.parseInt(pageNo);
-
+        
         PageDto<UserAEDto> users = userDService.listUsers(pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
-
+        
         model.addAttribute("users", users.getContent());
         model.addAttribute("totalPages", users.getTotalPages());
         model.addAttribute("totalItems", users.getTotalElements());
@@ -146,51 +115,87 @@ public class UserC {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
+        
         return "listAllUsers";
     }
     
-    @GetMapping(value = "/editByAdminPage/{userName}")
-    public String editByAdminPage(Model model,@PathVariable(name = "userName") String username) throws UserDNotFoundByUsername{
+    @GetMapping(value = "/admin/editByAdminPage/{userName}")
+    public String editByAdminPage(Model model, @PathVariable(name = "userName") String username) throws UserDNotFoundByUsername {
         log.info("editByAdminPage handler");
         
-        UserAEDto userAEDto= new UserAEDto(userDService.findUserByUsername(username));
+        UserAEDto userAEDto = new UserAEDto(userDService.findUserByUsername(username));
         model.addAttribute("userAEDto", userAEDto);
         
         return "editByAdmin";
     }
     
-    @PostMapping(value = "editByAdmin")
-    public String editByAdmin(Model model
-            ,UserAEDto userAEDto
-            ,@RequestParam(name = "rolCheckbox", required = false) List<RolEnum> listRolEnum
-            ,@RequestParam(name = "stateRadio", required = false) String state
-            ,RedirectAttributes redirectAttrs) throws Exception {
+    @PostMapping(value = "/admin/editByAdmin")
+    public String editByAdmin(Model model,
+             UserAEDto userAEDto,
+             @RequestParam(name = "rolCheckbox", required = false) List<RolEnum> listRolEnum,
+             @RequestParam(name = "stateRadio", required = false) String state,
+             RedirectAttributes redirectAttrs) throws Exception {
         log.info("saveUserByAdmin handler");
         
         userAEDto.setState(state);
-        userDService.userEditByAdmin(userAEDto,listRolEnum);
+        userDService.userEditByAdmin(userAEDto, listRolEnum);
         
         redirectAttrs
                 .addFlashAttribute("message", "User edited successfully")
                 .addFlashAttribute("class", "success")
                 .addAttribute("userName", userAEDto.getUserName());
-
-        return "redirect:/userC/editByAdminPage/{userName}";
+        
+        return "redirect:/userC/admin/editByAdminPage/{userName}";
     }
     
-    @PostMapping(value = "/delete")
-    public String deleteProduct(@RequestParam(name = "userName") String userName, RedirectAttributes redirectAttrs) throws Exception{
-        log.info("deleteProduct handler");
-
+    @PostMapping(value = "/admin/delete")
+    public String deleteUser(@RequestParam(name = "userName") String userName, RedirectAttributes redirectAttrs) throws Exception {
+        log.info("deleteUser handler");
+        
         userDService.deleteByuserName(userName);
-
+        
         redirectAttrs
                 .addFlashAttribute("message", "User deleted successfully")
                 .addFlashAttribute("class", "success");
-
-        return "redirect:/userC/listAllPage";
+        
+        return "redirect:/userC/admin/listAllPage";
     }
     
+    @GetMapping(value = "/auth/editImagePage")
+    public String editImagePage(Model model, @AuthenticationPrincipal CustomUserDetails loggedUser) throws Exception {
+        log.info("editImagePage handler");
+        model.addAttribute("userId", loggedUser.getId());
+        model.addAttribute("oldImage", userDService.findUserByUsername(loggedUser.getUsername()).getImage());
+        return "editImage";
+    }
+
+    @PostMapping(value = "auth/editImage")
+    public String editImage(@RequestParam(name = "file", required = false) MultipartFile image,
+            @RequestParam(name = "userId") String userId,
+            RedirectAttributes redirectAttrs) throws Exception {
+        log.info("editImage handler");
+        
+        if (image.isEmpty()) {
+            redirectAttrs
+                    .addFlashAttribute("message", "There is no image")
+                    .addFlashAttribute("class", "danger");
+            return "redirect:/userC/auth/editImagePage";
+        }
+        
+        userDService.userImageEdit(image, userId);
+        
+        redirectAttrs
+                .addFlashAttribute("message", "User image saved successfully")
+                .addFlashAttribute("class", "success");
+        
+        return "redirect:/personC/auth/editPage";
+    }
+    
+    @GetMapping(value = "/auth/deleteMyUser")
+    public String deleteMyUser(@AuthenticationPrincipal CustomUserDetails loggedUser) throws Exception {
+        log.info("deleteMyUser handler");
+        userDService.deleteMyUserByUsername(loggedUser.getUsername());
+        return "redirect:/";
+    }
     
 }

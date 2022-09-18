@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="layout/headAndScript :: head">
+        <title>Page to see search results</title>
+    </head>
+    <body>
+        <nav th:replace="layout/nav :: nav"></nav>
+
+        <div th:replace="layout/alert :: alert"></div>
+
+        <div class="container">
+            <div class="row mt-3">
+                <div class="col-12 col-md-3">
+                    <h3 class="mt-5 mb-3">Categories</h3>
+                    <ul class="list-group listCategoriesIndex">
+                        <li class="list-group-item"  th:each="category:${categories}">
+                            <a class="linksNoDeco" th:text="${category.name}" th:href="@{/productC/search}+ '?categorySelect=' + ${category.idCategory}+'&search=' + ${search}"></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-9">
+                    <div th:unless="${products}"><h2 class="display-6 mt-5" style="text-align: center;">No matches</h2></div>
+                    <div th:if="${products}">
+                        <h2 class="display-6" style="text-align: center;">Search results</h2>
+                        <div class="productsList mt-3">
+                            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                                <div class="col" th:each="product:${products}">
+                                    <div class="card" style="width: 16rem; margin: auto">
+                                        <div class="imageContainer"> 
+                                            <img th:if="${product.image}  and ${product.image!='' }"  class="card-img-top image" th:src="@{'data:image/jpeg;charset=utf-8;base64,' + ${product.image}}"  th:alt="${product.image}"/>
+                                            <img th:unless="${product.image} and ${product.image!= '' }"   class="card-img-top image" src="/img/productDefault.jpg"  alt="The product currently has no image"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="${product.name}"></h5>
+                                            <p th:text="${product.brand}" ></p>
+                                            <p th:text="'Price ' + ${new java.text.DecimalFormat('$#,##0.00').format(product.price)}"></p>
+                                            <a th:href="@{/productC/detailPage/} + ${product.idProduct}" class="btn btn-primary">Detail</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div th:if="${totalPages > 1}" >
+                            <div> 
+                                <div>
+                                    Total de elementos: [[${totalItems}]]
+                                </div>
+                                <nav aria-label="...">
+                                    <ul class="pagination justify-content-center">
+                                        <li  th:class="${actualPage == 1 } ? 'page-item disabled' : 'page-item ' "> 
+                                            <a th:if="${categorySelected == null}" class="page-link"  th:href="@{/productC/search}+ 
+                                               '?search=' + ${search} +
+                                               '&pageNo=' + ${actualPage-1} +
+                                               '&sortField=' + ${sortField} +
+                                               '&sortDir=' + ${sortDir}+ 
+                                               '&pageSize=' + ${pageSize}">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                            <!-- For when the list is by category -->
+                                            <a th:if="${categorySelected}" class="page-link"  th:href="@{/productC/search}+
+                                               '?categorySelect=' + ${categorySelected}+ 
+                                               '&search=' + ${search} +
+                                               '&pageNo=' + ${actualPage-1} +
+                                               '&sortField=' + ${sortField} +
+                                               '&sortDir=' + ${sortDir}+ 
+                                               '&pageSize=' + ${pageSize}">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+
+                                        <li  th:class="${actualPage == i} ? 'page-item active' : 'page-item ' "  th:each="i: ${#numbers.sequence(1,totalPages)}">
+                                            <a th:if="${categorySelected == null}" class="page-link"  th:href="@{/productC/search}+ 
+                                               '?search=' + ${search} +
+                                               '&pageNo=' + ${i} +
+                                               '&sortField=' + ${sortField} +
+                                               '&sortDir=' + ${sortDir}+ 
+                                               '&pageSize=' + ${pageSize}">[[${i}]]</a>
+
+                                            <!-- For when the list is by category -->
+                                            <a th:if="${categorySelected}" class="page-link"  th:href="@{/productC/search}+ 
+                                               '?categorySelect=' + ${categorySelected} + 
+                                               '&search=' + ${search} +
+                                               '&pageNo=' + ${i} +
+                                               '&sortField=' + ${sortField} +
+                                               '&sortDir=' + ${sortDir}+ 
+                                               '&pageSize=' + ${pageSize}">[[${i}]]</a>
+                                        </li>
+
+                                        <li  th:class="${actualPage == totalPages} ? 'page-item disabled' : 'page-item' " >
+                                            <a th:if="${categorySelected == null}" class="page-link"  th:href="@{/productC/search}+ 
+                                               '?search=' + ${search} +
+                                               '&pageNo=' + ${actualPage+1} +
+                                               '&sortField=' + ${sortField} +
+                                               '&sortDir=' + ${sortDir}+ 
+                                               '&pageSize=' + ${pageSize}" >
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+
+                                            <!-- For when the list is by category -->
+                                            <a th:if="${categorySelected}" class="page-link"  th:href="@{/productC/search}+ 
+                                               '?categorySelect=' + ${categorySelected} + 
+                                               '&search=' + ${search} +
+                                               '&pageNo=' + ${actualPage+1} +
+                                               '&sortField=' + ${sortField} +
+                                               '&sortDir=' + ${sortDir}+ 
+                                               '&pageSize=' + ${pageSize}" >
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="layout/headAndScript :: commonScript"></div>
+    </body>
+</html>

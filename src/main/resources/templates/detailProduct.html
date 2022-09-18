@@ -20,23 +20,32 @@
                 </div>
                 <div class="col-12 col-md-6">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-around">
+                        <div class="card-header d-flex justify-content-between">
                             <h2 th:text="${productDto.name}"></h2>
-                            <button class="favoriteButton"><i class="bi bi-suit-heart-fill"></i></button>
+                            <form th:unless="${inFavorites}" th:action="@{/favoriteC/auth/add}" method="POST">
+                                <input hidden="true" th:value="${productDto.idProduct}" name="idProduct"/>
+                                <button class="favoriteButton" type="submit"><i class="bi bi-suit-heart-fill"></i></button>
+                            </form>
+                            <a th:if="${inFavorites}" class="linksNoDeco favoriteButton" th:href="@{/favoriteC/auth/delete/} + ${productDto.idProduct}"><i class="bi bi-suit-heart-fill favoriteHeartRed"></i></a>
                         </div>
                         <div class="card-body d-grid gap-3">
-                            <h4 class="card-title" th:text="'Price: ' + ${productDto.price}"/>
-                            <h4 th:text="'Mark : ' + ${productDto.mark}"/>
+                            <h4 class="card-title" th:text="'Price: ' + ${new java.text.DecimalFormat('$#,##0.00').format(productDto.price)}"/>
+                            <h4 th:text="'Brand : ' + ${productDto.brand}"/>
                             <h5>Categories:</h5>
                             <ul class="categoryList">
                                 <li th:each="category:${productDto.oldCategories}" th:text="${category.name}"></li>
                             </ul>
-                            
-                            <form th:action="@{/cartC/add}" method="POST" th:if="${!productDto.inCart}">
-                                <input type="hidden" name="idProduct" th:value="${productDto.idProduct}">
+
+                            <form th:action="@{/cartC/add}" method="POST" th:unless="${productDto.inCart} or ${productDto.stock == 0} " th:object="${productDto}">
+                                <input type="text" hidden="true" th:field="*{image}"  th:value="${productDto.image}"/> <!--It is type text because right now what is in this field is a string, if it was brought from the database-->
+                                <input type="hidden" name="idProducto" th:field="*{idProduct}"/>
+                                <input type="hidden" name="name" th:field="*{name}"/>
+                                <input type="hidden" name="mark" th:field="*{brand}"/>
+                                <input type="hidden" name="stock" th:field="*{stock}"/>
+                                <input type="hidden" name="price" th:field="*{price}"/>
                                 <div class="row row-cols-auto">
                                     <div class="col">
-                                        <select name="amountSelect" class="form-select amountSelect" >
+                                        <select th:field="*{quantity}" class="form-select amountSelect" >
                                             <option th:each="i: ${#numbers.sequence(1,productDto.stock)}"   th:text=" ${i}" th:value="${i}" /> 
                                         </select>
                                     </div>
@@ -44,7 +53,9 @@
                                         <button type="submit" class="btn btn-primary"><i class="bi bi-cart-plus"></i></button>
                                     </div>
                                 </div>
+                                
                             </form>
+                            <span th:if="${productDto.stock == 0} ">There is no stock at the moment</span>
                             <span  th:if="${productDto.inCart}">This product is already in the cart</span>
                         </div>
                     </div>

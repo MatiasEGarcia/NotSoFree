@@ -15,19 +15,19 @@
                 <thead>
                     <tr>
                         <th scope="col">
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=idProduct&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Id</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/admin/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=idProduct&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Id</a>
                         </th>
                         <th scope="col">
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=name&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Name</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/admin/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=name&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Name</a>
                         </th>
                         <th scope="col">
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=stock&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Stock</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/admin/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=stock&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Stock</a>
                         </th>
                         <th scope="col">
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=mark&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Mark</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/admin/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=brand&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Brand</a>
                         </th>
                         <th scope="col"> <!--problema, dice que Product no tiene la propiedad price -->
-                            <a class="h6" th:href="@{/productC/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=price&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Precio</a>
+                            <a class="h6 linksNoDeco" th:href="@{/productC/admin/listAllPage}+ '?pageNo=' + ${actualPage} +'&sortField=price&sortDir=' + ${reverseSortDir}+ '&pageSize=' + ${pageSize}">#Precio</a>
                         </th>
                         <th scope="col">Image</th>
                         <th scope="col">Delete</th>
@@ -39,20 +39,20 @@
                         <td th:text="${product.idProduct}"></td>
                         <td th:text="${product.name}"></td>
                         <td th:text="${product.stock}"></td>
-                        <td th:text="${product.mark}"></td>
+                        <td th:text="${product.brand}"></td>
                         <td th:text="${product.price}"></td>
                         <td>
                             <img th:if="${product.image}  and ${product.image!='' }"   th:src="@{'data:image/jpeg;charset=utf-8;base64,' + ${product.image}}"  th:alt="${product.image}" style="max-width: 40px"/>
                             <img th:unless="${product.image} and ${product.image!= '' }"   src="/img/productDefault.jpg"  alt="The product currently has no image" style="max-width: 40px"/>
                         </td>
                         <td>
-                            <form id="formDeleteProduct"  th:action="@{/productC/deleteProd}" method="post">
+                            <form id="formDeleteProduct"  th:action="@{/productC/admin/deleteProd}" method="post">
                                 <input name="idProduct" hidden="true" th:value="${product.idProduct}"> 
                                     <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                             </form>
                         </td>
                         <td>
-                            <a class="btn btn-secondary" th:href="@{/productC/editPage/} + ${product.idProduct}">
+                            <a class="btn btn-secondary linksNoDeco" th:href="@{/productC/admin/editPage/} + ${product.idProduct}">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
                         </td>
@@ -68,7 +68,7 @@
                     <nav aria-label="...">
                         <ul class="pagination justify-content-center">
                             <li  th:class="${actualPage == 1 } ? 'page-item disabled' : 'page-item ' "> 
-                                <a class="page-link"  th:href="@{/productC/listAllPage}+ 
+                                <a class="page-link"  th:href="@{/productC/admin/listAllPage}+ 
                                    '?pageNo=' + ${actualPage-1} +
                                    '&sortField=' + ${sortField} +
                                    '&sortDir=' + ${sortDir}+ 
@@ -78,7 +78,7 @@
                             </li>
 
                             <li  th:class="${actualPage == i} ? 'page-item active' : 'page-item ' "  th:each="i: ${#numbers.sequence(1,totalPages)}">
-                                <a class="page-link"  th:href="@{/productC/listAllPage}+ 
+                                <a class="page-link"  th:href="@{/productC/admin/listAllPage}+ 
                                    '?pageNo=' + ${i} +
                                    '&sortField=' + ${sortField} +
                                    '&sortDir=' + ${sortDir}+ 
@@ -86,7 +86,7 @@
                             </li>
 
                             <li  th:class="${actualPage == totalPages} ? 'page-item disabled' : 'page-item' " >
-                                <a  class="page-link"  th:href="@{/productC/listAllPage}+ 
+                                <a  class="page-link"  th:href="@{/productC/admin/listAllPage}+ 
                                     '?pageNo=' + ${actualPage+1} +
                                     '&sortField=' + ${sortField} +
                                     '&sortDir=' + ${sortDir}+ 

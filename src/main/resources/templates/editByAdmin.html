@@ -17,7 +17,7 @@
                             <img class="imgUserLogin" src="/img/userDefault.jpg" alt="basicUserImage"/>
                         </div>
 
-                        <form class="d-grid gap-3" id="editUserByAdmin" method="POST" th:action="@{/userC/editByAdmin}" th:object="${userAEDto}">
+                        <form class="d-grid gap-3" id="editUserByAdmin" method="POST" th:action="@{/userC/admin/editByAdmin}" th:object="${userAEDto}">
                             <input type="hidden" name="idUser" th:field="*{idUser}"/>
                             <input type="hidden" name="idUser" th:field="*{roles}"/>
                             <div class="form-group">

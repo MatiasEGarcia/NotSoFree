@@ -8,7 +8,6 @@ import com.NotSoFree.dto.PageDto;
 import com.NotSoFree.dto.ProductDto;
 import com.NotSoFree.exception.ProductNotFoundById;
 import java.io.IOException;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -96,6 +95,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    public void updateProductsStock(List<ProductDto> products) throws Exception {
+        try {
+            for (int i = 0; i < products.size(); i++) {
+                products.get(i).setStock(products.get(i).getStock() - products.get(i).getQuantity());
+                productDao.updateProductStock(products.get(i));
+            }
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+    }
+
+    @Override
+    @Transactional
     public void removeProduct(Long idProduct) throws Exception {
         try {
             productDao.delete(productDao.findById(idProduct).orElseThrow(() -> new ProductNotFoundById(idProduct)));
@@ -133,15 +148,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageDto findProductsPaginated(List<Long> products, int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-
-        Page<Product> productsPage;
-        List<ProductDto> listProductDto= new ArrayList<>();
+    public List<ProductDto> findAllProductsById(List<Long> idProducts) throws Exception {
+        List<Product> products;
+        List<ProductDto> productsDto = new ArrayList<>();
 
         try {
-            productsPage = productDao.findProductsByIdPaginated(products, pageable);
+            products = productDao.findAllById(idProducts);
         } catch (DataAccessException e) {
             throw new Exception("Database Error");
         } catch (Exception e) {
@@ -149,26 +161,20 @@ public class ProductServiceImpl implements ProductService {
             throw new Exception("Unknown Error");
         }
 
-        if(!productsPage.isEmpty()){
-            for (int i = 0; i < productsPage.getContent().size(); i++) {
-                listProductDto.add(new ProductDto(productsPage.getContent().get(i)));
-            }
-            return new PageDto<>(listProductDto, productsPage.getTotalPages(), productsPage.getTotalElements());
+        for (Product product : products) {
+            productsDto.add(new ProductDto(product));
         }
-        
-        return null; 
+
+        return productsDto;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<Product> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-
-        //Pageable provides the info for the pagination
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort); // the pagination starts at 1 that's why I subtract 1
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 
         try {
-            //if you only wanted to use sort, you would have to pass instead of the pageable, just the sort
             return this.productDao.findAll(pageable);
         } catch (DataAccessException e) {
             throw new Exception("Database Error");
@@ -179,6 +185,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Product> findPaginatedByCategory(int pageNo, int pageSize, String sortField, String sortDir, Category category) throws Exception {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
@@ -191,5 +198,59 @@ public class ProductServiceImpl implements ProductService {
             e.printStackTrace();
             throw new Exception("Unknown Error");
         }
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public PageDto findPaginatedLike(String name, int pageNo, int pageSize, String sortField, String sortDir) throws Exception {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Product> pageProduct;
+        List<Product> listProduct;
+        List<ProductDto> listProductDto = new ArrayList<>();
+
+        try {
+            pageProduct = productDao.findByNameContaining(name, pageable);
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+        if (!pageProduct.isEmpty()) {
+            listProduct = pageProduct.getContent();
+            for (int i = 0; i < listProduct.size(); i++) {
+                listProductDto.add(new ProductDto(listProduct.get(i)));
+            }
+            return new PageDto<>(listProductDto, pageProduct.getTotalPages(), pageProduct.getTotalElements());
+        }
+
+        return null;
+    }
+
+    @Override
+    public PageDto findPaginatedLikeByCategory(String name, int pageNo, int pageSize, String sortField, String sortDir, Category category) throws Exception {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Product> pageProduct;
+        List<Product> listProduct;
+        List<ProductDto> listProductDto = new ArrayList<>();
+
+        try {
+            pageProduct = productDao.findByNameContainingByCategory(name, category, pageable);
+        } catch (DataAccessException e) {
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+        if (!pageProduct.isEmpty()) {
+            listProduct = pageProduct.getContent();
+            for (int i = 0; i < listProduct.size(); i++) {
+                listProductDto.add(new ProductDto(listProduct.get(i)));
+            }
+            return new PageDto<>(listProductDto, pageProduct.getTotalPages(), pageProduct.getTotalElements());
+        }
+
+        return null;
     }
 }

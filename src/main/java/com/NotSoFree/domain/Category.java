@@ -19,7 +19,7 @@ import lombok.ToString;
 
 @Data
 @Entity
-@Table(name = "categories", schema = "notanlibre")
+@Table(name = "categories", schema = "notsofree")
 public class Category implements Serializable{
     
     private static final long serialVersionUID = 1L;

@@ -3,15 +3,18 @@ package com.NotSoFree.dto;
 
 import com.NotSoFree.domain.Category;
 import com.NotSoFree.domain.Product;
+import com.NotSoFree.util.Cart;
 import com.NotSoFree.validator.NotZero;
 import java.io.Serializable;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class ProductDto implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class ProductDto extends Cart implements Serializable {
     
     private Long idProduct;
     
@@ -23,7 +26,7 @@ public class ProductDto implements Serializable {
     private int stock;
     
     @NotBlank(message="Product mark can't be empty")
-    private String mark;
+    private String brand;
     
     @NotNull(message="Product price can't be null")
     @NotZero
@@ -35,10 +38,6 @@ public class ProductDto implements Serializable {
     
     private List<Category> oldCategories;//To know if the product has categories
     
-    private boolean inCart = false; //To know if it is in the cart
-    
-    private int amountInCart;
-    
     public ProductDto(){
         
     }
@@ -47,7 +46,7 @@ public class ProductDto implements Serializable {
         this.idProduct= product.getIdProduct();
         this.name=product.getName();
         this.stock= product.getStock();
-        this.mark= product.getMark();
+        this.brand= product.getBrand();
         this.price= product.getPrice();
         this.image= product.getImage();
         this.oldCategories=oldCategories;
@@ -57,7 +56,7 @@ public class ProductDto implements Serializable {
         this.idProduct= product.getIdProduct();
         this.name=product.getName();
         this.stock= product.getStock();
-        this.mark= product.getMark();
+        this.brand= product.getBrand();
         this.price= product.getPrice();
         this.image= product.getImage();
     }

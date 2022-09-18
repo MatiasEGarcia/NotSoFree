@@ -19,7 +19,7 @@
                             <img class="imgUserLogin" src="/img/userDefault.jpg" alt="basicUserImage"/>
                         </div>
                         
-                        <form class="d-grid gap-3" id="editPassUName" method="POST" th:action="@{/userC/editPassUName}" th:object="${userEPUDto}">
+                        <form class="d-grid gap-3" id="editPassUName" method="POST" th:action="@{/userC/auth/editPassUName}" th:object="${userEPUDto}">
                             <input type="hidden" name="idProducto" th:field="*{idUser}"/>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="username" placeholder="User name"  th:field="*{username}" value="*{username}" />

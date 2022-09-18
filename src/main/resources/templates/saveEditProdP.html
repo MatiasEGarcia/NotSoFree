@@ -34,10 +34,10 @@
                             </ul>
                         </div>
                         <div class="form_group">
-                            <label for="mark" class="form-label">Mark</label>
-                            <input id="mark" type="text" class="form-control" th:field="*{mark}"/>
+                            <label for="mark" class="form-label">brand</label>
+                            <input id="mark" type="text" class="form-control" th:field="*{brand}"/>
                             <ul>
-                                <li th:each="error : ${#fields.errors('mark')}" th:text="${error}" class="error" />
+                                <li th:each="error : ${#fields.errors('brand')}" th:text="${error}" class="error" />
                             </ul>
                         </div>
                         <div class="form_group">
@@ -51,15 +51,19 @@
                             <label  for="image" class="form-label">Image</label>
                             <input id="image" name="file" type="file" class="form-control"/>
                         </div>
-                        
-                        
+
+
                         <div>
                             <h3>Categories</h3>
                             <div class="form-check mt-2" th:each="category:${listCategories}">
-                                <input class="form-check-input" name="boxCategory" type="checkbox" 
+                                <input th:if="${productDto.oldCategories}" class="form-check-input" name="boxCategory" type="checkbox" 
                                        th:value="${category.idCategory}" 
                                        th:checked="${#lists.contains(productDto.oldCategories, category)} "/> 
-                                    <label class="form-check-label" th:text="${category.name}"></label>
+                                
+                                <input th:unless="${productDto.oldCategories}" class="form-check-input" name="boxCategory" type="checkbox" 
+                                       th:value="${category.idCategory}"/> 
+                                
+                                <label class="form-check-label" th:text="${category.name}"></label>
                             </div>
                         </div>
 

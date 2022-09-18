@@ -35,12 +35,12 @@
                                     </td>
                                     <td th:text="${user.state}"></td>
                                     <td>
-                                        <a class="btn btn-secondary" th:href="@{/userC/editByAdminPage/} + ${user.userName}">
+                                        <a class="btn btn-secondary" th:href="@{/userC/admin/editByAdminPage/} + ${user.userName}">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <form id="formDeleteProduct"  th:action="@{/userC/delete}" method="post">
+                                        <form id="formDeleteProduct"  th:action="@{/userC/admin/delete}" method="post">
                                             <input name="userName" hidden="true" th:value="${user.userName}"> 
                                                 <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                                         </form>
@@ -57,7 +57,7 @@
                                 <nav aria-label="...">
                                     <ul class="pagination justify-content-center">
                                         <li  th:class="${actualPage == 1 } ? 'page-item disabled' : 'page-item ' "> 
-                                            <a class="page-link"  th:href="@{/userC/listAllPage}+ 
+                                            <a class="page-link"  th:href="@{/userC/admin/listAllPage}+ 
                                                '?pageNo=' + ${actualPage-1} +
                                                '&sortField=' + ${sortField} +
                                                '&sortDir=' + ${sortDir}+ 
@@ -67,7 +67,7 @@
                                         </li>
 
                                         <li  th:class="${actualPage == i} ? 'page-item active' : 'page-item ' "  th:each="i: ${#numbers.sequence(1,totalPages)}">
-                                            <a class="page-link"  th:href="@{/userC/listAllPage}+ 
+                                            <a class="page-link"  th:href="@{/userC/admin/listAllPage}+ 
                                                '?pageNo=' + ${i} +
                                                '&sortField=' + ${sortField} +
                                                '&sortDir=' + ${sortDir}+ 
@@ -75,7 +75,7 @@
                                         </li>
 
                                         <li  th:class="${actualPage == totalPages} ? 'page-item disabled' : 'page-item' " >
-                                            <a  class="page-link"  th:href="@{/userC/listAllPage}+ 
+                                            <a  class="page-link"  th:href="@{/userC/admin/listAllPage}+ 
                                                 '?pageNo=' + ${actualPage+1} +
                                                 '&sortField=' + ${sortField} +
                                                 '&sortDir=' + ${sortDir}+ 

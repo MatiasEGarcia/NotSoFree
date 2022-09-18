@@ -9,6 +9,16 @@
     object-fit: contain;
 }
 
+.linksNoDeco{
+    text-decoration: none;
+    color: black;
+}
+
+.linksNoDeco:hover{
+    text-decoration: none;
+    color: black;
+}
+
 /*--------------------------Login page*/
 .imgUserLoginContainer{
     width: 100%;
@@ -21,36 +31,17 @@
     object-fit: contain;
 }
 
-/*--------------------------listAllProducts*/
+/*--------------------------saveUser*/
 
-.tableListAllPageProducts a{
-    text-decoration: none;
-    color: black;
-}
-
-/*--------------------------listAllCategories*/
-
-.tableListAllPageCategory a{
-    text-decoration: none;
-    color: black;
-}
-
-/*--------------------------saveEditUser*/
-
-.saveEditUserImgContainer{
+.saveUserImgContainer{
     width: 100%;
     height: 20rem;
 }
 
-.saveEditUserImgContainer .saveEditUserImg{
+.saveUserImgContainer .saveUserImg{
     height: 100%;
     width: 100%;
     object-fit: contain;
-}
-
-#userForm  a {
-    text-decoration: none;
-    color: white;
 }
 
 /*------------------------editPassUName*/
@@ -66,13 +57,6 @@
     object-fit: contain;
 }
 
-/*-------------------------Index*/
-
-.listCategoriesIndex a {
-    text-decoration: none;
-    color: black;
-}
-
 /*-------------------------detailProduct*/
 
 #productDetail .favoriteButton i{
@@ -83,6 +67,10 @@
     color: red;
 }
 
+.favoriteHeartRed {
+    color:red;
+}
+
 #productDetail .favoriteButton{
     background: none;
     color: inherit;
@@ -91,4 +79,29 @@
     font: inherit;
     cursor: pointer;
     outline: inherit;
+}
+/*-------------------------editPersonDetails*/
+
+.editPersonImageContainer{
+    width: 100%;
+    height: 15em;
+}
+
+.editPersonImageContainer .editPersonImage{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+/*-------------------------editImage*/
+
+.editImageContainer{
+    width: 100%;
+    height: 25rem;
+}
+
+.editImageContainer .editImageOld{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
 }

@@ -24,9 +24,10 @@ public class PersonDto implements Serializable{
     @Size(min=8,max=15, message="Phone cannot be less than 8 and greater than 15")
     private String phone;
     
-     @Email(message="please enter a valid email" ,regexp="^[^@]+@[^@]+\\.[a-zA-Z]{2,}$")
+    @Email(message="please enter a valid email" ,regexp="^[^@]+@[^@]+\\.[a-zA-Z]{2,}$")
     private String email;
      
+    @NotBlank(message="Person address can't be blank")
     private String address;
     
     public PersonDto(){
@@ -40,7 +41,5 @@ public class PersonDto implements Serializable{
         this.phone= person.getPhone();
         this.email= person.getEmail();
         this.address= person.getAddress();
-    }
-    
-            
+    }       
 }

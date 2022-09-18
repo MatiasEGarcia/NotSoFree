@@ -30,12 +30,6 @@ public class ProdCateServiceImpl implements ProdCateService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public void findByProduct(Product product) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
     @Transactional
     public void save(ProdCate prodCate) throws Exception {
         try {

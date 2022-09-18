@@ -15,7 +15,7 @@
                 <div class="collapse navbar-collapse" id="nav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item" th:if="${!#ctx.session.isEmpty()} and ${#ctx.session.cartList != null}" >
-                            <a class="nav-link"  th:href="@{/cartC/cartList}" >
+                            <a class="nav-link" th:href="@{/cartC/cartList}" role="button" >
                                <i class="bi bi-cart"></i>
                                <span th:text="${#lists.size(#ctx.session.cartList)}"></span>
                             </a>
@@ -25,8 +25,8 @@
                                 Products
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/productC/savePage}">Save a product</a></li>
-                                 <li><a class="dropdown-item" th:href="@{/productC/listAllPage}">List all products</a></li>
+                                <li><a class="dropdown-item" th:href="@{/productC/admin/savePage}">Save a product</a></li>
+                                 <li><a class="dropdown-item" th:href="@{/productC/admin/listAllPage}">List all products</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
@@ -34,8 +34,8 @@
                                 Categories
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/categoryC/savePage}">Save a category</a></li>
-                                <li><a class="dropdown-item" th:href="@{/categoryC/listAllPage}">List all categories</a></li>
+                                <li><a class="dropdown-item" th:href="@{/categoryC/admin/savePage}">Save a category</a></li>
+                                <li><a class="dropdown-item" th:href="@{/categoryC/admin/listAllPage}">List all categories</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
@@ -43,8 +43,8 @@
                                 Users
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/userC/saveAdmin}">Save a user</a></li>
-                                <li><a class="dropdown-item" th:href="@{/userC/listAllPage}">List all users</a></li>
+                                <li><a class="dropdown-item" th:href="@{/userC/savePage}">Save a user</a></li>
+                                <li><a class="dropdown-item" th:href="@{/userC/admin/listAllPage}">List all users</a></li>
                             </ul>
                         </li>
                         
@@ -61,8 +61,8 @@
                                 <span sec:authentication="name">Usuario</span><i class="bi bi-person-circle"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/userC/editPage}">Edit profile</a></li>
-                                <li><a class="dropdown-item" >Favorites</a></li>
+                                <li><a class="dropdown-item" th:href="@{/personC/auth/editPage}">Edit profile</a></li>
+                                <li><a class="dropdown-item" th:href="@{/userC/auth/deleteMyUser}">Delete my user</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                    <form method="POST" th:action="@{/logout}"> 
@@ -76,11 +76,14 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link" th:href="@{/favoriteC/auth/listAll}">Favorites<i class="bi bi-suit-heart-fill"></i></a>
+                        </li>
                         
                     </ul>
                     
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <form class="d-flex" role="search" th:action="@{/productC/navSearch}" method="POST">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search"/>
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </div>
