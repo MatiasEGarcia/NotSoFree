@@ -4,8 +4,6 @@ import com.NotSoFree.dto.ProductDto;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
-
-
 import lombok.Data;
 import lombok.ToString;
 

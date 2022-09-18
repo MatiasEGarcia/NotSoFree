@@ -223,8 +223,7 @@ public class ProductC {
         PageDto pageProd = productService.findPaginatedLike(search, pageNoInt, Integer.parseInt(pageSize), sortField, sortDir);
         List<Category> activeCategories = categoryService.listByState(active);
 
-        model.addAttribute("search", search);
-        model.addAttribute("categories", activeCategories);
+        if(pageProd != null){
         model.addAttribute("products", pageProd.getContent());
         model.addAttribute("totalPages", pageProd.getTotalPages());
         model.addAttribute("totalItems", pageProd.getTotalElements());
@@ -233,7 +232,10 @@ public class ProductC {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
+        }
+   
+        model.addAttribute("search", search);
+        model.addAttribute("categories", activeCategories);
         return "search";
     }
 

@@ -179,19 +179,4 @@ public class CartC {
         }
         return listProd;
     }
-
-    //method to set the quantity of the product in the cart
-    public List<ProductDto> setAmount(List<Cart> carts, List<ProductDto> products) {
-        for (int i = 0; i < carts.size(); i++) {
-            for (int j = 0; j < products.size(); j++) {
-                if (carts.get(i).getIdProduct().equals(products.get(i).getIdProduct())) {
-                    products.get(i).setAmountInCart(carts.get(i).getAmount());
-                    break;
-                }
-            }
-        }
-
-        return products;
-    }
-
 }
