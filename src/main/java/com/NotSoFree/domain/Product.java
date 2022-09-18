@@ -11,7 +11,7 @@ import lombok.ToString;
 
 @Data
 @Entity
-@Table(name = "products", schema = "notanlibre")
+@Table(name = "products", schema = "notsofree")
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;

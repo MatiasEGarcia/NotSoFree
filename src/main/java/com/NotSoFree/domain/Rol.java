@@ -2,7 +2,6 @@
 package com.NotSoFree.domain;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,7 +16,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="roles", schema = "notanlibre")
+@Table(name="roles", schema = "notsofree")
 public class Rol implements Serializable{
     
        private static final long serialVersionUID=1L;

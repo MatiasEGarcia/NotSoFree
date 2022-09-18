@@ -15,7 +15,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "favorites", schema = "notanlibre")
+@Table(name = "favorites", schema = "notsofree")
 public class Favorite implements Serializable{
     
     private static final long serialVersionUID = 1L;

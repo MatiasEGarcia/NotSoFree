@@ -15,7 +15,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "prodcate", schema = "notanlibre")
+@Table(name = "prodcate", schema = "notsofree")
 public class ProdCate implements Serializable {
     
     private static final long serialVersionUID=1L;
