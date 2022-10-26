@@ -15,7 +15,7 @@ tienda online
 - Jakarta Validation
 
 ## Que podemos hacer??
-![Navegacion Basica](./NavegacionBasica.gif)
+![Navegacion Basica](/readmeFiles/NavegacionBasica.gif)
 
 - Desplegar la lista completa de productos, o desplegarla por su categoria, teniendo los productos mas de una posible categoria
 - Podemos a acceder a una pagina personal para cada producto, en ella podremos agregar la cantidad que queremos en el carrito.
@@ -24,7 +24,7 @@ tienda online
 
 
 ### USUARIOS
-![Users](./Usuarios.gif)
+![Users](/readmeFiles/Usuarios.gif)
 
 - El usuario podra crear una nueva cuenta para si mismo , o ingresar con una existente
 - La constraseña de cada usuario estara encriptada en la BDD
@@ -32,7 +32,7 @@ tienda online
 
 ### Rol User
 
-![Rol User](./User.gif)
+![Rol User](/readmeFiles/User.gif)
 
 - El rol de user podra: 
     - comprar productos
@@ -41,7 +41,7 @@ tienda online
 
 
 ### Rol Admin
-![Rol User](./Admin.gif)
+![Rol User](/readmeFiles/Admin.gif)
 
 - El rol de admin podra: 
     - agregar nuevos productos o categorias
@@ -54,7 +54,7 @@ tienda online
     - podra editar el rol que tiene un usuario o desabilitarlo al usuario
     - editar sus propios datos de usuario 
 
-![Rol User](./Autenti.gif)
+![Rol User](/readmeFiles/Autenti.gif)
 
 - Si un usuario no autenticado intenta entrar o realizar acciones que exijen un rol o el authenticarse , se le redireccionara al login page
 - Si un usuario no tiene la autorizacion necesaria, se le mostrara una pagina de error con un mensaje y un link a la pagina de inicio
@@ -64,6 +64,8 @@ tienda online
 ## Como arrancarlo??
 - Primero importar los archivos SQL para tener la BDD completa, eso incluye 2 usuarios de prueba, uno con rol admin y user(Mati , 123), y otro con solo el rol de user (Eze, 123)
 - Se debera completar los dataSource en el application.properties
-    -![properties](properties.png)
+    -![properties](/readmeFiles/properties.png)
+- En caso de que no uses un archivo env para los dataSource recomiendo borrar esta parte del pom.xml ->
+    -![filterEnvProp](/readmeFiles/filterEnvProp.png)
 - Descargar todas las dependencias del pom.xml
 - Por ultimo ejecutarlo con su entorno de desarrollo(netbeans, eclipse, etc...)en el puerto que se desee
